@@ -15,7 +15,7 @@
       "forceConsistentCasingInFileNames": true,
       "moduleResolution": "node16",
 
-      "outDir": "dist"
+      "outDir": "lib"
     },
 
     "include": ["src/**/*"]
