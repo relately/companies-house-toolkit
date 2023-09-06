@@ -1,3 +1,3 @@
-import { hello } from './index';
+import { hello } from './index.js';
 
 console.log(hello());

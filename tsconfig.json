@@ -1,13 +1,13 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Node 18",
+    "display": "Node 14",
   
-    "_version": "18.2.0",
+    "_version": "14.1.0",
   
     "compilerOptions": {
-      "lib": ["es2023", "dom"],
+      "lib": ["es2020"],
       "module": "node16",
-      "target": "es2022",
+      "target": "es2020",
   
       "strict": true,
       "esModuleInterop": true,
@@ -18,5 +18,5 @@
       "outDir": "lib"
     },
 
-    "include": ["src/**/*"]
+    "include": ["src/**/*.ts"]
 }
