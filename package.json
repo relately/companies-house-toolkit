@@ -1,0 +1,28 @@
+{
+  "name": "@relately/companies-house-transformer",
+  "version": "0.0.1",
+  "description": "Convert Companies House bulk data products into CSV and JSON",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/relately/companies-house-transformer.git"
+  },
+  "keywords": [
+    "companies-house",
+    "bulk",
+    "data",
+    "products",
+    "csv",
+    "json",
+    "dat"
+  ],
+  "author": "Tim Wardle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/relately/companies-house-transformer/issues"
+  },
+  "homepage": "https://github.com/relately/companies-house-transformer#readme"
+}
