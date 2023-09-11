@@ -27,7 +27,10 @@
     "json",
     "dat"
   ],
-  "author": "Tim Wardle",
+  "author": {
+    "name": "Tim Wardle",
+    "email": "tim@relately.co.uk"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/relately/companies-house-transformer/issues"
