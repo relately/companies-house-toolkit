@@ -14,6 +14,10 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "node/no-missing-import": "off"
+    "prettier/prettier": "warn",
+    "node/no-missing-import": "off",
+    "node/no-unpublished-import": "off",
+    "node/no-unsupported-features/es-syntax": "off",
+    "node/shebang": "off",
   }
 }

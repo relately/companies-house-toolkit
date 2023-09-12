@@ -1,3 +1,7 @@
-import { hello } from './index.js';
+import { program } from 'commander';
 
-console.log(hello());
+program
+  .name('cht')
+  .description('CLI to convert Companies House data products to CSV and JSON')
+  .option('-d, --debug', 'output debugging information', false)
+  .parse(process.argv);
