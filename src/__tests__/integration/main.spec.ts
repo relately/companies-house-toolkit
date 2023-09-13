@@ -1,4 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
+import { readFile } from 'node:fs/promises';
+import { fixturePath } from './paths.js';
 import runCli from './run-cli.js';
 
 describe('cht', () => {
@@ -6,5 +8,58 @@ describe('cht', () => {
     const { stdout } = await runCli(['--help']);
 
     expect(stdout).toContain('Usage: cht [options]');
+  });
+
+  describe('product 217', () => {
+    it('should convert to standardised CSV', async () => {
+      const { stdout } = await runCli([
+        'transform',
+        fixturePath('input/product-217/sample.csv'),
+      ]);
+
+      const expected = await readFile(
+        fixturePath('output/product-217/sample-expected.csv'),
+        'utf-8'
+      );
+
+      expect(stdout).toEqual(expected);
+    });
+
+    it('should handle a file that does not exist', async () => {
+      const { stderr, exitCode } = await runCli(
+        ['transform', 'does-not-exist.csv'],
+        { reject: false }
+      );
+
+      expect(stderr).toEqual(
+        'File or directory "does-not-exist.csv" does not exist'
+      );
+      expect(exitCode).toEqual(1);
+    });
+
+    it('should handle passing a directory', async () => {
+      const { stdout, stderr } = await runCli([
+        'transform',
+        fixturePath('input/product-217'),
+      ]);
+
+      const expected = await readFile(
+        fixturePath('output/product-217/sample-expected.csv'),
+        'utf-8'
+      );
+
+      expect(stdout).toEqual(expected);
+      expect(stderr).toEqual(
+        'Directory provided, processing all files within it'
+      );
+    });
+
+    it.todo('should handle passing a directory with multiple files');
+
+    it.todo('should handle long files');
+
+    it.todo('should convert to JSON');
+
+    it.todo('should handle stdin');
   });
 });

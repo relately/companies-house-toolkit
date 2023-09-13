@@ -10,8 +10,8 @@
     "lint": "eslint ./src/ --fix",
     "prepare": "husky install",
     "start": "ts-node --esm ./src/cli.ts",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest --watch",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
@@ -60,6 +60,8 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "commander": "^11.0.0"
+    "commander": "^11.0.0",
+    "fast-csv": "^4.3.6",
+    "glob": "^10.3.4"
   }
 }
