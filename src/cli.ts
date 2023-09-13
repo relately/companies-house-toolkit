@@ -1,14 +1,11 @@
 import { program } from 'commander';
 import { lstatSync } from 'node:fs';
-import {
-  transformDirectory,
-  transformFile,
-  transformStdIn,
-} from './app/transform.js';
+import { FormatterType, getFormatter } from './app/formatter.js';
+import { getParser } from './app/parser.js';
+import { SourceType, getSourceStream } from './app/source.js';
+import { mapObjectKeys } from './app/util.js';
 
-type InputType = 'stdin' | 'file' | 'directory' | undefined;
-
-const parseInputType = (input: string): InputType => {
+const parseSourceType = (input: string): SourceType | undefined => {
   if (input === '-') {
     return 'stdin';
   }
@@ -22,28 +19,32 @@ const parseInputType = (input: string): InputType => {
   return stats.isDirectory() ? 'directory' : 'file';
 };
 
+const parseFormatterType = (options: Record<string, string>): FormatterType =>
+  options.json || options.j ? 'json' : 'csv';
+
 program
   .name('cht')
   .description('CLI to convert Companies House data products to CSV and JSON');
 
 program
   .command('transform')
-  .addArgument(program.createArgument('<input>', 'the input file or directory'))
-  .action((input) => {
-    switch (parseInputType(input)) {
-      case 'stdin':
-        transformStdIn();
-        break;
-      case 'file':
-        transformFile(input);
-        break;
-      case 'directory':
-        transformDirectory(input);
-        break;
-      default:
-        process.stderr.write(`File or directory "${input}" does not exist`);
-        process.exit(1);
+  .argument('<input>', 'the input file or directory')
+  .option('-j, --json', 'output JSON instead of CSV', false)
+  .action((input, options) => {
+    const sourceType = parseSourceType(input);
+
+    if (!sourceType) {
+      process.stderr.write(`File or directory "${input}" does not exist`);
+      process.exit(1);
     }
+
+    const formatterType = parseFormatterType(options);
+
+    getSourceStream(sourceType, input)
+      .through(getParser())
+      .map(mapObjectKeys((key) => key.trim()))
+      .through(getFormatter(formatterType))
+      .pipe(process.stdout);
   });
 
 program.parse();

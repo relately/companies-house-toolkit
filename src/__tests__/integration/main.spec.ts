@@ -68,10 +68,24 @@ describe('cht', () => {
       expect(stdout).toEqual(expected);
     });
 
+    // For product 217 should take the latest file
     it.todo('should handle passing a directory with multiple files');
 
     it.todo('should handle long files');
 
-    it.todo('should convert to JSON');
+    it('should convert to JSON', async () => {
+      const { stdout } = await runCli([
+        'transform',
+        fixturePath('input/product-217/sample.csv'),
+        '--json',
+      ]);
+
+      const expected = await readFile(
+        fixturePath('output/product-217/sample-expected.json'),
+        'utf-8'
+      );
+
+      expect(stdout).toEqual(expected);
+    });
   });
 });
