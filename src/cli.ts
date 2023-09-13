@@ -3,6 +3,13 @@ import { format, parse } from 'fast-csv';
 import { globStream } from 'glob';
 import { createReadStream, existsSync, lstatSync } from 'node:fs';
 
+const processFile = (filePath: string) => {
+  createReadStream(filePath)
+    .pipe(parse({ headers: true }))
+    .pipe(format({ headers: true }))
+    .pipe(process.stdout);
+};
+
 program
   .name('cht')
   .description('CLI to convert Companies House data products to CSV and JSON');
@@ -31,26 +38,18 @@ program
       process.exit(1);
     }
 
+    let glob = input;
+
     if (lstatSync(input).isDirectory()) {
       process.stderr.write(
         'Directory provided, processing all files within it'
       );
 
-      const stream = globStream(`${input}/**/*.csv`, {});
-
       // Stream each file through the pipeline
-      stream.on('data', (file) => {
-        createReadStream(file)
-          .pipe(parse({ headers: true }))
-          .pipe(format({ headers: true }))
-          .pipe(process.stdout);
-      });
-    } else {
-      createReadStream(input)
-        .pipe(parse({ headers: true }))
-        .pipe(format({ headers: true }))
-        .pipe(process.stdout);
+      glob = `${input}/**/*.csv`;
     }
+
+    globStream(glob, {}).on('data', processFile);
   });
 
 program.parse();
