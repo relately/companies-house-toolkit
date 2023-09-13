@@ -37,6 +37,10 @@ describe('cht', () => {
       expect(exitCode).toEqual(1);
     });
 
+    it.todo(
+      'should handle a file that is not a directory or file but does exist'
+    );
+
     it('should handle passing a directory', async () => {
       const { stdout, stderr } = await runCli([
         'transform',
@@ -49,9 +53,6 @@ describe('cht', () => {
       );
 
       expect(stdout).toEqual(expected);
-      expect(stderr).toEqual(
-        'Directory provided, processing all files within it'
-      );
     });
 
     it('should handle stdin', async () => {
