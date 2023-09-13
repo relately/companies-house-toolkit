@@ -33,6 +33,16 @@ program
   .option('-o, --output', 'output to file')
   .option('-d, --debug', 'show debugging information', false)
   .action((input) => {
+    if (input === '-') {
+      process.stdin
+        .pipe(parse({ headers: true }))
+        .pipe(format({ headers: true }))
+        .pipe(process.stdout)
+        .on('end', () => process.exit(0));
+
+      return;
+    }
+
     if (!existsSync(input)) {
       process.stderr.write(`File or directory "${input}" does not exist`);
       process.exit(1);

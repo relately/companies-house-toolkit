@@ -54,12 +54,23 @@ describe('cht', () => {
       );
     });
 
+    it('should handle stdin', async () => {
+      const { stdout } = await runCli(['transform', '-'], {
+        inputFile: fixturePath('input/product-217/sample.csv'),
+      });
+
+      const expected = await readFile(
+        fixturePath('output/product-217/sample-expected.csv'),
+        'utf-8'
+      );
+
+      expect(stdout).toEqual(expected);
+    });
+
     it.todo('should handle passing a directory with multiple files');
 
     it.todo('should handle long files');
 
     it.todo('should convert to JSON');
-
-    it.todo('should handle stdin');
   });
 });
