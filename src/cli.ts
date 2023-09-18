@@ -3,7 +3,7 @@ import { lstatSync } from 'node:fs';
 import { FormatterType, getFormatter } from './app/formatter.js';
 import { getParser } from './app/parser.js';
 import { SourceType, getSourceStream } from './app/source.js';
-import { mapObjectKeys } from './app/util.js';
+import { getTransformer } from './app/transformer.js';
 
 const parseSourceType = (input: string): SourceType | undefined => {
   if (input === '-') {
@@ -42,7 +42,7 @@ program
 
     getSourceStream(sourceType, input)
       .through(getParser())
-      .map(mapObjectKeys((key) => key.trim()))
+      .through(getTransformer(formatterType))
       .through(getFormatter(formatterType))
       .pipe(process.stdout);
   });

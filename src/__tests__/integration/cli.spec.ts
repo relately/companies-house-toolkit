@@ -42,7 +42,7 @@ describe('cht', () => {
     );
 
     it('should handle passing a directory', async () => {
-      const { stdout, stderr } = await runCli([
+      const { stdout } = await runCli([
         'transform',
         fixturePath('input/product-217'),
       ]);

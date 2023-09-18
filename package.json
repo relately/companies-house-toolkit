@@ -43,7 +43,9 @@
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/node-lts": "^18.12.5",
+    "@types/flat": "^5.0.2",
     "@types/highland": "^2.12.15",
+    "@types/ramda": "^0.29.4",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -62,7 +64,9 @@
   },
   "dependencies": {
     "commander": "^11.0.0",
+    "date-fns": "^2.30.0",
     "fast-csv": "^4.3.6",
+    "flat": "^5.0.2",
     "glob": "^10.3.4",
     "highland": "^2.13.5",
     "indent-string": "^5.0.0"
