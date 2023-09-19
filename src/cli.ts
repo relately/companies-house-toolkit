@@ -1,8 +1,8 @@
 import { program } from 'commander';
 import { lstatSync } from 'node:fs';
-import { convert } from './app/convert.js';
 import { FormatterType } from './app/convert/formatter.js';
 import { SourceType } from './app/convert/source.js';
+import { renderUI } from './app/ui.js';
 
 const parseSourceType = (input: string): SourceType | undefined => {
   if (input === '-') {
@@ -39,7 +39,7 @@ program
 
     const formatterType = parseFormatterType(options);
 
-    convert(input, sourceType, formatterType);
+    renderUI({ input, sourceType, formatterType });
   });
 
 program.parse();

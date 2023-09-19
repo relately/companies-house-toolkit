@@ -63,12 +63,16 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@inkjs/ui": "^1.0.0",
+    "@types/react": "^18.2.22",
     "commander": "^11.0.0",
     "date-fns": "^2.30.0",
     "fast-csv": "^4.3.6",
     "flat": "^5.0.2",
     "glob": "^10.3.4",
     "highland": "^2.13.5",
-    "indent-string": "^5.0.0"
+    "indent-string": "^5.0.0",
+    "ink": "^4.4.1",
+    "react": "^18.2.0"
   }
 }
