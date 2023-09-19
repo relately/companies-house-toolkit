@@ -13,7 +13,7 @@ describe('cht', () => {
   describe('product 217', () => {
     it('should convert to standardised CSV', async () => {
       const { stdout } = await runCli([
-        'transform',
+        'convert',
         fixturePath('input/product-217/sample.csv'),
       ]);
 
@@ -27,7 +27,7 @@ describe('cht', () => {
 
     it('should handle a file that does not exist', async () => {
       const { stderr, exitCode } = await runCli(
-        ['transform', 'does-not-exist.csv'],
+        ['convert', 'does-not-exist.csv'],
         { reject: false }
       );
 
@@ -43,7 +43,7 @@ describe('cht', () => {
 
     it('should handle passing a directory', async () => {
       const { stdout } = await runCli([
-        'transform',
+        'convert',
         fixturePath('input/product-217'),
       ]);
 
@@ -56,7 +56,7 @@ describe('cht', () => {
     });
 
     it('should handle stdin', async () => {
-      const { stdout } = await runCli(['transform', '-'], {
+      const { stdout } = await runCli(['convert', '-'], {
         inputFile: fixturePath('input/product-217/sample.csv'),
       });
 
@@ -75,7 +75,7 @@ describe('cht', () => {
 
     it('should convert to JSON', async () => {
       const { stdout } = await runCli([
-        'transform',
+        'convert',
         fixturePath('input/product-217/sample.csv'),
         '--json',
       ]);

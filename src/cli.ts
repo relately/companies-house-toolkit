@@ -1,9 +1,8 @@
 import { program } from 'commander';
 import { lstatSync } from 'node:fs';
-import { FormatterType, getFormatter } from './app/formatter.js';
-import { getParser } from './app/parser.js';
-import { SourceType, getSourceStream } from './app/source.js';
-import { getTransformer } from './app/transformer.js';
+import { convert } from './app/convert.js';
+import { FormatterType } from './app/convert/formatter.js';
+import { SourceType } from './app/convert/source.js';
 
 const parseSourceType = (input: string): SourceType | undefined => {
   if (input === '-') {
@@ -27,7 +26,7 @@ program
   .description('CLI to convert Companies House data products to CSV and JSON');
 
 program
-  .command('transform')
+  .command('convert')
   .argument('<input>', 'the input file or directory')
   .option('-j, --json', 'output JSON instead of CSV', false)
   .action((input, options) => {
@@ -40,11 +39,7 @@ program
 
     const formatterType = parseFormatterType(options);
 
-    getSourceStream(sourceType, input)
-      .through(getParser())
-      .through(getTransformer(formatterType))
-      .through(getFormatter(formatterType))
-      .pipe(process.stdout);
+    convert(input, sourceType, formatterType);
   });
 
 program.parse();
