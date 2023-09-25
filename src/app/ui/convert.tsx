@@ -1,11 +1,9 @@
 import { ProgressBar, Spinner } from '@inkjs/ui';
-import highland from 'highland';
 import { Box, Text } from 'ink';
-import fs from 'node:fs';
 import React, { useEffect } from 'react';
 import { convert } from '../convert.js';
 import { FormatterType } from '../convert/formatter.js';
-import { SourceType } from '../convert/source.js';
+import { SourceType, estimateSourceSize } from '../convert/source.js';
 
 export type ConvertProps = {
   input: string;
@@ -18,50 +16,86 @@ export const Convert: React.FC<ConvertProps> = ({
   sourceType,
   formatterType,
 }: ConvertProps) => {
-  const [total, setTotal] = React.useState<number | undefined>(undefined);
+  const [error, setError] = React.useState<Error | null>(null);
+  const [total, setTotal] = React.useState<number | null | undefined>(
+    undefined
+  );
   const [progress, setProgress] = React.useState(0);
 
+  const handleError = (f: () => void) => {
+    try {
+      f();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error);
+      }
+    }
+  };
+
   useEffect(() => {
-    highland<string>(fs.createReadStream(input))
-      .split()
-      .reduce(-1, (previous) => previous + 1)
-      .map((value) => (value > 0 ? value : 0))
-      .toPromise(Promise)
-      .then((value) => setTotal(value));
+    handleError(() =>
+      estimateSourceSize(sourceType, input).then((value) => {
+        setTotal(value);
+      })
+    );
   }, []);
 
   useEffect(() => {
-    if (total) {
-      convert(input, sourceType, formatterType, () => {
-        setProgress((progress) => progress + 1);
-      });
+    if (total !== undefined) {
+      handleError(() =>
+        convert(input, sourceType, formatterType, () =>
+          setProgress((progress) => progress + 1)
+        )
+      );
     }
   }, [total]);
+
+  useEffect(() => {
+    if (error) {
+      process.exit(1);
+    }
+  }, [error]);
+
+  if (error) {
+    return <Text>{error.message}</Text>;
+  }
 
   return (
     <Box flexDirection="column" margin={1} rowGap={1}>
       <Box>
-        <Text>
-          Converting {input} to {formatterType}
-        </Text>
+        {!total || progress < total ? (
+          <Text>
+            Converting {sourceType === 'stdin' ? 'stdin' : input} to{' '}
+            {formatterType}
+          </Text>
+        ) : (
+          <Text>
+            Finished Converting {sourceType === 'stdin' ? 'stdin' : input} to{' '}
+            {formatterType}
+          </Text>
+        )}
       </Box>
 
-      <Box>
-        {total ? (
+      {total && progress < total && (
+        <Box>
           <Box gap={1}>
-            <Box minWidth="75%">
+            <Box minWidth="60%">
               <ProgressBar value={(progress / total) * 100} />
             </Box>
-            <Box minWidth={40}>
+            <Box minWidth="0%">
               <Text>
                 {Math.round((progress / total) * 100)}% | {progress} / {total}
               </Text>
             </Box>
           </Box>
-        ) : (
+        </Box>
+      )}
+
+      {total === undefined && (
+        <Box>
           <Spinner label="Calculating progress..." />
-        )}
-      </Box>
+        </Box>
+      )}
     </Box>
   );
 };

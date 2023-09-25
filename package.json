@@ -46,6 +46,7 @@
     "@types/flat": "^5.0.2",
     "@types/highland": "^2.12.15",
     "@types/ramda": "^0.29.4",
+    "@types/react": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -64,7 +65,6 @@
   },
   "dependencies": {
     "@inkjs/ui": "^1.0.0",
-    "@types/react": "^18.2.22",
     "commander": "^11.0.0",
     "date-fns": "^2.30.0",
     "fast-csv": "^4.3.6",

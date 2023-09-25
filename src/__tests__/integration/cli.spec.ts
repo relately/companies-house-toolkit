@@ -37,10 +37,6 @@ describe('cht', () => {
       expect(exitCode).toEqual(1);
     });
 
-    it.todo(
-      'should handle a file that is not a directory or file but does exist'
-    );
-
     it('should handle passing a directory', async () => {
       const { stdout } = await runCli([
         'convert',
@@ -68,10 +64,28 @@ describe('cht', () => {
       expect(stdout).toEqual(expected);
     });
 
-    // For product 217 should take the latest file
-    it.todo('should handle passing a directory with multiple files');
+    it('should take the latest file when passing a directory with multiple files', async () => {
+      const { stdout } = await runCli([
+        'convert',
+        fixturePath('input/product-217-multiple'),
+      ]);
 
-    it.todo('should handle long files');
+      const expected = await readFile(
+        fixturePath('output/product-217/sample-expected.csv'),
+        'utf-8'
+      );
+
+      expect(stdout).toEqual(expected);
+    });
+
+    it('should handle a directory that does not contain any CSV files', async () => {
+      const { exitCode, stderr } = await runCli(
+        ['convert', fixturePath('input/empty')],
+        { reject: false }
+      );
+
+      expect(exitCode).toEqual(1);
+    });
 
     it('should convert to JSON', async () => {
       const { stdout } = await runCli([

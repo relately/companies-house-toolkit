@@ -10,11 +10,9 @@ export const convert = (
   sourceType: SourceType,
   formatterType: FormatterType,
   onTick?: TickHandler
-) => {
-  return getSourceStream(sourceType, source)
+) =>
+  getSourceStream(sourceType, source)
     .through(getParser())
     .through(getTransformer(formatterType))
-    .through(getFormatter(formatterType))
-    .tap((item) => (onTick ? onTick(item) : null))
+    .through(getFormatter(formatterType, onTick))
     .pipe(process.stdout);
-};
