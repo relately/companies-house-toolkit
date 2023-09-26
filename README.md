@@ -41,13 +41,13 @@ Once we've published our first version to NPM it will be possible to run the CLI
 ### Output JSON to `stdout`
 
 ```bash
-npm start --silent -- convert --json prod217.csv
+npm start --silent -- convert --json --product=217 prod217.csv
 ```
 
 ### Output CSV to a file
 
 ```bash
-npm start --silent -- convert prod217.csv > converted.csv
+npm start --silent -- convert --product=183 /path/to/directory/prod183 > converted.csv
 ```
 
 

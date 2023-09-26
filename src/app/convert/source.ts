@@ -1,36 +1,50 @@
 import { globSync } from 'glob';
 import highland from 'highland';
 import { createReadStream } from 'node:fs';
+import { stat } from 'node:fs/promises';
 
-export type SourceType = 'stdin' | 'file' | 'directory';
+export type StdinSourceType = {
+  type: 'stdin';
+};
 
-export const getSourceStream = (sourceType: SourceType, source: string) => {
-  switch (sourceType) {
+export type FileSourceType = {
+  type: 'file';
+  path: string;
+};
+
+export type DirectorySourceType = {
+  type: 'directory';
+  path: string;
+  extension: string;
+  fileSelection: 'all' | 'latest';
+};
+
+export type SourceType = StdinSourceType | FileSourceType | DirectorySourceType;
+
+export const getSourceStream = (source: SourceType) => {
+  switch (source.type) {
     case 'stdin':
       return getStdinStream();
     case 'file':
-      return getFileStream(source);
+      return getFileStream(source.path);
     case 'directory':
       return getDirectoryFileStream(source);
   }
 };
 
-export const estimateSourceSize = (sourceType: SourceType, source: string) => {
-  switch (sourceType) {
+const estimateFileSize = async (filePath: string) =>
+  stat(filePath).then((stats) => stats.size);
+
+export const estimateSourceSize = async (source: SourceType) => {
+  switch (source.type) {
     case 'stdin':
-      return Promise.resolve(null);
+      return null;
     case 'file':
-      return getFileStream(source)
-        .split()
-        .reduce(-1, (count) => count + 1)
-        .map((value) => (value > 0 ? value : 0))
-        .toPromise(Promise);
+      return estimateFileSize(source.path);
     case 'directory':
-      return getDirectoryFileStream(source)
-        .split()
-        .reduce(-1, (count) => count + 1)
-        .map((value) => (value > 0 ? value : 0))
-        .toPromise(Promise);
+      return Promise.all(getDirectoryFiles(source).map(estimateFileSize)).then(
+        (sizes) => sizes.reduce((acc, size) => acc + size, 0)
+      );
   }
 };
 
@@ -39,16 +53,28 @@ const getStdinStream = () => highland<string>(process.stdin);
 const getFileStream = (filePath: string) =>
   highland<string>(createReadStream(filePath));
 
-const getDirectoryFileStream = (directoryPath: string) => {
-  const files = globSync(`${directoryPath}/**/*.csv`);
+const getDirectoryFiles = ({
+  path,
+  extension,
+  fileSelection,
+}: DirectorySourceType) => {
+  const files = globSync(`${path}/**/*.${extension}`);
 
-  const filePath = files.sort().pop();
-
-  if (!filePath) {
+  if (files.length === 0) {
     throw new Error(
-      `Directory "${directoryPath}" does not contain any CSV files`
+      `Directory "${path}" does not contain any ${extension} files`
     );
   }
 
-  return getFileStream(filePath);
+  return fileSelection === 'latest'
+    ? files.sort().slice(files.length - 1)
+    : files.sort();
+};
+
+const getDirectoryFileStream = (directorySourceType: DirectorySourceType) => {
+  const files = getDirectoryFiles(directorySourceType);
+
+  return files.length === 1
+    ? getFileStream(files[0])
+    : highland(files).flatMap(getFileStream);
 };

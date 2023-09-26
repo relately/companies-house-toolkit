@@ -1,19 +1,21 @@
 import { ProgressBar, Spinner } from '@inkjs/ui';
 import { Box, Text } from 'ink';
+import prettyBytes from 'pretty-bytes';
 import React, { useEffect } from 'react';
 import { convert } from '../convert.js';
 import { FormatterType } from '../convert/formatter.js';
+import { ParserType } from '../convert/parser.js';
 import { SourceType, estimateSourceSize } from '../convert/source.js';
 
 export type ConvertProps = {
-  input: string;
   sourceType: SourceType;
+  parserType: ParserType;
   formatterType: FormatterType;
 };
 
 export const Convert: React.FC<ConvertProps> = ({
-  input,
   sourceType,
+  parserType,
   formatterType,
 }: ConvertProps) => {
   const [error, setError] = React.useState<Error | null>(null);
@@ -34,7 +36,7 @@ export const Convert: React.FC<ConvertProps> = ({
 
   useEffect(() => {
     handleError(() =>
-      estimateSourceSize(sourceType, input).then((value) => {
+      estimateSourceSize(sourceType).then((value) => {
         setTotal(value);
       })
     );
@@ -43,8 +45,8 @@ export const Convert: React.FC<ConvertProps> = ({
   useEffect(() => {
     if (total !== undefined) {
       handleError(() =>
-        convert(input, sourceType, formatterType, () =>
-          setProgress((progress) => progress + 1)
+        convert(sourceType, parserType, formatterType, (progress) =>
+          setProgress(progress)
         )
       );
     }
@@ -65,18 +67,19 @@ export const Convert: React.FC<ConvertProps> = ({
       <Box>
         {!total || progress < total ? (
           <Text>
-            Converting {sourceType === 'stdin' ? 'stdin' : input} to{' '}
-            {formatterType}
+            Converting {sourceType.type === 'stdin' ? 'stdin' : sourceType.path}{' '}
+            to {formatterType}
           </Text>
         ) : (
           <Text>
-            Finished Converting {sourceType === 'stdin' ? 'stdin' : input} to{' '}
+            Finished Converting{' '}
+            {sourceType.type === 'stdin' ? 'stdin' : sourceType.path} to{' '}
             {formatterType}
           </Text>
         )}
       </Box>
 
-      {total && progress < total && (
+      {total && (
         <Box>
           <Box gap={1}>
             <Box minWidth="60%">
@@ -84,7 +87,8 @@ export const Convert: React.FC<ConvertProps> = ({
             </Box>
             <Box minWidth="0%">
               <Text>
-                {Math.round((progress / total) * 100)}% | {progress} / {total}
+                {Math.round((progress / total) * 100)}% |{' '}
+                {prettyBytes(progress)} / {prettyBytes(total)}
               </Text>
             </Box>
           </Box>

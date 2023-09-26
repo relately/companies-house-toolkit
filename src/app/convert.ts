@@ -1,18 +1,23 @@
 import { FormatterType, getFormatter } from './convert/formatter.js';
-import { getParser } from './convert/parser.js';
+import { ParserType, getParser } from './convert/parser.js';
 import { SourceType, getSourceStream } from './convert/source.js';
 import { getTransformer } from './convert/transformer.js';
 
-type TickHandler = (tick: string) => void;
+type ProgressHandler = (progress: number) => void;
 
 export const convert = (
-  source: string,
-  sourceType: SourceType,
+  source: SourceType,
+  parserType: ParserType,
   formatterType: FormatterType,
-  onTick?: TickHandler
-) =>
-  getSourceStream(sourceType, source)
-    .through(getParser())
+  onProgress?: ProgressHandler
+) => {
+  let itemBytes = 0;
+
+  return getSourceStream(source)
+    .tap((item) => (itemBytes += Buffer.byteLength(item, 'utf8')))
+    .through(getParser(parserType))
     .through(getTransformer(formatterType))
-    .through(getFormatter(formatterType, onTick))
+    .through(getFormatter(formatterType))
+    .tap(() => (onProgress ? onProgress(itemBytes) : null))
     .pipe(process.stdout);
+};
