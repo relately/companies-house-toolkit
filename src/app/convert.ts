@@ -5,6 +5,8 @@ import { getTransformer } from './convert/transformer.js';
 
 type ProgressHandler = (progress: number) => void;
 
+export type Through<I, O = I> = (x: Highland.Stream<I>) => Highland.Stream<O>;
+
 export const convert = (
   source: SourceType,
   parserType: ParserType,
@@ -15,7 +17,12 @@ export const convert = (
 
   return getSourceStream(source)
     .tap((item) => (itemBytes += Buffer.byteLength(item, 'utf8')))
-    .through(getParser(parserType))
+    .through(
+      getParser(parserType) as Through<
+        string,
+        Record<string, string | boolean | number>
+      >
+    )
     .through(getTransformer(formatterType))
     .through(getFormatter(formatterType))
     .tap(() => (onProgress ? onProgress(itemBytes) : null))

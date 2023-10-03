@@ -25,11 +25,7 @@ export type ParserType =
   | Product183ParserType
   | Product217ParserType;
 
-type Parser = (
-  stream: Highland.Stream<string>
-) => Highland.Stream<Record<string, unknown>>;
-
-export const getParser = (parserType: ParserType): Parser => {
+export const getParser = (parserType: ParserType) => {
   switch (parserType.product) {
     case '101':
       return parseProduct101;

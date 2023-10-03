@@ -1,3 +1,4 @@
+/* eslint-disable no-process-exit */
 import { ProgressBar, Spinner } from '@inkjs/ui';
 import { Box, Text } from 'ink';
 import prettyBytes from 'pretty-bytes';
@@ -24,7 +25,7 @@ export const Convert: React.FC<ConvertProps> = ({
   );
   const [progress, setProgress] = React.useState(0);
 
-  const handleError = (f: () => void) => {
+  const handleError = (f: () => unknown) => {
     try {
       f();
     } catch (error: unknown) {
@@ -35,11 +36,10 @@ export const Convert: React.FC<ConvertProps> = ({
   };
 
   useEffect(() => {
-    handleError(() =>
-      estimateSourceSize(sourceType).then((value) => {
-        setTotal(value);
-      })
-    );
+    handleError(async () => {
+      const value = await estimateSourceSize(sourceType);
+      setTotal(value);
+    });
   }, []);
 
   useEffect(() => {

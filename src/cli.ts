@@ -1,3 +1,4 @@
+/* eslint-disable no-process-exit */
 import { program } from 'commander';
 import { lstatSync } from 'node:fs';
 import { FormatterType } from './app/convert/formatter.js';
@@ -42,12 +43,18 @@ const parseSourceType = (
     : { type: 'file', path: input };
 };
 
-const parseFormatterType = (options: Record<string, string>): FormatterType =>
+const parseFormatterType = (options: ConvertOptions): FormatterType =>
   options.json || options.j ? 'json' : 'csv';
 
 program
   .name('cht')
   .description('CLI to convert Companies House data products to CSV and JSON');
+
+type ConvertOptions = {
+  product: string;
+  json?: boolean;
+  j?: boolean;
+};
 
 program
   .command('convert')
@@ -63,7 +70,7 @@ program
       .createOption('-j, --json', 'output JSON instead of CSV')
       .default(false)
   )
-  .action((input, options) => {
+  .action((input: string, options: ConvertOptions) => {
     const parserType = parseParserType(options.product);
 
     if (!parserType) {

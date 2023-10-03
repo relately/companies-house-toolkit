@@ -1,6 +1,6 @@
 import { CompanyRecord } from '../product183/types.js';
 
-type GazettableDocumentTypeCompanyGroupCode =
+export type GazettableDocumentTypeCompanyGroupCode =
   | 'Certificates' // A
   | 'Constitutional Documents' // B
   | 'Directors' // C
@@ -15,7 +15,7 @@ type GazettableDocumentTypeCompanyGroupCode =
   | 'Dissolution First Gazette' // 1
   | 'Dissolution Final Gazette'; // 2
 
-type GazettableDocumentTypeLLPGroupCode =
+export type GazettableDocumentTypeLLPGroupCode =
   | 'Certificates' // A
   | 'Incorporation' // B
   | 'Members' // C
@@ -24,7 +24,7 @@ type GazettableDocumentTypeLLPGroupCode =
   | 'Winding Up' // F
   | 'Restoration'; // G
 
-type GazettableDocumentTypeSEGroupCode =
+export type GazettableDocumentTypeSEGroupCode =
   | 'Company Registration' // A
   | 'Statuses' // B
   | 'Members' // C
@@ -158,7 +158,6 @@ type NewIncorporationTransaction = BaseTransaction<
   | 'alphaKey'
   | 'address.houseNameOrNumber'
   | 'address.careOf'
-  | 'address.houseNameOrNumber'
   | 'address.street'
   | 'address.area'
   | 'address.postTown'
@@ -183,7 +182,6 @@ type AddRecordTransaction = BaseTransaction<
   | 'alphaKey'
   | 'address.houseNameOrNumber'
   | 'address.careOf'
-  | 'address.houseNameOrNumber'
   | 'address.street'
   | 'address.area'
   | 'address.postTown'
@@ -216,7 +214,6 @@ type RestorationTransaction = BaseTransaction<
   | 'alphaKey'
   | 'address.houseNameOrNumber'
   | 'address.careOf'
-  | 'address.houseNameOrNumber'
   | 'address.street'
   | 'address.area'
   | 'address.postTown'
@@ -285,7 +282,6 @@ type AddressTransaction = BaseTransaction<
   | 'postcodeStatus'
   | 'address.houseNameOrNumber'
   | 'address.careOf'
-  | 'address.houseNameOrNumber'
   | 'address.street'
   | 'address.area'
   | 'address.postTown'

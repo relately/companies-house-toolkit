@@ -1,13 +1,15 @@
 import { camelCase } from 'change-case';
 import flat from 'flat';
+import { Through } from '../../convert.js';
 import { filterObjectValues, mapObjectKeys, mapObjectValues } from '../util.js';
 import { ItemTransformer, convertDates, trimKeys } from './shared.js';
 
 const convertExclude = ['companyNumber'];
 
-export const transformJson = <T extends Record<string, unknown>>(
-  stream: Highland.Stream<T>
-): Highland.Stream<Record<string, unknown>> =>
+export const transformJson: Through<
+  Record<string, string | boolean | number>,
+  Record<string, unknown>
+> = (stream) =>
   stream
     .map(trimKeys)
     .map(removeEmptyValues)
@@ -20,7 +22,7 @@ const removeEmptyValues: ItemTransformer = filterObjectValues(
   (value) => value !== ''
 );
 
-const convertNumbers: (exclude: string[]) => ItemTransformer = (exclude) =>
+const convertNumbers = (exclude: string[]): ItemTransformer =>
   mapObjectValues((value, key) => {
     if (typeof value === 'string' && !exclude.includes(camelCase(key))) {
       if (value.match(/^\d+$/)) {
@@ -34,7 +36,10 @@ const convertNumbers: (exclude: string[]) => ItemTransformer = (exclude) =>
   });
 
 const replaceUnderscoreNumbers: ItemTransformer = mapObjectKeys((key) =>
-  key.replaceAll(/_(\d+)/g, (_match, index) => `.${parseInt(index) - 1}`)
-);
+  key.replaceAll(
+    /_(\d+)/g,
+    (_match, index: string) => `.${parseInt(index) - 1}`
+  )
+) as ItemTransformer;
 
 const unflatten: ItemTransformer = flat.unflatten;

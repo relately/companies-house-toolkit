@@ -1,12 +1,9 @@
-import { describe, expect, it } from '@jest/globals';
 import highland from 'highland';
+import { describe, expect, it } from 'vitest';
 import { transformJson } from '../json.js';
 
-const runTransformJson = (input: Record<string, unknown>[]) =>
-  highland<Record<string, unknown>>(input)
-    .through(transformJson)
-    .collect()
-    .toPromise(Promise);
+const runTransformJson = (input: Record<string, string | number | boolean>[]) =>
+  highland(input).through(transformJson).collect().toPromise(Promise);
 
 describe('transformJson', () => {
   it('should trim keys', async () => {

@@ -18,6 +18,6 @@
     "node/no-missing-import": "off",
     "node/no-unpublished-import": "off",
     "node/no-unsupported-features/es-syntax": "off",
-    "node/shebang": "off",
+    "node/shebang": "off"
   }
 }
