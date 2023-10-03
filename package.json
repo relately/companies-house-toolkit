@@ -9,7 +9,7 @@
     "commit": "cz",
     "lint": "eslint ./src/ --fix",
     "prepare": "husky install",
-    "start": "vite-node ./src/cli.ts",
+    "start": "vite-node ./src/cli.tsx",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
@@ -44,11 +44,13 @@
     "@tsconfig/node-lts": "^18.12.5",
     "@types/flat": "^5.0.2",
     "@types/highland": "^2.12.15",
+    "@types/node": "^20.8.3",
     "@types/ramda": "^0.29.4",
     "@types/react": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "cz-conventional-changelog": "^3.3.0",
+    "deep-cleaner": "^2.0.0-alpha.3",
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-node": "^11.1.0",
@@ -64,7 +66,6 @@
   },
   "dependencies": {
     "@inkjs/ui": "^1.0.0",
-    "change-case": "^4.1.2",
     "commander": "^11.0.0",
     "date-fns": "^2.30.0",
     "fast-csv": "^4.3.6",
@@ -73,8 +74,11 @@
     "highland": "^2.13.5",
     "indent-string": "^5.0.0",
     "ink": "^4.4.1",
+    "level": "^8.0.0",
+    "map-obj": "^5.0.2",
     "pretty-bytes": "^6.1.1",
     "ramda": "^0.29.0",
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "title-case": "^4.1.2"
   }
 }

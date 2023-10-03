@@ -1,0 +1,348 @@
+[
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 30,
+        "month": 4
+      },
+      "last_accounts": {
+        "made_up_to": "2022-04-30",
+        "type": "total-exemption-full"
+      },
+      "next_made_up_to": "2023-04-30"
+    },
+    "company_name": "VERNON INVESTMENTS (1856) LIMITED",
+    "company_number": "00000452",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-06-01"
+    },
+    "date_of_creation": "1856-11-03",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00000452"
+    },
+    "registered_office_address": {
+      "address_line_1": "Burnham Yard",
+      "address_line_2": "London End",
+      "country": "United Kingdom",
+      "locality": "Beaconsfield",
+      "postal_code": "HP9 2JH",
+      "premises": "C/O Azets",
+      "region": "Bucks"
+    },
+    "sic_codes": ["68100"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 3
+      },
+      "last_accounts": {
+        "made_up_to": "2003-03-31",
+        "type": "dormant"
+      },
+      "next_made_up_to": "2004-03-31"
+    },
+    "company_name": "VULCAN REALISATIONS LIMITED",
+    "company_number": "00001556",
+    "confirmation_statement": {
+      "last_made_up_to": "2004-04-24"
+    },
+    "date_of_creation": "1864-08-27",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00001556"
+    },
+    "registered_office_address": {
+      "address_line_1": "Begbies Traynor",
+      "address_line_2": "1 Old Hall Street",
+      "locality": "Liverpool",
+      "postal_code": "L3 9HF"
+    },
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 1,
+        "month": 3
+      },
+      "last_accounts": {
+        "made_up_to": "2022-03-03",
+        "type": "dormant"
+      },
+      "next_made_up_to": "2023-03-03"
+    },
+    "company_name": "WHITBREAD INTERNATIONAL LIMITED",
+    "company_number": "00002120",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-12-18"
+    },
+    "date_of_creation": "1861-01-23",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00002120"
+    },
+    "registered_office_address": {
+      "address_line_1": "Whitbread Court Houghton Hall",
+      "address_line_2": "Business Park Porz Avenue",
+      "locality": "Dunstable",
+      "postal_code": "LU5 5XE",
+      "region": "Bedfordshire"
+    },
+    "sic_codes": ["74990"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 3
+      },
+      "last_accounts": {
+        "made_up_to": "2022-03-31",
+        "type": "dormant"
+      },
+      "next_made_up_to": "2023-03-31"
+    },
+    "company_name": "WIKE MILL COMPANY LIMITED.(THE)",
+    "company_number": "00002980",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-08-04"
+    },
+    "date_of_creation": "1866-04-09",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00002980"
+    },
+    "registered_office_address": {
+      "address_line_1": "Greenside Lane",
+      "country": "England",
+      "locality": "Bradford",
+      "postal_code": "BD8 9TF",
+      "premises": "Cumberland House",
+      "region": "England"
+    },
+    "sic_codes": ["99999"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "made_up_to": "2021-12-31",
+        "type": "full"
+      },
+      "next_made_up_to": "2022-12-31"
+    },
+    "company_name": "VINTERS ENGINEERING LIMITED",
+    "company_number": "00003543",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-05-01"
+    },
+    "date_of_creation": "1867-04-17",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00003543"
+    },
+    "registered_office_address": {
+      "address_line_1": "Rolls Royce Plc",
+      "address_line_2": "Moor Lane",
+      "locality": "Derby",
+      "postal_code": "DE24 8BJ",
+      "region": "Derbyshire"
+    },
+    "sic_codes": ["29320", "30110", "30990", "32990"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "made_up_to": "2021-12-31",
+        "type": "dormant"
+      },
+      "next_made_up_to": "2022-12-31"
+    },
+    "company_name": "VAL DE TRAVERS ASPHALTE LIMITED",
+    "company_number": "00005292",
+    "confirmation_statement": {
+      "last_made_up_to": "2023-01-24"
+    },
+    "date_of_creation": "1871-02-15",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00005292"
+    },
+    "registered_office_address": {
+      "address_line_1": "T3 Trinity Park",
+      "address_line_2": "Bickenhill Lane",
+      "country": "United Kingdom",
+      "locality": "Birmingham",
+      "postal_code": "B37 7ES",
+      "premises": "Ground Floor"
+    },
+    "sic_codes": ["99999"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "made_up_to": "2021-12-31",
+        "type": "total-exemption-full"
+      },
+      "next_made_up_to": "2022-12-31"
+    },
+    "company_name": "WIBSEY PERSEVERANCE MILL COMPANY LIMITED(THE)",
+    "company_number": "00005775",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-03-21"
+    },
+    "date_of_creation": "1871-10-23",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00005775"
+    },
+    "registered_office_address": {
+      "address_line_1": "Mill Street",
+      "address_line_2": "Wibsey",
+      "locality": "Bradford",
+      "postal_code": "BD6 3HR",
+      "region": "West Yorkshire"
+    },
+    "sic_codes": ["68201"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "made_up_to": "2021-12-31",
+        "type": "dormant"
+      },
+      "next_made_up_to": "2022-12-31"
+    },
+    "company_name": "WESTERN TELEGRAPH COMPANY LIMITED",
+    "company_number": "00006886",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-09-30"
+    },
+    "date_of_creation": "1873-01-08",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00006886"
+    },
+    "registered_office_address": {
+      "address_line_1": "161 Hammersmith Road",
+      "country": "United Kingdom",
+      "locality": "London",
+      "postal_code": "W6 8BS",
+      "premises": "Griffin House"
+    },
+    "sic_codes": ["74990"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 30,
+        "month": 9
+      },
+      "last_accounts": {
+        "made_up_to": "2022-09-30",
+        "type": "dormant"
+      },
+      "next_made_up_to": "2023-09-30"
+    },
+    "company_name": "WEST HEATON BOWLING CLUB LIMITED",
+    "company_number": "00007464",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-11-30"
+    },
+    "date_of_creation": "1873-07-11",
+    "jurisdiction": "england-wales",
+    "links": {
+      "self": "/company/00007464"
+    },
+    "registered_office_address": {
+      "address_line_1": "Princes Road",
+      "country": "United Kingdom",
+      "locality": "Stockport",
+      "postal_code": "SK4 3NQ",
+      "premises": "West Heaton Bowling, Tennis And Squash Club"
+    },
+    "sic_codes": ["93199"],
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 1
+      },
+      "next_made_up_to": "2024-01-31"
+    },
+    "company_name": "CAPE PTY LTD",
+    "company_number": "FC039386",
+    "date_of_creation": "2022-01-01",
+    "registered_office_address": {
+      "address_line_1": "19-21 South Steyne",
+      "country": "Australia",
+      "locality": "Manly",
+      "premises": "Wotso Manlly",
+      "region": "Nsw 2095"
+    },
+    "type": "other"
+  },
+  {
+    "company_name": "KINDRED CAPITAL CO-INVEST I LP",
+    "company_number": "LP022502",
+    "date_of_creation": "2022-03-28",
+    "registered_office_address": {
+      "address_line_1": "Sekforde Street",
+      "locality": "London",
+      "postal_code": "EC1R 0HA",
+      "premises": "1st Floor 44-46"
+    },
+    "type": "limited-partnership"
+  },
+  {
+    "company_name": "SYNERGIZAR INVESTMENTS LP",
+    "company_number": "LP022503",
+    "date_of_creation": "2022-03-28",
+    "registered_office_address": {
+      "address_line_1": "Foster Lane",
+      "locality": "London",
+      "postal_code": "EC2V 6HR",
+      "premises": "3rd Floor 10"
+    },
+    "type": "limited-partnership"
+  },
+  {
+    "company_name": "NEXT47 2023, L.P.",
+    "company_number": "LP022504",
+    "date_of_creation": "2022-03-28",
+    "registered_office_address": {
+      "address_line_1": "Pinehurst Road",
+      "locality": "Farnborough",
+      "postal_code": "GU14 7BF",
+      "premises": "Pinehurst 2"
+    },
+    "type": "limited-partnership"
+  }
+]
