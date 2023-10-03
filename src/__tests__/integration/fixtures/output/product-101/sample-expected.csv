@@ -1,0 +1,11 @@
+transactionType,correctionMarker,companyNumber,jurisdiction,transactionId,receivedDate,dateOfIncorporation,companyStatus,postcode,postcodeStatus,name,alphaKey,address.houseNameOrNumber,address.careOf,address.street,address.area,address.postTown,address.region,address.postcode,address.country,address.poBox,address.suppliedCompanyName,gazettableDocumentType,accountsMadeUpDate,confirmationStatementDate,accountingReferenceDate.day,accountingReferenceDate.month,accountsType,inspectMarker
+Add Record,,CE029767,England/Wales,3346390494,2022-07-21,2022-07-20,Other,,Original address as provided by company,NORFOLK BEEKEEPERS' ASSOCIATION,NORFOLKBEEKEEPERSASSOCIATION,,,,,,,,,,,,,,,,,
+Add Record,,CE029768,England/Wales,3346390495,2022-07-21,2022-07-20,Other,,Original address as provided by company,ARCHDIOCESE OF LIVERPOOL,ARCHDIOCESEOFLIVERPOOL,,,,,,,,,,,,,,,,,
+Add Record,,CE029769,England/Wales,3346390496,2022-07-21,2022-07-20,Other,,Original address as provided by company,BRENT LODGE WILDLIFE HOSPITAL,BRENTLODGEWILDLIFEHOSPITAL,,,,,,,,,,,,,,,,,
+Add Record,,CE029770,England/Wales,3346390497,2022-07-21,2022-07-20,Other,,Original address as provided by company,FRIENDS OF JAMARKO AND EPHC,FRIENDSOFJAMARKOANDEPHC,,,,,,,,,,,,,,,,,
+Add Record,,CE029771,England/Wales,3346390498,2022-07-21,2022-07-20,Other,,Original address as provided by company,GATEWAY CHURCH - BRIDGEND VALLEYS,GATEWAYCHURCHBRIDGENDVALLEY,,,,,,,,,,,,,,,,,
+Address,,LP012418,England/Wales,3326576666,2022-01-12,,,,Original address as provided by company,,,,,P.O. BOX 309 UGLAND HOUSE,GEORGE TOWN,GRAND CAYMAN  KY1-1104,CAYMAN ISLANDS,,,,,,,,,,,
+Designation as Private Fund Limited Partnership,,LP022305,England/Wales,3325725403,2021-12-29,,,,,,,,,,,,,,,,,,,,,,,
+Confirmation Statement Date,,NC000707,Northern Ireland,3325763612,2022-01-05,,,,,,,,,,,,,,,,,D4,,2021-11-25,,,,
+Gazettable Document Type Not Otherwise Included,,NC000909,Northern Ireland,3325725091,2022-01-05,,,,,,,,,,,,,,,,,C1,,,,,,
+Accounts Made Up Date,,NC001472,Northern Ireland,3325771071,2022-01-05,,,,,,,,,,,,,,,,,D1,2021-04-05,,,,Unaudited Abridged,

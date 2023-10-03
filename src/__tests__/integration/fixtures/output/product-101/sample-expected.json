@@ -1,0 +1,114 @@
+[
+  {
+    "transactionType": "Add Record",
+    "companyNumber": "CE029767",
+    "jurisdiction": "England/Wales",
+    "transactionId": 3346390494,
+    "receivedDate": "2022-07-21",
+    "dateOfIncorporation": "2022-07-20",
+    "companyStatus": "Other",
+    "postcodeStatus": "Original address as provided by company",
+    "name": "NORFOLK BEEKEEPERS' ASSOCIATION",
+    "alphaKey": "NORFOLKBEEKEEPERSASSOCIATION"
+  },
+  {
+    "transactionType": "Add Record",
+    "companyNumber": "CE029768",
+    "jurisdiction": "England/Wales",
+    "transactionId": 3346390495,
+    "receivedDate": "2022-07-21",
+    "dateOfIncorporation": "2022-07-20",
+    "companyStatus": "Other",
+    "postcodeStatus": "Original address as provided by company",
+    "name": "ARCHDIOCESE OF LIVERPOOL",
+    "alphaKey": "ARCHDIOCESEOFLIVERPOOL"
+  },
+  {
+    "transactionType": "Add Record",
+    "companyNumber": "CE029769",
+    "jurisdiction": "England/Wales",
+    "transactionId": 3346390496,
+    "receivedDate": "2022-07-21",
+    "dateOfIncorporation": "2022-07-20",
+    "companyStatus": "Other",
+    "postcodeStatus": "Original address as provided by company",
+    "name": "BRENT LODGE WILDLIFE HOSPITAL",
+    "alphaKey": "BRENTLODGEWILDLIFEHOSPITAL"
+  },
+  {
+    "transactionType": "Add Record",
+    "companyNumber": "CE029770",
+    "jurisdiction": "England/Wales",
+    "transactionId": 3346390497,
+    "receivedDate": "2022-07-21",
+    "dateOfIncorporation": "2022-07-20",
+    "companyStatus": "Other",
+    "postcodeStatus": "Original address as provided by company",
+    "name": "FRIENDS OF JAMARKO AND EPHC",
+    "alphaKey": "FRIENDSOFJAMARKOANDEPHC"
+  },
+  {
+    "transactionType": "Add Record",
+    "companyNumber": "CE029771",
+    "jurisdiction": "England/Wales",
+    "transactionId": 3346390498,
+    "receivedDate": "2022-07-21",
+    "dateOfIncorporation": "2022-07-20",
+    "companyStatus": "Other",
+    "postcodeStatus": "Original address as provided by company",
+    "name": "GATEWAY CHURCH - BRIDGEND VALLEYS",
+    "alphaKey": "GATEWAYCHURCHBRIDGENDVALLEY"
+  },
+  {
+    "transactionType": "Address",
+    "companyNumber": "LP012418",
+    "jurisdiction": "England/Wales",
+    "transactionId": 3326576666,
+    "receivedDate": "2022-01-12",
+    "postcodeStatus": "Original address as provided by company",
+    "address": {
+      "street": "P.O. BOX 309 UGLAND HOUSE",
+      "area": "GEORGE TOWN",
+      "postTown": "GRAND CAYMAN  KY1-1104",
+      "region": "CAYMAN ISLANDS"
+    }
+  },
+  {
+    "transactionType": "Designation as Private Fund Limited Partnership",
+    "companyNumber": "LP022305",
+    "jurisdiction": "England/Wales",
+    "transactionId": 3325725403,
+    "receivedDate": "2021-12-29",
+    "privateFundIndicator": "Changed from a limited partnership to a private fund limited partnership"
+  },
+  {
+    "transactionType": "Confirmation Statement Date",
+    "companyNumber": "NC000707",
+    "jurisdiction": "Northern Ireland",
+    "transactionId": 3325763612,
+    "receivedDate": "2022-01-05",
+    "gazettableDocumentType": "D4",
+    "confirmationStatementDate": "2021-11-25",
+    "withUpdatesIndicator": false
+  },
+  {
+    "transactionType": "Gazettable Document Type Not Otherwise Included",
+    "companyNumber": "NC000909",
+    "jurisdiction": "Northern Ireland",
+    "transactionId": 3325725091,
+    "receivedDate": "2022-01-05",
+    "gazettableDocumentType": "C1",
+    "gazetteDate": "2022-01-18"
+  },
+  {
+    "transactionType": "Accounts Made Up Date",
+    "companyNumber": "NC001472",
+    "jurisdiction": "Northern Ireland",
+    "transactionId": 3325771071,
+    "receivedDate": "2022-01-05",
+    "gazettableDocumentType": "D1",
+    "accountsMadeUpDate": "2021-04-05",
+    "accountsType": "Unaudited Abridged",
+    "gazetteDate": "2022-01-18"
+  }
+]

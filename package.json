@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "@inkjs/ui": "^1.0.0",
+    "change-case": "^4.1.2",
     "commander": "^11.0.0",
     "date-fns": "^2.30.0",
     "fast-csv": "^4.3.6",
@@ -73,6 +74,8 @@
     "highland": "^2.13.5",
     "indent-string": "^5.0.0",
     "ink": "^4.4.1",
+    "pretty-bytes": "^6.1.1",
+    "ramda": "^0.29.0",
     "react": "^18.2.0"
   }
 }

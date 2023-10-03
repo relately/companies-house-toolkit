@@ -1,0 +1,237 @@
+[
+  {
+    "companyNumber": "00000118",
+    "name": "ASHFORD CATTLE MARKET COMPANY LIMITED(THE)",
+    "dateOfIncorporation": "1856-09-25",
+    "accountsMadeUpDate": "2020-07-31",
+    "confirmationStatementDate": "2021-12-18",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 7
+    },
+    "accountsType": "Small Abbreviated",
+    "postcode": "TN23 1DA",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "ASHFORDCATTLEMARKET",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "street": "11 BANK STREET",
+      "area": "ASHFORD",
+      "postTown": "KENT",
+      "postcode": "TN23 1DA"
+    }
+  },
+  {
+    "companyNumber": "00000133",
+    "name": "BRITISH INDIA STEAM NAVIGATION COMPANY LIMITED",
+    "dateOfIncorporation": "1856-09-29",
+    "accountsMadeUpDate": "2020-12-31",
+    "confirmationStatementDate": "2022-01-27",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 12
+    },
+    "accountsType": "Audit Exemption Subsidiary",
+    "postcode": "SW1E 5JQ",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BRITISHINDIASTEAMNAVIGATION",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "street": "16 PALACE STREET",
+      "area": "LONDON",
+      "postcode": "SW1E 5JQ"
+    }
+  },
+  {
+    "companyNumber": "00000529",
+    "name": "B.L.HOLDINGS LIMITED",
+    "dateOfIncorporation": "1856-11-04",
+    "accountsMadeUpDate": "2021-03-31",
+    "confirmationStatementDate": "2021-12-31",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 3
+    },
+    "accountsType": "Full Accounts",
+    "postcode": "W1H 7LX",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BLHOLDING",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "street": "YORK HOUSE",
+      "area": "45 SEYMOUR STREET",
+      "postTown": "LONDON",
+      "postcode": "W1H 7LX"
+    }
+  },
+  {
+    "companyNumber": "00000687",
+    "name": "BRITISH INDIAN TEA COMPANY LIMITED",
+    "dateOfIncorporation": "1863-10-10",
+    "accountsMadeUpDate": "2020-12-31",
+    "confirmationStatementDate": "2021-06-21",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 12
+    },
+    "accountsType": "Dormant",
+    "postcode": "ME17 4AB",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BRITISHINDIANTEA",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "street": "LINTON PARK",
+      "area": "LINTON",
+      "postTown": "MAIDSTONE",
+      "region": "KENT",
+      "postcode": "ME17 4AB"
+    }
+  },
+  {
+    "companyNumber": "00001122",
+    "name": "B T R PROPERTY HOLDINGS LIMITED",
+    "dateOfIncorporation": "1864-03-31",
+    "accountsMadeUpDate": "2020-12-31",
+    "confirmationStatementDate": "2021-05-08",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 12
+    },
+    "accountsType": "Small Abbreviated",
+    "postcode": "TF3 3BL",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BTRPROPERTYHOLDING",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "houseNameOrNumber": "SCHNEIDER ELECTRIC",
+      "street": "STAFFORD PARK 5",
+      "postTown": "TELFORD",
+      "postcode": "TF3 3BL",
+      "country": "ENGLAND"
+    }
+  },
+  {
+    "companyNumber": "00001140",
+    "name": "BRITISH STEEL TRADING LIMITED",
+    "dateOfIncorporation": "1864-04-04",
+    "accountsMadeUpDate": "2006-12-30",
+    "confirmationStatementDate": "2006-05-25",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 12
+    },
+    "accountsType": "Dormant",
+    "postcode": "SW1X 7HS",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BRITISHSTEELTRADING",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "houseNameOrNumber": 18,
+      "street": "GROSVENOR PLACE",
+      "postTown": "LONDON",
+      "postcode": "SW1X 7HS"
+    }
+  },
+  {
+    "companyNumber": "00002119",
+    "name": "BURY BREWERY COMPANY,LIMITED(THE)",
+    "dateOfIncorporation": "1861-01-23",
+    "accountsMadeUpDate": "2021-03-31",
+    "confirmationStatementDate": "2021-08-14",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 3
+    },
+    "accountsType": "Dormant",
+    "postcode": "BB2 7LB",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BURYBREWERYCOMPANY",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "houseNameOrNumber": "MYERSCOUGH ROAD",
+      "street": "MELLOR BROOK",
+      "postTown": "BLACKBURN",
+      "region": "LANCASHIRE",
+      "postcode": "BB2 7LB",
+      "country": "ENGLAND"
+    }
+  },
+  {
+    "companyNumber": "00002537",
+    "name": "BRABY-FULLER LIMITED",
+    "dateOfIncorporation": "1865-10-24",
+    "accountsMadeUpDate": "2004-12-31",
+    "confirmationStatementDate": "2004-10-31",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 12
+    },
+    "accountsType": "Full Accounts",
+    "postcode": "RG7 4SD",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BRABYFULLER",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "street": "KPMG",
+      "area": "ARLINGTON BUSINESS PARK THEALE",
+      "postTown": "READING",
+      "region": "BERKSHIRE",
+      "postcode": "RG7 4SD"
+    }
+  },
+  {
+    "companyNumber": "00003002",
+    "name": "BA (GI) LIMITED",
+    "dateOfIncorporation": "1866-04-12",
+    "accountsMadeUpDate": "2020-12-31",
+    "confirmationStatementDate": "2021-11-06",
+    "companyStatus": "Private Limited",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 12
+    },
+    "accountsType": "Full Accounts",
+    "postcode": "EC3M 4AJ",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BAGI",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "houseNameOrNumber": "4TH FLOOR, 8",
+      "street": "FENCHURCH PLACE",
+      "postTown": "LONDON",
+      "postcode": "EC3M 4AJ",
+      "country": "ENGLAND"
+    }
+  },
+  {
+    "companyNumber": "00005188",
+    "name": "BIRMINGHAM LAW SOCIETY(THE)",
+    "dateOfIncorporation": "1870-12-09",
+    "accountsMadeUpDate": "2020-12-31",
+    "confirmationStatementDate": "2022-01-24",
+    "companyStatus": "Private Limited Company Without Share Capital",
+    "accountingReferenceDate": {
+      "day": 31,
+      "month": 12
+    },
+    "accountsType": "Audited Abridged",
+    "postcode": "B2 5BG",
+    "postcodeStatus": "Original address as provided by company",
+    "alphaKey": "BIRMINGHAMLAWSOCIETY",
+    "jurisdiction": "England/Wales",
+    "address": {
+      "houseNameOrNumber": "SUITE 101,CHELTENHAM HOUSE",
+      "street": "14-16 TEMPLE STREET",
+      "postTown": "BIRMINGHAM",
+      "postcode": "B2 5BG"
+    }
+  }
+]
