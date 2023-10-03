@@ -5,4 +5,4 @@ import { fileURLToPath } from 'node:url';
 const cli = resolve(dirname(fileURLToPath(import.meta.url)), '../../cli.ts');
 
 export default (args: string[], options?: Options) =>
-  execa('ts-node', ['--esm', cli, ...args], options);
+  execa('vite-node', [cli, ...args], options);

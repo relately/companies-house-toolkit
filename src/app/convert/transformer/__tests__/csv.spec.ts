@@ -1,12 +1,9 @@
-import { describe, expect, it } from '@jest/globals';
 import highland from 'highland';
+import { describe, expect, it } from 'vitest';
 import { transformCsv } from '../csv.js';
 
-const runTransformCsv = (input: Record<string, unknown>[]) =>
-  highland<Record<string, unknown>>(input)
-    .through(transformCsv)
-    .collect()
-    .toPromise(Promise);
+const runTransformCsv = (input: Record<string, string | number | boolean>[]) =>
+  highland(input).through(transformCsv).collect().toPromise(Promise);
 
 describe('transformCsv', () => {
   it('should trim keys', async () => {

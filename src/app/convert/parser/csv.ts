@@ -1,6 +1,7 @@
 import { parse } from 'fast-csv';
+import { Through } from '../../convert.js';
 
-export const parseCsv = (
-  stream: Highland.Stream<string>
-): Highland.Stream<Record<string, unknown>> =>
-  stream.through(parse({ headers: true }));
+export const parseCsv: Through<string, Record<string, string>> = (stream) =>
+  stream.through(parse({ headers: true })) as Highland.Stream<
+    Record<string, string>
+  >;

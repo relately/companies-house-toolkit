@@ -87,5 +87,5 @@ export const reorderCompanyFields = (record: CompanyRecord) =>
       ...result,
       [field]: record[field],
     }),
-    {} as Record<string, unknown>
+    {} as CompanyRecord
   );

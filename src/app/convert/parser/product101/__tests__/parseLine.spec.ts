@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from 'vitest';
 import { getLineType, parseLine, parseTransaction } from '../parseLine.js';
 import { TransactionLine } from '../types.js';
 
