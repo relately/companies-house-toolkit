@@ -28,7 +28,7 @@ export const writeSnapshotToDb = (
   eventEmitter: EventEmitter,
   batchSize = 10000
 ) =>
-  getSourceStream(source)
+  getSourceStream(source, eventEmitter)
     .through(parseProduct183)
     .through(transformProduct183)
     .map(companyRecordToBatchOperation)

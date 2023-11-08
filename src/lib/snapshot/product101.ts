@@ -19,7 +19,7 @@ export const writeUpdatesToDb = (
   eventEmitter: EventEmitter,
   batchSize = 1000
 ) =>
-  getSourceStream(source)
+  getSourceStream(source, eventEmitter)
     .through(parseProduct101)
     .map(transformProduct101)
     .through(transformTransactionToBatchOperation())
