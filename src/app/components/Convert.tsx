@@ -1,8 +1,6 @@
 /* eslint-disable no-process-exit */
-import { ProgressBar, Spinner } from '@inkjs/ui';
-import { Box, Text } from 'ink';
-import prettyBytes from 'pretty-bytes';
-import React, { useEffect } from 'react';
+import { Box } from 'ink';
+import React, { useEffect, useState } from 'react';
 import {
   FormatterType,
   ProductType,
@@ -10,6 +8,11 @@ import {
   convert,
   estimateSourceSize,
 } from '../../lib/convert.js';
+import { useMessages } from '../hooks/useMessages.js';
+import { useProgress } from '../hooks/useProgress.js';
+import { Messages } from './shared/Messages.js';
+import { Progress } from './shared/Progress.js';
+import { Summary } from './shared/Summary.js';
 
 export type ConvertProps = {
   sourceType: SourceType;
@@ -22,87 +25,45 @@ export const Convert: React.FC<ConvertProps> = ({
   productType,
   formatterType,
 }: ConvertProps) => {
-  const [error, setError] = React.useState<Error | null>(null);
-  const [total, setTotal] = React.useState<number | null | undefined>(
-    undefined
-  );
-  const [progress, setProgress] = React.useState(0);
-
-  const handleError = (f: () => unknown) => {
+  const { messages, addError } = useMessages();
+  const { progress, setProgress, total } = useProgress(() => {
     try {
-      f();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error);
+      return estimateSourceSize(sourceType);
+    } catch (error) {
+      if (error instanceof Error && 'message' in error) {
+        addError(error.message);
       }
-    }
-  };
 
-  useEffect(() => {
-    handleError(async () => {
-      const value = await estimateSourceSize(sourceType);
-      setTotal(value);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (total !== undefined) {
-      handleError(() =>
-        convert(sourceType, productType, formatterType, (progress) =>
-          setProgress(progress)
-        )
-      );
-    }
-  }, [total]);
-
-  useEffect(() => {
-    if (error) {
       process.exit(1);
     }
-  }, [error]);
+  });
+  const [isComplete, setIsComplete] = useState(false);
 
-  if (error) {
-    return <Text>{error.message}</Text>;
-  }
+  useEffect(() => {
+    convert(sourceType, productType, formatterType)
+      .on('error', (error: string) => {
+        addError(error);
+
+        process.exit(1);
+      })
+      .on('finish', () => {
+        setIsComplete(true);
+      })
+      .on('progress', setProgress);
+  }, []);
 
   return (
     <Box flexDirection="column" margin={1} rowGap={1}>
-      <Box>
-        {!total || progress < total ? (
-          <Text>
-            Converting {sourceType.type === 'stdin' ? 'stdin' : sourceType.path}{' '}
-            to {formatterType}
-          </Text>
-        ) : (
-          <Text>
-            Finished Converting{' '}
-            {sourceType.type === 'stdin' ? 'stdin' : sourceType.path} to{' '}
-            {formatterType}
-          </Text>
-        )}
-      </Box>
+      <Summary
+        description={`Converting ${
+          sourceType.type === 'stdin' ? 'stdin' : sourceType.path
+        } to ${formatterType}`}
+        status="converting"
+        isComplete={isComplete}
+        progress={<Progress total={total} progress={progress} />}
+      />
 
-      {total && (
-        <Box>
-          <Box gap={1}>
-            <Box minWidth="60%">
-              <ProgressBar value={(progress / total) * 100} />
-            </Box>
-            <Box minWidth="0%">
-              <Text>
-                {Math.round((progress / total) * 100)}% |{' '}
-                {prettyBytes(progress)} / {prettyBytes(total)}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-      )}
-
-      {total === undefined && (
-        <Box>
-          <Spinner label="Calculating progress..." />
-        </Box>
-      )}
+      <Messages messages={messages} />
     </Box>
   );
 };

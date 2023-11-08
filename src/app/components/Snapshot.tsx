@@ -1,13 +1,14 @@
-import { Box, Static, Text } from 'ink';
+import { Box } from 'ink';
 import React, { useEffect } from 'react';
 import { FormatterType } from '../../lib/convert.js';
-
-import { StatusMessage } from '@inkjs/ui';
 import { snapshot } from '../../lib/snapshot.js';
 import {
   DirectorySourceType,
   FileSourceType,
 } from '../../lib/sources/index.js';
+import { useMessages } from '../hooks/useMessages.js';
+import { Messages } from './shared/Messages.js';
+import { Summary } from './shared/Summary.js';
 
 export type SnapshotProps = {
   snapshotSource: FileSourceType | DirectorySourceType;
@@ -15,20 +16,15 @@ export type SnapshotProps = {
   formatterType: FormatterType;
 };
 
-type Message = {
-  type: 'error' | 'warning';
-  content: string;
-};
-
 export const Snapshot: React.FC<SnapshotProps> = ({
   snapshotSource,
   updatesSource,
   formatterType,
 }: SnapshotProps) => {
-  const [isComplete, setIsComplete] = React.useState(false);
+  const { messages, addWarning, addError } = useMessages();
   const [status, setStatus] = React.useState('');
+  const [isComplete, setIsComplete] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
-  const [messages, setMessages] = React.useState<Message[]>([]);
 
   useEffect(() => {
     snapshot({ snapshotSource, updatesSource, formatterType })
@@ -40,29 +36,22 @@ export const Snapshot: React.FC<SnapshotProps> = ({
       .on('progress', (progress: number) =>
         setProgress((prev) => prev + progress)
       )
-      .on('error', (error: string) =>
-        setMessages((prev) => [...prev, { type: 'error', content: error }])
-      )
-      .on('warning', (warning: string) =>
-        setMessages((prev) => [...prev, { type: 'warning', content: warning }])
-      );
+      .on('error', addError)
+      .on('warning', addWarning);
   }, []);
 
   return (
     <Box flexDirection="column" margin={1} rowGap={1}>
-      <Text>Creating snapshot...</Text>
+      <Summary
+        description="Creating snapshot"
+        status={status}
+        isComplete={isComplete}
+        progress={
+          <Box>{progress > 0 ? `${progress} records written` : ''}</Box>
+        }
+      />
 
-      <Text>{isComplete ? 'Finished' : status}</Text>
-
-      <Text>{progress > 0 ? `${progress} records written` : ''}</Text>
-
-      <Static items={messages}>
-        {(message) => (
-          <StatusMessage key={message.content} variant={message.type}>
-            {message.content}
-          </StatusMessage>
-        )}
-      </Static>
+      <Messages messages={messages} />
     </Box>
   );
 };

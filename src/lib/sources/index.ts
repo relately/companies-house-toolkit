@@ -1,3 +1,4 @@
+import { EventEmitter } from 'node:events';
 import { estimateDirectorySize, getDirectoryFileStream } from './directory.js';
 import { estimateFileSize, getFileStream } from './file.js';
 import { getStdinStream } from './stdin.js';
@@ -20,14 +21,17 @@ export type DirectorySourceType = {
 
 export type SourceType = StdinSourceType | FileSourceType | DirectorySourceType;
 
-export const getSourceStream = (source: SourceType) => {
+export const getSourceStream = (
+  source: SourceType,
+  eventEmitter?: EventEmitter
+) => {
   switch (source.type) {
     case 'stdin':
       return getStdinStream();
     case 'file':
       return getFileStream(source.path);
     case 'directory':
-      return getDirectoryFileStream(source);
+      return getDirectoryFileStream(source, eventEmitter);
   }
 };
 
