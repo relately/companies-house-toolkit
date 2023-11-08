@@ -1,0 +1,329 @@
+[
+  {
+    "company_number": "00000118",
+    "company_name": "ASHFORD CATTLE MARKET COMPANY LIMITED(THE)",
+    "date_of_creation": "1856-09-25",
+    "confirmation_statement": {
+      "last_made_up_to": "2021-12-18"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 7
+      },
+      "last_accounts": {
+        "type": "small",
+        "made_up_to": "2020-07-31"
+      },
+      "next_made_up_to": "2021-07-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "address_line_1": "11 Bank Street",
+      "address_line_2": "Ashford",
+      "locality": "Kent",
+      "postal_code": "TN23 1DA"
+    },
+    "links": {
+      "self": "/company/00000118"
+    }
+  },
+  {
+    "company_number": "00000133",
+    "company_name": "BRITISH INDIA STEAM NAVIGATION COMPANY LIMITED",
+    "date_of_creation": "1856-09-29",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-01-27"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "type": "audit-exemption-subsidiary",
+        "made_up_to": "2020-12-31"
+      },
+      "next_made_up_to": "2021-12-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "address_line_1": "16 Palace Street",
+      "address_line_2": "London",
+      "postal_code": "SW1E 5JQ"
+    },
+    "links": {
+      "self": "/company/00000133"
+    }
+  },
+  {
+    "company_number": "00000529",
+    "company_name": "B.L.HOLDINGS LIMITED",
+    "date_of_creation": "1856-11-04",
+    "confirmation_statement": {
+      "last_made_up_to": "2021-12-31"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 3
+      },
+      "last_accounts": {
+        "type": "full",
+        "made_up_to": "2021-03-31"
+      },
+      "next_made_up_to": "2022-03-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "address_line_1": "York House",
+      "address_line_2": "45 Seymour Street",
+      "locality": "London",
+      "postal_code": "W1H 7LX"
+    },
+    "links": {
+      "self": "/company/00000529"
+    }
+  },
+  {
+    "company_number": "00000687",
+    "company_name": "BRITISH INDIAN TEA COMPANY LIMITED",
+    "date_of_creation": "1863-10-10",
+    "confirmation_statement": {
+      "last_made_up_to": "2021-06-21"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "type": "dormant",
+        "made_up_to": "2020-12-31"
+      },
+      "next_made_up_to": "2021-12-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "address_line_1": "Linton Park",
+      "address_line_2": "Linton",
+      "locality": "Maidstone",
+      "region": "Kent",
+      "postal_code": "ME17 4AB"
+    },
+    "links": {
+      "self": "/company/00000687"
+    }
+  },
+  {
+    "company_number": "00001122",
+    "company_name": "B T R PROPERTY HOLDINGS LIMITED",
+    "date_of_creation": "1864-03-31",
+    "confirmation_statement": {
+      "last_made_up_to": "2021-05-08"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "type": "small",
+        "made_up_to": "2020-12-31"
+      },
+      "next_made_up_to": "2021-12-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "premises": "Schneider Electric",
+      "address_line_1": "Stafford Park 5",
+      "locality": "Telford",
+      "postal_code": "TF3 3BL",
+      "country": "England"
+    },
+    "links": {
+      "self": "/company/00001122"
+    }
+  },
+  {
+    "company_number": "00001140",
+    "company_name": "BRITISH STEEL TRADING LIMITED",
+    "date_of_creation": "1864-04-04",
+    "confirmation_statement": {
+      "last_made_up_to": "2006-05-25"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "type": "dormant",
+        "made_up_to": "2006-12-30"
+      },
+      "next_made_up_to": "2007-12-30"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "premises": "18",
+      "address_line_1": "Grosvenor Place",
+      "locality": "London",
+      "postal_code": "SW1X 7HS"
+    },
+    "links": {
+      "self": "/company/00001140"
+    }
+  },
+  {
+    "company_number": "00002119",
+    "company_name": "BURY BREWERY COMPANY,LIMITED(THE)",
+    "date_of_creation": "1861-01-23",
+    "confirmation_statement": {
+      "last_made_up_to": "2021-08-14"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 3
+      },
+      "last_accounts": {
+        "type": "dormant",
+        "made_up_to": "2021-03-31"
+      },
+      "next_made_up_to": "2022-03-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "premises": "Myerscough Road",
+      "address_line_1": "Mellor Brook",
+      "locality": "Blackburn",
+      "region": "Lancashire",
+      "postal_code": "BB2 7LB",
+      "country": "England"
+    },
+    "links": {
+      "self": "/company/00002119"
+    }
+  },
+  {
+    "company_number": "00002537",
+    "company_name": "BRABY-FULLER LIMITED",
+    "date_of_creation": "1865-10-24",
+    "confirmation_statement": {
+      "last_made_up_to": "2004-10-31"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "type": "full",
+        "made_up_to": "2004-12-31"
+      },
+      "next_made_up_to": "2005-12-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "address_line_1": "KPMG",
+      "address_line_2": "Arlington Business Park Theale",
+      "locality": "Reading",
+      "region": "Berkshire",
+      "postal_code": "RG7 4SD"
+    },
+    "links": {
+      "self": "/company/00002537"
+    }
+  },
+  {
+    "company_number": "00003002",
+    "company_name": "BA (GI) LIMITED",
+    "date_of_creation": "1866-04-12",
+    "confirmation_statement": {
+      "last_made_up_to": "2021-11-06"
+    },
+    "type": "ltd",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "type": "full",
+        "made_up_to": "2020-12-31"
+      },
+      "next_made_up_to": "2021-12-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "premises": "4th Floor, 8",
+      "address_line_1": "Fenchurch Place",
+      "locality": "London",
+      "postal_code": "EC3M 4AJ",
+      "country": "England"
+    },
+    "links": {
+      "self": "/company/00003002"
+    }
+  },
+  {
+    "company_number": "00005188",
+    "company_name": "BIRMINGHAM LAW SOCIETY(THE)",
+    "date_of_creation": "1870-12-09",
+    "confirmation_statement": {
+      "last_made_up_to": "2022-01-24"
+    },
+    "type": "private-limited-guarant-nsc",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 12
+      },
+      "last_accounts": {
+        "type": "audited-abridged",
+        "made_up_to": "2020-12-31"
+      },
+      "next_made_up_to": "2021-12-31"
+    },
+    "jurisdiction": "england-wales",
+    "registered_office_address": {
+      "premises": "Suite 101, Cheltenham House",
+      "address_line_1": "14-16 Temple Street",
+      "locality": "Birmingham",
+      "postal_code": "B2 5BG"
+    },
+    "links": {
+      "self": "/company/00005188"
+    }
+  },
+  {
+    "company_number": "SP29395R",
+    "company_name": "CLANALBA HOUSING CO-OPERATIVE LIMITED",
+    "date_of_creation": "2002-04-30",
+    "type": "other",
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 99,
+        "month": 99
+      }
+    },
+    "jurisdiction": "scotland",
+    "registered_office_address": {
+      "address_line_1": "26 Cedarbank",
+      "address_line_2": "Livingston",
+      "locality": "West Lothian",
+      "postal_code": "EH54 6DR"
+    },
+    "links": {
+      "self": "/company/SP29395R"
+    }
+  }
+]

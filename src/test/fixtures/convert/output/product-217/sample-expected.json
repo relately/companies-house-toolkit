@@ -1,0 +1,393 @@
+[
+  {
+    "accounts": {
+      "next_made_up_to": "2023-10-31",
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 10
+      },
+      "next_due": "2024-07-12"
+    },
+    "company_name": "! HEAL UR TECH LTD",
+    "company_number": "14413082",
+    "company_status": "active",
+    "confirmation_statement": {
+      "next_due": "2023-10-25",
+      "next_made_up_to": "2023-10-11"
+    },
+    "date_of_creation": "2022-10-12",
+    "has_charges": false,
+    "links": {
+      "self": "/company/14413082"
+    },
+    "registered_office_address": {
+      "locality": "Guildford",
+      "country": "England",
+      "address_line_1": "5 Bridge Street",
+      "postal_code": "GU1 4RY"
+    },
+    "sic_codes": ["33140", "47421"],
+    "type": "private-limited-guarant-nsc"
+  },
+  {
+    "company_number": "08209948",
+    "date_of_creation": "2012-09-11",
+    "accounts": {
+      "next_made_up_to": "2023-09-30",
+      "last_accounts": {
+        "type": "dormant",
+        "made_up_to": "2022-09-30"
+      },
+      "accounting_reference_date": {
+        "day": 30,
+        "month": 9
+      },
+      "next_due": "2024-06-30"
+    },
+    "sic_codes": ["99999"],
+    "company_name": "! LTD",
+    "registered_office_address": {
+      "locality": "Harrogate",
+      "address_line_1": "9 Princes Square",
+      "country": "England",
+      "postal_code": "HG1 1ND"
+    },
+    "type": "ltd",
+    "company_status": "active",
+    "has_charges": false,
+    "confirmation_statement": {
+      "next_due": "2023-09-25",
+      "last_made_up_to": "2022-09-11",
+      "next_made_up_to": "2023-09-11"
+    },
+    "links": {
+      "self": "/company/08209948"
+    }
+  },
+  {
+    "company_status": "active",
+    "registered_office_address": {
+      "country": "United Kingdom",
+      "address_line_1": "The Studio Hatherlow House",
+      "postal_code": "SK6 3DY",
+      "address_line_2": "Hatherlow",
+      "locality": "Romiley"
+    },
+    "company_number": "11399177",
+    "date_of_creation": "2018-06-05",
+    "company_name": "!? LTD",
+    "links": {
+      "self": "/company/11399177"
+    },
+    "confirmation_statement": {
+      "next_made_up_to": "2024-06-05",
+      "next_due": "2024-06-19",
+      "last_made_up_to": "2023-06-05"
+    },
+    "accounts": {
+      "last_accounts": {
+        "made_up_to": "2022-06-30",
+        "type": "total-exemption-full"
+      },
+      "accounting_reference_date": {
+        "day": 30,
+        "month": 6
+      },
+      "next_due": "2024-03-31",
+      "next_made_up_to": "2023-06-30"
+    },
+    "sic_codes": ["47710"],
+    "type": "ltd",
+    "has_charges": false
+  },
+  {
+    "links": {
+      "self": "/company/11743365"
+    },
+    "company_number": "11743365",
+    "has_charges": false,
+    "type": "ltd",
+    "company_status": "active",
+    "confirmation_statement": {
+      "next_due": "2024-01-10",
+      "next_made_up_to": "2023-12-27",
+      "last_made_up_to": "2022-12-27"
+    },
+    "company_name": "!BIG IMPACT GRAPHICS LIMITED",
+    "registered_office_address": {
+      "postal_code": "EC1V 9LT",
+      "address_line_1": "372 Old Street",
+      "address_line_2": "335 Rosden House",
+      "country": "United Kingdom",
+      "locality": "London"
+    },
+    "sic_codes": ["18129", "59112", "63120", "74201"],
+    "accounts": {
+      "last_accounts": {
+        "made_up_to": "2022-12-31",
+        "type": "dormant"
+      },
+      "next_due": "2024-09-30",
+      "accounting_reference_date": {
+        "month": 12,
+        "day": 31
+      },
+      "next_made_up_to": "2023-12-31"
+    },
+    "date_of_creation": "2018-12-28"
+  },
+  {
+    "links": {
+      "self": "/company/13404790"
+    },
+    "accounts": {
+      "last_accounts": {
+        "made_up_to": "2022-09-30",
+        "type": "micro-entity"
+      },
+      "accounting_reference_date": {
+        "month": 9,
+        "day": 30
+      },
+      "next_due": "2024-06-30",
+      "next_made_up_to": "2023-09-30"
+    },
+    "company_name": "!GOBERUB LTD",
+    "company_number": "13404790",
+    "company_status": "active",
+    "confirmation_statement": {
+      "next_due": "2024-05-29",
+      "next_made_up_to": "2024-05-15",
+      "last_made_up_to": "2023-05-15"
+    },
+    "date_of_creation": "2021-05-17",
+    "registered_office_address": {
+      "region": "Hertfordshire",
+      "address_line_1": "13 Southmill Road",
+      "postal_code": "CM23 3FR",
+      "country": "England",
+      "locality": "Bishop's Stortford"
+    },
+    "sic_codes": ["62020", "70229", "79110"],
+    "type": "ltd",
+    "has_charges": false
+  },
+  {
+    "links": {
+      "self": "/company/13522064"
+    },
+    "accounts": {
+      "last_accounts": {
+        "made_up_to": "2023-07-31",
+        "type": "micro-entity"
+      },
+      "next_made_up_to": "2024-07-31",
+      "next_due": "2025-04-30",
+      "accounting_reference_date": {
+        "month": 7,
+        "day": 31
+      }
+    },
+    "company_name": "!NFOGENIE LTD",
+    "company_number": "13522064",
+    "company_status": "active",
+    "confirmation_statement": {
+      "next_due": "2024-08-03",
+      "last_made_up_to": "2023-07-20",
+      "next_made_up_to": "2024-07-20"
+    },
+    "date_of_creation": "2021-07-21",
+    "has_charges": false,
+    "registered_office_address": {
+      "address_line_1": "71-75 Shelton Street",
+      "region": "Greater London",
+      "country": "United Kingdom",
+      "locality": "London",
+      "postal_code": "WC2H 9JQ"
+    },
+    "sic_codes": ["58290"],
+    "type": "ltd"
+  },
+  {
+    "links": {
+      "self": "/company/11006939"
+    },
+    "company_name": "!NNOV8 LIMITED",
+    "date_of_creation": "2017-10-11",
+    "accounts": {
+      "accounting_reference_date": {
+        "month": 3,
+        "day": 31
+      },
+      "next_due": "2023-12-31",
+      "last_accounts": {
+        "made_up_to": "2022-03-31",
+        "type": "micro-entity"
+      },
+      "next_made_up_to": "2023-03-31"
+    },
+    "registered_office_address": {
+      "postal_code": "TN8 5NF",
+      "address_line_1": "Old Barn Farm",
+      "country": "England",
+      "address_line_2": "Hartfield Road",
+      "locality": "Edenbridge"
+    },
+    "company_status": "active",
+    "type": "ltd",
+    "has_charges": false,
+    "confirmation_statement": {
+      "last_made_up_to": "2022-10-10",
+      "next_made_up_to": "2023-10-10",
+      "next_due": "2023-10-24"
+    },
+    "company_number": "11006939",
+    "sic_codes": ["62090", "70229"]
+  },
+  {
+    "links": {
+      "self": "/company/SC606050"
+    },
+    "date_of_creation": "2018-08-22",
+    "confirmation_statement": {
+      "next_due": "2024-02-12",
+      "next_made_up_to": "2024-01-29",
+      "last_made_up_to": "2023-01-29"
+    },
+    "company_status": "active",
+    "registered_office_address": {
+      "locality": "Aberdeen",
+      "address_line_1": "26 Polmuir Road",
+      "postal_code": "AB11 7SY",
+      "country": "Scotland"
+    },
+    "has_charges": true,
+    "accounts": {
+      "next_made_up_to": "2023-08-31",
+      "next_due": "2024-05-31",
+      "last_accounts": {
+        "made_up_to": "2022-08-31",
+        "type": "total-exemption-full"
+      },
+      "accounting_reference_date": {
+        "day": 31,
+        "month": 8
+      }
+    },
+    "sic_codes": ["68209"],
+    "company_name": "!NSPIRED INVESTMENTS LTD",
+    "type": "ltd",
+    "company_number": "SC606050"
+  },
+  {
+    "accounts": {
+      "next_due": "2023-10-10",
+      "accounting_reference_date": {
+        "month": 1,
+        "day": 10
+      },
+      "last_accounts": {
+        "type": "total-exemption-full",
+        "made_up_to": "2022-01-10"
+      },
+      "next_made_up_to": "2023-01-10"
+    },
+    "type": "ltd",
+    "registered_office_address": {
+      "country": "United Kingdom",
+      "postal_code": "AB11 7SY",
+      "address_line_1": "26 Polmuir Road",
+      "locality": "Aberdeen"
+    },
+    "company_name": "!NSPIRED LTD",
+    "date_of_creation": "2012-04-11",
+    "sic_codes": ["70229"],
+    "company_number": "SC421617",
+    "company_status": "liquidation",
+    "has_charges": false,
+    "confirmation_statement": {
+      "next_made_up_to": "2022-04-11",
+      "last_made_up_to": "2021-04-11",
+      "next_due": "2022-04-25"
+    },
+    "links": {
+      "self": "/company/SC421617"
+    }
+  },
+  {
+    "type": "ltd",
+    "date_of_creation": "2006-06-29",
+    "registered_office_address": {
+      "address_line_1": "Unit 3 Willcock House",
+      "postal_code": "BS30 5LW",
+      "locality": "Bristol",
+      "address_line_2": "Southway Drive"
+    },
+    "sic_codes": ["49410"],
+    "company_number": "05861787",
+    "accounts": {
+      "next_made_up_to": "2023-06-30",
+      "last_accounts": {
+        "type": "total-exemption-full",
+        "made_up_to": "2022-06-30"
+      },
+      "accounting_reference_date": {
+        "day": 30,
+        "month": 6
+      },
+      "next_due": "2024-03-31"
+    },
+    "company_name": "XLSS (LOGISTICS) LTD",
+    "company_status": "active",
+    "previous_company_names": [
+      {
+        "effective_from": "2015-01-30",
+        "ceased_on": "2017-05-03",
+        "name": "XL STAFF SOLUTIONS LTD"
+      },
+      {
+        "ceased_on": "2015-01-30",
+        "name": "MOVEJOB LTD",
+        "effective_from": "2011-11-15"
+      },
+      {
+        "effective_from": "2011-03-10",
+        "ceased_on": "2011-11-15",
+        "name": "MOOVJOB LTD"
+      },
+      {
+        "name": "GEEN LIMITED",
+        "ceased_on": "2011-03-10",
+        "effective_from": "2009-04-22"
+      },
+      {
+        "name": "JELLY BEAN RECRUITMENT LIMITED",
+        "ceased_on": "2009-04-22",
+        "effective_from": "2006-06-29"
+      }
+    ],
+    "has_charges": true,
+    "confirmation_statement": {
+      "next_made_up_to": "2024-06-29",
+      "last_made_up_to": "2023-06-29",
+      "next_due": "2024-07-13"
+    },
+    "links": {
+      "self": "/company/05861787"
+    }
+  },
+  {
+    "company_name": "\"20-20 VOICE\" CANCER",
+    "company_number": "CE000952",
+    "company_status": "active",
+    "confirmation_statement": {
+      "next_made_up_to": "2015-04-16"
+    },
+    "date_of_creation": "2014-04-17",
+    "has_charges": false,
+    "links": {
+      "self": "/company/CE000952"
+    },
+    "type": "charitable-incorporated-organisation"
+  }
+]
