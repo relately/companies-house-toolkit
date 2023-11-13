@@ -1,4 +1,5 @@
 import EventEmitter from 'node:events';
+import { Writable } from 'node:stream';
 import { FormatterType } from './formatters/index.js';
 import { convertProduct101 } from './product101/converter.js';
 import { convertProduct183 } from './product183/converter.js';
@@ -12,11 +13,19 @@ export { FormatterType, ProductType, SourceType };
 export type ProgressHandler = (progress: number) => void;
 export type Through<I, O = I> = (x: Highland.Stream<I>) => Highland.Stream<O>;
 
-export const convert = (
-  source: SourceType,
-  productType: ProductType,
-  formatterType: FormatterType
-) => {
+type ConvertOptions = {
+  source: SourceType;
+  productType: ProductType;
+  formatterType: FormatterType;
+  writeStream?: Writable;
+};
+
+export const convert = ({
+  source,
+  productType,
+  formatterType,
+  writeStream = process.stdout,
+}: ConvertOptions) => {
   const eventEmitter = new EventEmitter();
 
   try {
@@ -26,13 +35,13 @@ export const convert = (
       .tap((item) => (itemBytes += Buffer.byteLength(item, 'utf8')))
       .through(getConverter(productType, formatterType))
       .tap(() => eventEmitter.emit('progress', itemBytes))
-      .pipe(process.stdout)
+      .pipe(writeStream)
       .on('finish', () => eventEmitter.emit('finish'));
   } catch (error) {
     if (error instanceof Error && 'message' in error) {
-      eventEmitter.emit('x', error.message);
+      eventEmitter.emit('error', error.message);
     } else if (typeof error === 'string') {
-      eventEmitter.emit('x', error);
+      eventEmitter.emit('error', error);
     } else {
       throw error;
     }

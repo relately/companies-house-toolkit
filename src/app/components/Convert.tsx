@@ -40,7 +40,7 @@ export const Convert: React.FC<ConvertProps> = ({
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    convert(sourceType, productType, formatterType)
+    convert({ source: sourceType, productType, formatterType })
       .on('error', (error: string) => {
         addError(error);
 
