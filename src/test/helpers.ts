@@ -20,3 +20,21 @@ export const captureStreamOutput = (
     });
   });
 };
+
+type CaptureWarningCallback = () => EventEmitter;
+
+export const captureStreamWarnings = (
+  callback: CaptureWarningCallback
+): Promise<string[]> => {
+  return new Promise((resolve) => {
+    const warnings: string[] = [];
+
+    callback()
+      .on('warning', (warning: string) => {
+        warnings.push(warning);
+      })
+      .on('finish', () => {
+        resolve(warnings);
+      });
+  });
+};

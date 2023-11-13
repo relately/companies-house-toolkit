@@ -1,12 +1,12 @@
 import { Level } from 'level';
 import EventEmitter from 'node:events';
 import { Writable } from 'node:stream';
-import { FormatterType } from './convert.js';
 import { readValuesFromDb } from './snapshot/db.js';
 import { writeUpdatesToDb } from './snapshot/product101.js';
 import { getSnapshotDate, writeSnapshotToDb } from './snapshot/product183.js';
 import { CompanySnapshotDB, SnapshotCompany } from './snapshot/types.js';
-import { DirectorySourceType, FileSourceType } from './sources/index.js';
+import { FormatterType } from './util/formatters/types.js';
+import { DirectorySourceType, FileSourceType } from './util/sources/types.js';
 
 type SnapshotOptions = {
   snapshotSource: FileSourceType | DirectorySourceType;
@@ -42,15 +42,10 @@ const processSnapshot = async (
     eventEmitter.emit('status', 'writing snapshot');
     await writeSnapshotToDb(db, snapshotSource, eventEmitter);
 
+    const snapshotDate = await getSnapshotDate(snapshotSource);
+
     eventEmitter.emit('status', 'writing updates');
-    await writeUpdatesToDb(
-      db,
-      {
-        ...updatesSource,
-        fileSelection: await getSnapshotDate(snapshotSource),
-      },
-      eventEmitter
-    );
+    await writeUpdatesToDb(db, updatesSource, snapshotDate, eventEmitter);
 
     eventEmitter.emit('status', 'reading from db');
     readValuesFromDb(db, formatterType)

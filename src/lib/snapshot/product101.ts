@@ -1,11 +1,12 @@
 import highland from 'highland';
 import { EventEmitter } from 'node:events';
 import { Duplex } from 'node:stream';
-import { parseProduct101 } from '../product101/parser.js';
-import { transformProduct101 } from '../product101/transformer.js';
-import { CompanyTransaction } from '../product101/transformer/types.js';
-import { DirectorySourceType, getSourceStream } from '../sources/index.js';
+import { parseProduct101 } from '../products/101/parser.js';
+import { transformProduct101 } from '../products/101/transformer.js';
+import { CompanyTransaction } from '../products/101/transformer/types.js';
 import { formatDates } from '../util/objects.js';
+import { getDirectoryFileStream } from '../util/sources/directory.js';
+import { DirectorySourceType } from '../util/sources/types.js';
 import { resolveBatch } from './db.js';
 import {
   CompanySnapshotDB,
@@ -16,10 +17,11 @@ import {
 export const writeUpdatesToDb = (
   db: CompanySnapshotDB,
   source: DirectorySourceType,
+  snapshotDate: Date,
   eventEmitter: EventEmitter,
   batchSize = 1000
 ) =>
-  getSourceStream(source, eventEmitter)
+  getDirectoryFileStream(source, 'txt', snapshotDate)
     .through(parseProduct101)
     .map(transformProduct101)
     .through(transformTransactionToBatchOperation())

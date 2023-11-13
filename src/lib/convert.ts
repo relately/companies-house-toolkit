@@ -1,65 +1,47 @@
 import EventEmitter from 'node:events';
 import { Writable } from 'node:stream';
-import { FormatterType } from './formatters/index.js';
-import { convertProduct101 } from './product101/converter.js';
-import { convertProduct183 } from './product183/converter.js';
-import { convertProduct217 } from './product217/converter.js';
-import { SourceType, getSourceStream } from './sources/index.js';
-import { ProductType } from './types/product.js';
-
-export { estimateSourceSize } from './sources/index.js';
-export { FormatterType, ProductType, SourceType };
-
-export type ProgressHandler = (progress: number) => void;
-export type Through<I, O = I> = (x: Highland.Stream<I>) => Highland.Stream<O>;
+import { getConverter, getSourceStream } from './convert/index.js';
+import { estimateProduct101SourceSize } from './products/101/source.js';
+import { estimateProduct183SourceSize } from './products/183/source.js';
+import { estimateProduct217SourceSize } from './products/217/source.js';
+import { Product } from './types/product.js';
+import { FormatterType } from './util/formatters/types.js';
+import { SourceType } from './util/sources/types.js';
 
 type ConvertOptions = {
   source: SourceType;
-  productType: ProductType;
+  product: Product;
   formatterType: FormatterType;
   writeStream?: Writable;
 };
 
 export const convert = ({
+  product,
   source,
-  productType,
   formatterType,
   writeStream = process.stdout,
 }: ConvertOptions) => {
   const eventEmitter = new EventEmitter();
 
-  try {
-    let itemBytes = 0;
+  let itemBytes = 0;
 
-    getSourceStream(source, eventEmitter)
-      .tap((item) => (itemBytes += Buffer.byteLength(item, 'utf8')))
-      .through(getConverter(productType, formatterType))
-      .tap(() => eventEmitter.emit('progress', itemBytes))
-      .pipe(writeStream)
-      .on('finish', () => eventEmitter.emit('finish'));
-  } catch (error) {
-    if (error instanceof Error && 'message' in error) {
-      eventEmitter.emit('error', error.message);
-    } else if (typeof error === 'string') {
-      eventEmitter.emit('error', error);
-    } else {
-      throw error;
-    }
-  }
+  getSourceStream(product, source)
+    .tap((item) => (itemBytes += Buffer.byteLength(item, 'utf8')))
+    .through(getConverter(product, formatterType))
+    .tap(() => eventEmitter.emit('progress', itemBytes))
+    .pipe(writeStream)
+    .on('finish', () => eventEmitter.emit('finish'));
 
   return eventEmitter;
 };
 
-const getConverter = (
-  productType: ProductType,
-  formatterType: FormatterType
-): Through<string, string> => {
-  switch (productType.product) {
+export const estimateSourceSize = (product: Product, source: SourceType) => {
+  switch (product) {
     case '101':
-      return convertProduct101(formatterType);
+      return estimateProduct101SourceSize(source);
     case '183':
-      return convertProduct183(formatterType);
+      return estimateProduct183SourceSize(source);
     case '217':
-      return convertProduct217(formatterType);
+      return estimateProduct217SourceSize(source);
   }
 };

@@ -3,41 +3,34 @@ import { createCommand, createOption } from 'commander';
 import { render } from 'ink';
 import { lstatSync } from 'node:fs';
 import React from 'react';
-import { FormatterType, ProductType } from '../../lib/convert.js';
 
-import { Product101 } from '../../lib/product101/types.js';
-import { Product183 } from '../../lib/product183/types.js';
+import { FormatterType } from '../../lib/util/formatters/types.js';
 import {
   DirectorySourceType,
   FileSourceType,
-} from '../../lib/sources/index.js';
+} from '../../lib/util/sources/types.js';
 import { Snapshot } from '../components/Snapshot.js';
 
-const parseSnapshotProductType = (
-  productPair: string
-): Product183 | undefined => {
+const parseSnapshotProductType = (productPair: string): '183' | undefined => {
   switch (productPair) {
     case '183,101':
-      return { product: '183', extension: 'dat', fileSelection: 'all' };
+      return '183';
     default:
       return undefined;
   }
 };
 
-const parseUpdatesProductType = (
-  productPair: string
-): Product101 | undefined => {
+const parseUpdatesProductType = (productPair: string): '101' | undefined => {
   switch (productPair) {
     case '183,101':
-      return { product: '101', extension: 'txt', fileSelection: 'all' };
+      return '101';
     default:
       return undefined;
   }
 };
 
 const parseSourceType = (
-  input: string,
-  productType: ProductType
+  input: string
 ): FileSourceType | DirectorySourceType | undefined => {
   const stats = lstatSync(input, { throwIfNoEntry: false });
 
@@ -49,8 +42,6 @@ const parseSourceType = (
     ? {
         type: 'directory',
         path: input,
-        extension: productType.extension,
-        fileSelection: productType.fileSelection,
       }
     : { type: 'file', path: input };
 };
@@ -100,10 +91,7 @@ export const createSnapshotCommand = () =>
         process.exit(1);
       }
 
-      const snapshotSource = parseSourceType(
-        options.snapshotPath,
-        snapshotParserType
-      );
+      const snapshotSource = parseSourceType(options.snapshotPath);
 
       if (!snapshotSource) {
         process.stderr.write(
@@ -112,10 +100,7 @@ export const createSnapshotCommand = () =>
         process.exit(1);
       }
 
-      const updatesSource = parseSourceType(
-        options.updatesPath,
-        updatesParserType
-      );
+      const updatesSource = parseSourceType(options.updatesPath);
 
       if (!updatesSource) {
         process.stderr.write(

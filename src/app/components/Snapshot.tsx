@@ -5,7 +5,7 @@ import { snapshot } from '../../lib/snapshot.js';
 import {
   DirectorySourceType,
   FileSourceType,
-} from '../../lib/sources/index.js';
+} from '../../lib/util/sources/types.js';
 import { useMessages } from '../hooks/useMessages.js';
 import { Messages } from './shared/Messages.js';
 import { Summary } from './shared/Summary.js';

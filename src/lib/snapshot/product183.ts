@@ -1,21 +1,19 @@
 import { parseISO } from 'date-fns';
+import { EventEmitter } from 'events';
 import highland from 'highland';
 import { BatchOperation } from 'level';
-import { EventEmitter } from 'stream';
-import { parseProduct183 } from '../product183/parser.js';
-import { parseHeader } from '../product183/parser/parseLine.js';
-import { transformProduct183 } from '../product183/transformer.js';
-import { Product183Company } from '../product183/transformer/types.js';
-import {
-  DirectorySourceType,
-  FileSourceType,
-  getSourceStream,
-} from '../sources/index.js';
+
+import { parseProduct183 } from '../products/183/parser.js';
+import { parseHeader } from '../products/183/parser/parseLine.js';
+import { getProduct183SourceStream } from '../products/183/source.js';
+import { transformProduct183 } from '../products/183/transformer.js';
+import { Product183Company } from '../products/183/transformer/types.js';
 import { formatDates } from '../util/objects.js';
+import { DirectorySourceType, FileSourceType } from '../util/sources/types.js';
 import { CompanySnapshotDB, SnapshotCompany } from './types.js';
 
 export const getSnapshotDate = (source: FileSourceType | DirectorySourceType) =>
-  getSourceStream(source)
+  getProduct183SourceStream(source)
     .split()
     .take(1)
     .map(parseHeader)
@@ -28,7 +26,7 @@ export const writeSnapshotToDb = (
   eventEmitter: EventEmitter,
   batchSize = 10000
 ) =>
-  getSourceStream(source, eventEmitter)
+  getProduct183SourceStream(source)
     .through(parseProduct183)
     .through(transformProduct183)
     .map(companyRecordToBatchOperation)
