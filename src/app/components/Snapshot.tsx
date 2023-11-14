@@ -1,7 +1,7 @@
-import { Box } from 'ink';
+import { Box, Text } from 'ink';
 import React, { useEffect } from 'react';
-import { FormatterType } from '../../lib/convert.js';
 import { snapshot } from '../../lib/snapshot.js';
+import { FormatterType } from '../../lib/util/formatters/types.js';
 import {
   DirectorySourceType,
   FileSourceType,
@@ -47,7 +47,7 @@ export const Snapshot: React.FC<SnapshotProps> = ({
         status={status}
         isComplete={isComplete}
         progress={
-          <Box>{progress > 0 ? `${progress} records written` : ''}</Box>
+          <Text>{progress > 0 ? `${progress} records written` : ''}</Text>
         }
       />
 
