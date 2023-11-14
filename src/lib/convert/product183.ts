@@ -1,12 +1,22 @@
+import { parseProduct183 } from '../products/183/parser.js';
+import { transformProduct183 } from '../products/183/transformer.js';
+import { Product183Company } from '../products/183/transformer/types.js';
 import { formatCsv } from '../util/formatters/csv.js';
 import { formatJson } from '../util/formatters/json.js';
 import { FormatterType } from '../util/formatters/types.js';
 import { Through } from '../util/types.js';
-import { SnapshotCompany } from './types.js';
 
-export const formatCompanySnapshot = (
+export const convertProduct183 =
+  (formatterType: FormatterType): Through<string, string> =>
+  (stream) =>
+    stream
+      .through(parseProduct183)
+      .through(transformProduct183)
+      .through(formatProduct183(formatterType));
+
+const formatProduct183 = (
   type: FormatterType
-): Through<SnapshotCompany, string> => {
+): Through<Product183Company, string> => {
   switch (type) {
     case 'json':
       return formatJson();
@@ -17,7 +27,6 @@ export const formatCompanySnapshot = (
         'type',
         'subtype',
         'company_status',
-        'company_status_detail',
         'date_of_creation',
         'jurisdiction',
         'accounts.next_made_up_to',
@@ -35,12 +44,6 @@ export const formatCompanySnapshot = (
         'registered_office_address.region',
         'registered_office_address.postal_code',
         'registered_office_address.country',
-        'voluntary-dissolution-indicator',
-        'last_full_members_list_date',
-        'sic_codes.0',
-        'sic_codes.1',
-        'sic_codes.2',
-        'sic_codes.3',
         'links.self',
       ]);
   }

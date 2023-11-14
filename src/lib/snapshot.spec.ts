@@ -16,8 +16,6 @@ describe('snapshot', () => {
           updatesSource: {
             type: 'directory',
             path: fixturePath('snapshot/input/product-101'),
-            extension: 'txt',
-            fileSelection: 'all',
           },
           formatterType: 'json',
           writeStream,
@@ -43,8 +41,6 @@ describe('snapshot', () => {
         updatesSource: {
           type: 'directory',
           path: fixturePath('snapshot/input/product-101'),
-          extension: 'txt',
-          fileSelection: 'all',
         },
         formatterType: 'csv',
         writeStream,

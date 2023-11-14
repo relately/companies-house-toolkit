@@ -5,3 +5,5 @@ export type RecursivePartial<T> = {
     ? RecursivePartial<T[P]>
     : T[P];
 };
+
+export type Through<I, O = I> = (x: Highland.Stream<I>) => Highland.Stream<O>;

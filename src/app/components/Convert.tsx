@@ -1,13 +1,10 @@
 /* eslint-disable no-process-exit */
 import { Box } from 'ink';
 import React, { useEffect, useState } from 'react';
-import {
-  FormatterType,
-  ProductType,
-  SourceType,
-  convert,
-  estimateSourceSize,
-} from '../../lib/convert.js';
+import { convert, estimateSourceSize } from '../../lib/convert.js';
+import { Product } from '../../lib/types/product.js';
+import { FormatterType } from '../../lib/util/formatters/types.js';
+import { SourceType } from '../../lib/util/sources/types.js';
 import { useMessages } from '../hooks/useMessages.js';
 import { useProgress } from '../hooks/useProgress.js';
 import { Messages } from './shared/Messages.js';
@@ -16,19 +13,19 @@ import { Summary } from './shared/Summary.js';
 
 export type ConvertProps = {
   sourceType: SourceType;
-  productType: ProductType;
+  product: Product;
   formatterType: FormatterType;
 };
 
 export const Convert: React.FC<ConvertProps> = ({
   sourceType,
-  productType,
+  product,
   formatterType,
 }: ConvertProps) => {
   const { messages, addError } = useMessages();
   const { progress, setProgress, total } = useProgress(() => {
     try {
-      return estimateSourceSize(sourceType);
+      return estimateSourceSize(product, sourceType);
     } catch (error) {
       if (error instanceof Error && 'message' in error) {
         addError(error.message);
@@ -40,7 +37,7 @@ export const Convert: React.FC<ConvertProps> = ({
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    convert({ source: sourceType, productType, formatterType })
+    convert({ source: sourceType, product, formatterType })
       .on('error', (error: string) => {
         addError(error);
 

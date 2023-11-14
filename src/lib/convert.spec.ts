@@ -24,11 +24,7 @@ describe('convert', () => {
             type: 'file',
             path: fixturePath('convert/input/product-217/sample.csv'),
           },
-          productType: {
-            product: '217',
-            extension: 'csv',
-            fileSelection: 'latest',
-          },
+          product: '217',
           formatterType: 'csv',
           writeStream,
         })
@@ -48,14 +44,8 @@ describe('convert', () => {
           source: {
             type: 'directory',
             path: fixturePath('convert/input/product-217'),
-            extension: 'csv',
-            fileSelection: 'latest',
           },
-          productType: {
-            product: '217',
-            extension: 'csv',
-            fileSelection: 'latest',
-          },
+          product: '217',
           formatterType: 'csv',
           writeStream,
         })
@@ -69,6 +59,36 @@ describe('convert', () => {
       expect(output).toEqual(expected);
     });
 
+    it('should handle a directory that does not contain any CSV files', () => {
+      expect(() =>
+        convert({
+          source: {
+            type: 'directory',
+            path: fixturePath('convert/input/empty'),
+          },
+          product: '217',
+          formatterType: 'csv',
+        })
+      ).toThrowError(
+        `Directory "${fixturePath(
+          'convert/input/empty'
+        )}" does not contain any csv files`
+      );
+    });
+
+    it('should handle a file that does not exist', () => {
+      expect(() =>
+        convert({
+          source: {
+            type: 'file',
+            path: 'file-does-not-exist.csv',
+          },
+          product: '217',
+          formatterType: 'csv',
+        })
+      ).toThrowError('File "file-does-not-exist.csv" does not exist');
+    });
+
     it('should handle stdin', async () => {
       const input = await readFile(
         fixturePath('convert/input/product-217/sample.csv'),
@@ -80,11 +100,7 @@ describe('convert', () => {
           source: {
             type: 'stdin',
           },
-          productType: {
-            product: '217',
-            extension: 'csv',
-            fileSelection: 'latest',
-          },
+          product: '217',
           formatterType: 'csv',
           writeStream,
         });
@@ -108,14 +124,8 @@ describe('convert', () => {
           source: {
             type: 'directory',
             path: fixturePath('convert/input/product-217-multiple'),
-            extension: 'csv',
-            fileSelection: 'latest',
           },
-          productType: {
-            product: '217',
-            extension: 'csv',
-            fileSelection: 'latest',
-          },
+          product: '217',
           formatterType: 'csv',
           writeStream,
         })
@@ -136,11 +146,7 @@ describe('convert', () => {
             type: 'file',
             path: fixturePath('convert/input/product-217/sample.csv'),
           },
-          productType: {
-            product: '217',
-            extension: 'csv',
-            fileSelection: 'latest',
-          },
+          product: '217',
           formatterType: 'json',
           writeStream,
         })
@@ -163,11 +169,7 @@ describe('convert', () => {
             type: 'file',
             path: fixturePath('convert/input/product-183/sample.dat'),
           },
-          productType: {
-            product: '183',
-            extension: 'dat',
-            fileSelection: 'all',
-          },
+          product: '183',
           formatterType: 'csv',
           writeStream,
         })
@@ -187,14 +189,8 @@ describe('convert', () => {
           source: {
             type: 'directory',
             path: fixturePath('convert/input/product-183'),
-            extension: 'dat',
-            fileSelection: 'all',
           },
-          productType: {
-            product: '183',
-            extension: 'dat',
-            fileSelection: 'all',
-          },
+          product: '183',
           formatterType: 'csv',
           writeStream,
         })
@@ -219,11 +215,7 @@ describe('convert', () => {
           source: {
             type: 'stdin',
           },
-          productType: {
-            product: '183',
-            extension: 'dat',
-            fileSelection: 'all',
-          },
+          product: '183',
           formatterType: 'csv',
           writeStream,
         });
@@ -241,20 +233,31 @@ describe('convert', () => {
       expect(output).toEqual(expected);
     });
 
+    it('should handle a directory that does not contain any DAT files', () => {
+      expect(() =>
+        convert({
+          source: {
+            type: 'directory',
+            path: fixturePath('convert/input/empty'),
+          },
+          product: '183',
+          formatterType: 'csv',
+        })
+      ).toThrowError(
+        `Directory "${fixturePath(
+          'convert/input/empty'
+        )}" does not contain any dat files`
+      );
+    });
+
     it('should merge all files when passing a directory with multiple files', async () => {
       const output = await captureStreamOutput((writeStream) =>
         convert({
           source: {
             type: 'directory',
             path: fixturePath('convert/input/product-183-multiple'),
-            extension: 'dat',
-            fileSelection: 'all',
           },
-          productType: {
-            product: '183',
-            extension: 'dat',
-            fileSelection: 'all',
-          },
+          product: '183',
           formatterType: 'csv',
           writeStream,
         })
@@ -275,11 +278,7 @@ describe('convert', () => {
             type: 'file',
             path: fixturePath('convert/input/product-183/sample.dat'),
           },
-          productType: {
-            product: '183',
-            extension: 'dat',
-            fileSelection: 'all',
-          },
+          product: '183',
           formatterType: 'json',
           writeStream,
         })
@@ -302,11 +301,7 @@ describe('convert', () => {
             type: 'file',
             path: fixturePath('convert/input/product-101/sample.txt'),
           },
-          productType: {
-            product: '101',
-            extension: 'txt',
-            fileSelection: 'all',
-          },
+          product: '101',
           formatterType: 'csv',
           writeStream,
         })
@@ -326,14 +321,8 @@ describe('convert', () => {
           source: {
             type: 'directory',
             path: fixturePath('convert/input/product-101'),
-            extension: 'txt',
-            fileSelection: 'all',
           },
-          productType: {
-            product: '101',
-            extension: 'txt',
-            fileSelection: 'all',
-          },
+          product: '101',
           formatterType: 'csv',
           writeStream,
         })
@@ -358,11 +347,7 @@ describe('convert', () => {
           source: {
             type: 'stdin',
           },
-          productType: {
-            product: '101',
-            extension: 'txt',
-            fileSelection: 'all',
-          },
+          product: '101',
           formatterType: 'csv',
           writeStream,
         });
@@ -380,20 +365,31 @@ describe('convert', () => {
       expect(output).toEqual(expected);
     });
 
+    it('should handle a directory that does not contain any TXT files', () => {
+      expect(() =>
+        convert({
+          source: {
+            type: 'directory',
+            path: fixturePath('convert/input/empty'),
+          },
+          product: '101',
+          formatterType: 'csv',
+        })
+      ).toThrowError(
+        `Directory "${fixturePath(
+          'convert/input/empty'
+        )}" does not contain any txt files`
+      );
+    });
+
     it('should merge all files when passing a directory with multiple files', async () => {
       const output = await captureStreamOutput((writeStream) =>
         convert({
           source: {
             type: 'directory',
             path: fixturePath('convert/input/product-101-multiple'),
-            extension: 'txt',
-            fileSelection: 'all',
           },
-          productType: {
-            product: '101',
-            extension: 'txt',
-            fileSelection: 'all',
-          },
+          product: '101',
           formatterType: 'csv',
           writeStream,
         })
@@ -414,11 +410,7 @@ describe('convert', () => {
             type: 'file',
             path: fixturePath('convert/input/product-101/sample.txt'),
           },
-          productType: {
-            product: '101',
-            extension: 'txt',
-            fileSelection: 'all',
-          },
+          product: '101',
           formatterType: 'json',
           writeStream,
         })

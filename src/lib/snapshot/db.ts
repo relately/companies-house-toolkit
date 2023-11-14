@@ -2,8 +2,8 @@ import highland from 'highland';
 import EventEmitter from 'node:events';
 import { Readable } from 'node:stream';
 import { mergeDeepRight } from 'ramda';
-import { FormatterType } from '../convert.js';
 import { isLevelNotFoundError } from '../util/db.js';
+import { FormatterType } from '../util/formatters/types.js';
 import { formatCompanySnapshot } from './formatter.js';
 import {
   CompanySnapshotAddOperation,
