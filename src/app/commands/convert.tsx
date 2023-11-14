@@ -3,8 +3,9 @@ import { createArgument, createCommand, createOption } from 'commander';
 import { render } from 'ink';
 import { lstatSync } from 'node:fs';
 import React from 'react';
-import { FormatterType, SourceType } from '../../lib/convert.js';
 import { Product } from '../../lib/types/product.js';
+import { FormatterType } from '../../lib/util/formatters/types.js';
+import { SourceType } from '../../lib/util/sources/types.js';
 import { Convert } from '../components/Convert.js';
 
 const parseProductType = (product: string): Product | undefined => {
