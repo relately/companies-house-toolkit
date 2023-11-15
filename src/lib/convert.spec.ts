@@ -72,7 +72,7 @@ describe('convert', () => {
       ).toThrowError(
         `Directory "${fixturePath(
           'convert/input/empty'
-        )}" does not contain any csv files`
+        )}" does not contain any files matching "*.csv"`
       );
     });
 
@@ -246,7 +246,7 @@ describe('convert', () => {
       ).toThrowError(
         `Directory "${fixturePath(
           'convert/input/empty'
-        )}" does not contain any dat files`
+        )}" does not contain any files matching "*.dat"`
       );
     });
 
@@ -299,7 +299,7 @@ describe('convert', () => {
         convert({
           source: {
             type: 'file',
-            path: fixturePath('convert/input/product-101/sample.txt'),
+            path: fixturePath('convert/input/product-101/sample_all_opt.txt'),
           },
           product: '101',
           formatterType: 'csv',
@@ -338,7 +338,7 @@ describe('convert', () => {
 
     it('should handle stdin', async () => {
       const input = await readFile(
-        fixturePath('convert/input/product-101/sample.txt'),
+        fixturePath('convert/input/product-101/sample_all_opt.txt'),
         'utf-8'
       );
 
@@ -378,7 +378,7 @@ describe('convert', () => {
       ).toThrowError(
         `Directory "${fixturePath(
           'convert/input/empty'
-        )}" does not contain any txt files`
+        )}" does not contain any files matching "*_all_opt.txt"`
       );
     });
 
@@ -408,7 +408,7 @@ describe('convert', () => {
         convert({
           source: {
             type: 'file',
-            path: fixturePath('convert/input/product-101/sample.txt'),
+            path: fixturePath('convert/input/product-101/sample_all_opt.txt'),
           },
           product: '101',
           formatterType: 'json',
