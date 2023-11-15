@@ -11,7 +11,7 @@ export const getProduct217SourceStream = (sourceType: SourceType) => {
     case 'file':
       return getFileStream(sourceType.path);
     case 'directory':
-      return getDirectoryFileStream(sourceType, 'csv', 'latest');
+      return getDirectoryFileStream(sourceType, '*.csv', 'latest');
     case 'stdin':
       return getStdinStream();
   }
@@ -22,7 +22,7 @@ export const estimateProduct217SourceSize = (sourceType: SourceType) => {
     case 'file':
       return estimateFileSize(sourceType.path);
     case 'directory':
-      return estimateDirectorySize(sourceType, 'csv', 'latest');
+      return estimateDirectorySize(sourceType, '*.csv', 'latest');
     case 'stdin':
       return null;
   }

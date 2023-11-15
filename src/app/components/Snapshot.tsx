@@ -13,12 +13,14 @@ import { Summary } from './shared/Summary.js';
 export type SnapshotProps = {
   snapshotSource: FileSourceType | DirectorySourceType;
   updatesSource: DirectorySourceType;
+  alternativeUpdatesSource?: DirectorySourceType;
   formatterType: FormatterType;
 };
 
 export const Snapshot: React.FC<SnapshotProps> = ({
   snapshotSource,
   updatesSource,
+  alternativeUpdatesSource,
   formatterType,
 }: SnapshotProps) => {
   const { messages, addWarning, addError } = useMessages();
@@ -27,7 +29,12 @@ export const Snapshot: React.FC<SnapshotProps> = ({
   const [progress, setProgress] = React.useState(0);
 
   useEffect(() => {
-    snapshot({ snapshotSource, updatesSource, formatterType })
+    snapshot({
+      snapshotSource,
+      updatesSource,
+      alternativeUpdatesSource,
+      formatterType,
+    })
       .on('finish', () => setIsComplete(true))
       .on('status', (status: string) => {
         setProgress(0);

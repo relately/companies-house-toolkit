@@ -53,6 +53,7 @@ type SnapshotOptions = {
   productPair: string;
   snapshotPath: string;
   updatesPath: string;
+  alternativeUpdatesPath?: string;
   json?: boolean;
   j?: boolean;
 };
@@ -78,6 +79,12 @@ export const createSnapshotCommand = () =>
         '-u, --updates-path <updates>',
         'Path to the updates directory'
       ).makeOptionMandatory(true)
+    )
+    .addOption(
+      createOption(
+        '-a, --alternative-updates-path <alternative-updates>',
+        'Path to the alternative updates directory'
+      )
     )
     .addOption(
       createOption('-j, --json', 'Output JSON instead of CSV').default(false)
@@ -114,12 +121,27 @@ export const createSnapshotCommand = () =>
         process.exit(1);
       }
 
+      let alternativeUpdatesSource: DirectorySourceType | undefined = undefined;
+      if (options.alternativeUpdatesPath) {
+        const sourceType = parseSourceType(options.alternativeUpdatesPath);
+
+        if (sourceType && sourceType.type !== 'directory') {
+          process.stderr.write(
+            `Alternative updates path must be a directory, not a file`
+          );
+          process.exit(1);
+        }
+
+        alternativeUpdatesSource = sourceType;
+      }
+
       const formatterType = parseFormatterType(options);
 
       render(
         <Snapshot
           snapshotSource={snapshotSource}
           updatesSource={updatesSource}
+          alternativeUpdatesSource={alternativeUpdatesSource}
           formatterType={formatterType}
         />,
         { stdout: process.stderr }

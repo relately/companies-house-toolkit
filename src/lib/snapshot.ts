@@ -11,6 +11,7 @@ import { DirectorySourceType, FileSourceType } from './util/sources/types.js';
 type SnapshotOptions = {
   snapshotSource: FileSourceType | DirectorySourceType;
   updatesSource: DirectorySourceType;
+  alternativeUpdatesSource?: DirectorySourceType;
   formatterType: FormatterType;
   writeStream?: Writable;
 };
@@ -30,6 +31,7 @@ const processSnapshot = async (
   {
     snapshotSource,
     updatesSource,
+    alternativeUpdatesSource,
     formatterType,
     writeStream = process.stdout,
   }: SnapshotOptions,
@@ -45,7 +47,13 @@ const processSnapshot = async (
     const snapshotDate = await getSnapshotDate(snapshotSource);
 
     eventEmitter.emit('status', 'writing updates');
-    await writeUpdatesToDb(db, updatesSource, snapshotDate, eventEmitter);
+    await writeUpdatesToDb({
+      db,
+      source: updatesSource,
+      alternativeSource: alternativeUpdatesSource,
+      snapshotDate,
+      eventEmitter,
+    });
 
     eventEmitter.emit('status', 'reading from db');
     readValuesFromDb(db, formatterType)

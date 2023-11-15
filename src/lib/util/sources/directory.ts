@@ -4,16 +4,16 @@ import { allFiles, filesAfter, latestFile } from './directory/fileSelection.js';
 import { estimateFileSize, getFileStream } from './file.js';
 import { DirectoryFileSelection, DirectorySourceType } from './types.js';
 
-const getDirectoryFiles = (
+export const getDirectoryFiles = (
   { path }: DirectorySourceType,
-  extension: string,
+  fileGlob: string,
   fileSelection: DirectoryFileSelection
 ) => {
-  const files = globSync(`${path}/**/*.${extension}`);
+  const files = globSync(`${path}/**/${fileGlob}`);
 
   if (files.length === 0) {
     throw new Error(
-      `Directory "${path}" does not contain any ${extension} files`
+      `Directory "${path}" does not contain any files matching "${fileGlob}".`
     );
   }
 
