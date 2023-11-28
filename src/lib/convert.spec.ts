@@ -1,3 +1,4 @@
+import EventEmitter from 'events';
 import { readFile } from 'fs/promises';
 import { stdin } from 'mock-stdin';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -18,16 +19,20 @@ describe('convert', () => {
 
   describe('product 217', () => {
     it('should convert to standardised CSV', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'file',
-            path: fixturePath('convert/input/product-217/sample.csv'),
-          },
-          product: '217',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'file',
+                path: fixturePath('convert/input/product-217/sample.csv'),
+              },
+              product: '217',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -39,16 +44,20 @@ describe('convert', () => {
     });
 
     it('should handle passing a directory', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/product-217'),
-          },
-          product: '217',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'directory',
+                path: fixturePath('convert/input/product-217'),
+              },
+              product: '217',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -60,33 +69,59 @@ describe('convert', () => {
     });
 
     it('should handle a directory that does not contain any CSV files', () => {
-      expect(() =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/empty'),
+      expect(async () => {
+        const eventEmitter = new EventEmitter();
+        const errorPromise = new Promise<Error>((resolve) => {
+          eventEmitter.on('error', resolve);
+        });
+
+        void convert(
+          {
+            source: {
+              type: 'directory',
+              path: fixturePath('convert/input/empty'),
+            },
+            product: '217',
+            formatterType: 'csv',
           },
-          product: '217',
-          formatterType: 'csv',
-        })
-      ).toThrowError(
-        `Directory "${fixturePath(
-          'convert/input/empty'
-        )}" does not contain any files matching "*.csv"`
-      );
+          eventEmitter
+        );
+
+        const error = await errorPromise;
+
+        expect(error.message).toEqual(
+          `Directory "${fixturePath(
+            'convert/input/empty'
+          )}" does not contain any files matching "*.csv"`
+        );
+      });
     });
 
     it('should handle a file that does not exist', () => {
-      expect(() =>
-        convert({
-          source: {
-            type: 'file',
-            path: 'file-does-not-exist.csv',
+      expect(async () => {
+        const eventEmitter = new EventEmitter();
+        const errorPromise = new Promise<Error>((resolve) => {
+          eventEmitter.on('error', resolve);
+        });
+
+        void convert(
+          {
+            source: {
+              type: 'file',
+              path: 'file-does-not-exist.csv',
+            },
+            product: '217',
+            formatterType: 'csv',
           },
-          product: '217',
-          formatterType: 'csv',
-        })
-      ).toThrowError('File "file-does-not-exist.csv" does not exist');
+          eventEmitter
+        );
+
+        const error = await errorPromise;
+
+        expect(error.message).toEqual(
+          'File "file-does-not-exist.csv" does not exist'
+        );
+      });
     });
 
     it('should handle stdin', async () => {
@@ -95,19 +130,20 @@ describe('convert', () => {
         'utf-8'
       );
 
-      const output = await captureStreamOutput((writeStream) => {
-        const converter = convert({
-          source: {
-            type: 'stdin',
+      const output = await captureStreamOutput((writeStream, eventEmitter) => {
+        void convert(
+          {
+            source: {
+              type: 'stdin',
+            },
+            product: '217',
+            formatterType: 'csv',
+            writeStream,
           },
-          product: '217',
-          formatterType: 'csv',
-          writeStream,
-        });
+          eventEmitter
+        );
 
         mockStdin.send(input).send(null);
-
-        return converter;
       });
 
       const expected = await readFile(
@@ -119,16 +155,20 @@ describe('convert', () => {
     });
 
     it('should take the latest file when passing a directory with multiple files', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/product-217-multiple'),
-          },
-          product: '217',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'directory',
+                path: fixturePath('convert/input/product-217-multiple'),
+              },
+              product: '217',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -140,16 +180,20 @@ describe('convert', () => {
     });
 
     it('should convert to JSON', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'file',
-            path: fixturePath('convert/input/product-217/sample.csv'),
-          },
-          product: '217',
-          formatterType: 'json',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'file',
+                path: fixturePath('convert/input/product-217/sample.csv'),
+              },
+              product: '217',
+              formatterType: 'json',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -163,16 +207,20 @@ describe('convert', () => {
 
   describe('product 183', () => {
     it('should convert to standardised CSV', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'file',
-            path: fixturePath('convert/input/product-183/sample.dat'),
-          },
-          product: '183',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'file',
+                path: fixturePath('convert/input/product-183/sample.dat'),
+              },
+              product: '183',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -184,16 +232,20 @@ describe('convert', () => {
     });
 
     it('should handle passing a directory', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/product-183'),
-          },
-          product: '183',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'directory',
+                path: fixturePath('convert/input/product-183'),
+              },
+              product: '183',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -210,19 +262,20 @@ describe('convert', () => {
         'utf-8'
       );
 
-      const output = await captureStreamOutput((writeStream) => {
-        const converter = convert({
-          source: {
-            type: 'stdin',
+      const output = await captureStreamOutput((writeStream, eventEmitter) => {
+        void convert(
+          {
+            source: {
+              type: 'stdin',
+            },
+            product: '183',
+            formatterType: 'csv',
+            writeStream,
           },
-          product: '183',
-          formatterType: 'csv',
-          writeStream,
-        });
+          eventEmitter
+        );
 
         mockStdin.send(input).send(null);
-
-        return converter;
       });
 
       const expected = await readFile(
@@ -234,33 +287,49 @@ describe('convert', () => {
     });
 
     it('should handle a directory that does not contain any DAT files', () => {
-      expect(() =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/empty'),
+      expect(async () => {
+        const eventEmitter = new EventEmitter();
+        const errorPromise = new Promise<Error>((resolve) => {
+          eventEmitter.on('error', resolve);
+        });
+
+        await convert(
+          {
+            source: {
+              type: 'directory',
+              path: fixturePath('convert/input/empty'),
+            },
+            product: '183',
+            formatterType: 'csv',
           },
-          product: '183',
-          formatterType: 'csv',
-        })
-      ).toThrowError(
-        `Directory "${fixturePath(
-          'convert/input/empty'
-        )}" does not contain any files matching "*.dat"`
-      );
+          eventEmitter
+        );
+
+        const error = await errorPromise;
+
+        expect(error.message).toEqual(
+          `Directory "${fixturePath(
+            'convert/input/empty'
+          )}" does not contain any files matching "*.dat"`
+        );
+      });
     });
 
     it('should merge all files when passing a directory with multiple files', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/product-183-multiple'),
-          },
-          product: '183',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'directory',
+                path: fixturePath('convert/input/product-183-multiple'),
+              },
+              product: '183',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -272,16 +341,20 @@ describe('convert', () => {
     });
 
     it('should convert to JSON', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'file',
-            path: fixturePath('convert/input/product-183/sample.dat'),
-          },
-          product: '183',
-          formatterType: 'json',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'file',
+                path: fixturePath('convert/input/product-183/sample.dat'),
+              },
+              product: '183',
+              formatterType: 'json',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -295,16 +368,22 @@ describe('convert', () => {
 
   describe('product 101', () => {
     it('should convert to standardised CSV', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'file',
-            path: fixturePath('convert/input/product-101/sample_all_opt.txt'),
-          },
-          product: '101',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'file',
+                path: fixturePath(
+                  'convert/input/product-101/sample_all_opt.txt'
+                ),
+              },
+              product: '101',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -316,16 +395,20 @@ describe('convert', () => {
     });
 
     it('should handle passing a directory', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/product-101'),
-          },
-          product: '101',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'directory',
+                path: fixturePath('convert/input/product-101'),
+              },
+              product: '101',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -342,19 +425,20 @@ describe('convert', () => {
         'utf-8'
       );
 
-      const output = await captureStreamOutput((writeStream) => {
-        const converter = convert({
-          source: {
-            type: 'stdin',
+      const output = await captureStreamOutput((writeStream, eventEmitter) => {
+        void convert(
+          {
+            source: {
+              type: 'stdin',
+            },
+            product: '101',
+            formatterType: 'csv',
+            writeStream,
           },
-          product: '101',
-          formatterType: 'csv',
-          writeStream,
-        });
+          eventEmitter
+        );
 
         mockStdin.send(input).send(null);
-
-        return converter;
       });
 
       const expected = await readFile(
@@ -366,33 +450,49 @@ describe('convert', () => {
     });
 
     it('should handle a directory that does not contain any TXT files', () => {
-      expect(() =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/empty'),
+      expect(async () => {
+        const eventEmitter = new EventEmitter();
+        const errorPromise = new Promise<Error>((resolve) => {
+          eventEmitter.on('error', resolve);
+        });
+
+        void convert(
+          {
+            source: {
+              type: 'directory',
+              path: fixturePath('convert/input/empty'),
+            },
+            product: '101',
+            formatterType: 'csv',
           },
-          product: '101',
-          formatterType: 'csv',
-        })
-      ).toThrowError(
-        `Directory "${fixturePath(
-          'convert/input/empty'
-        )}" does not contain any files matching "*_all_opt.txt"`
-      );
+          eventEmitter
+        );
+
+        const error = await errorPromise;
+
+        expect(error.message).toEqual(
+          `Directory "${fixturePath(
+            'convert/input/empty'
+          )}" does not contain any files matching "*_all_opt.txt"`
+        );
+      });
     });
 
     it('should merge all files when passing a directory with multiple files', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'directory',
-            path: fixturePath('convert/input/product-101-multiple'),
-          },
-          product: '101',
-          formatterType: 'csv',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'directory',
+                path: fixturePath('convert/input/product-101-multiple'),
+              },
+              product: '101',
+              formatterType: 'csv',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(
@@ -404,16 +504,22 @@ describe('convert', () => {
     });
 
     it('should convert to JSON', async () => {
-      const output = await captureStreamOutput((writeStream) =>
-        convert({
-          source: {
-            type: 'file',
-            path: fixturePath('convert/input/product-101/sample_all_opt.txt'),
-          },
-          product: '101',
-          formatterType: 'json',
-          writeStream,
-        })
+      const output = await captureStreamOutput(
+        (writeStream, eventEmitter) =>
+          void convert(
+            {
+              source: {
+                type: 'file',
+                path: fixturePath(
+                  'convert/input/product-101/sample_all_opt.txt'
+                ),
+              },
+              product: '101',
+              formatterType: 'json',
+              writeStream,
+            },
+            eventEmitter
+          )
       );
 
       const expected = await readFile(

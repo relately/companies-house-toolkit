@@ -1,22 +1,18 @@
 import { parseProduct101 } from '../products/101/parser.js';
 import { transformProduct101 } from '../products/101/transformer.js';
-import { CompanyTransaction } from '../products/101/transformer/types.js';
 import { formatCsv } from '../util/formatters/csv.js';
 import { formatJson } from '../util/formatters/json.js';
 import { FormatterType } from '../util/formatters/types.js';
-import { Through } from '../util/types.js';
+import { compose, map } from '../util/streams.js';
 
-export const convertProduct101 =
-  (formatterType: FormatterType): Through<string, string> =>
-  (stream) =>
-    stream
-      .through(parseProduct101)
-      .map(transformProduct101)
-      .through(formatProduct101(formatterType));
+export const convertProduct101 = (formatterType: FormatterType) =>
+  compose(
+    parseProduct101(),
+    map(transformProduct101),
+    formatProduct101(formatterType)
+  );
 
-const formatProduct101 = (
-  type: FormatterType
-): Through<CompanyTransaction, string> => {
+const formatProduct101 = (type: FormatterType) => {
   switch (type) {
     case 'json':
       return formatJson();

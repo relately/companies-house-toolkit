@@ -35,10 +35,13 @@ export const transformProduct100 = (
           accounts: transformProduct183Accounts(record),
           company_name: record.name,
           company_number: record.companyNumber,
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
           registered_office_address:
             transformProduct100RegisteredOfficeAddress(record),
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Add Record':
@@ -58,13 +61,16 @@ export const transformProduct100 = (
           company_status_detail: transformProduct183CompanyStatusDetail(
             record.inspectMarker
           ),
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
           registered_office_address:
             transformProduct100RegisteredOfficeAddress(record),
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Restoration':
@@ -85,13 +91,16 @@ export const transformProduct100 = (
           company_status_detail: transformProduct183CompanyStatusDetail(
             record.inspectMarker
           ),
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
           registered_office_address:
             transformProduct100RegisteredOfficeAddress(record),
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Status':
@@ -102,7 +111,10 @@ export const transformProduct100 = (
           document_type: record.gazettableDocumentType,
         },
         data: {
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Accounts Made Up Date':
@@ -127,7 +139,7 @@ export const transformProduct100 = (
           document_type: record.gazettableDocumentType,
         },
         data: {
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
         },
@@ -195,7 +207,7 @@ export const transformProduct100 = (
         type: 'date-of-incorporation',
         ...transformCommonFields(record),
         data: {
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
         },
       };
     case 'Inspect Marker':
@@ -277,11 +289,8 @@ export const transformProduct100 = (
         type: 'full-members-list',
         ...transformCommonFields(record),
         data: {
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
-          ),
-          last_full_members_list_date: parseIsoDate(
-            record.confirmationStatementDate
           ),
         },
       };
@@ -340,7 +349,7 @@ export const transformProduct100 = (
           document_type: record.gazettableDocumentType,
         },
         data: {
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
         },

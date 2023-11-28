@@ -47,9 +47,7 @@
     },
     "company_name": "VULCAN REALISATIONS LIMITED",
     "company_number": "00001556",
-    "confirmation_statement": {
-      "last_made_up_to": "2004-04-24"
-    },
+    "last_full_members_list_date": "2004-04-24",
     "date_of_creation": "1864-08-27",
     "jurisdiction": "england-wales",
     "links": {
@@ -73,7 +71,7 @@
         "made_up_to": "2022-03-03",
         "type": "dormant"
       },
-      "next_made_up_to": "2023-03-03"
+      "next_made_up_to": "2023-03-01"
     },
     "company_name": "WHITBREAD INTERNATIONAL LIMITED",
     "company_number": "00002120",
@@ -293,9 +291,28 @@
     "accounts": {
       "accounting_reference_date": {
         "day": 31,
+        "month": 5
+      },
+      "next_made_up_to": "1966-05-31"
+    },
+    "company_name": "P.L.A. (METROPOLITAN TERMINALS) LIMITED",
+    "company_number": "00849210",
+    "date_of_creation": "1965-05-18",
+    "registered_office_address": {
+      "address_line_1": "Tilbury Docks",
+      "address_line_2": "Tilbury",
+      "locality": "Essex",
+      "postal_code": "RM18 7ER"
+    },
+    "type": "ltd"
+  },
+  {
+    "accounts": {
+      "accounting_reference_date": {
+        "day": 31,
         "month": 1
       },
-      "next_made_up_to": "2024-01-31"
+      "next_made_up_to": "2023-01-31"
     },
     "company_name": "CAPE PTY LTD",
     "company_number": "FC039386",

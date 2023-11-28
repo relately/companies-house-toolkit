@@ -35,11 +35,11 @@ export type CompanyTransaction =
 type BaseTransaction = {
   gazette?: {
     document_type?: string;
-    date?: Date;
+    date?: string;
   };
   transaction_id: string;
   jurisdiction?: Company['jurisdiction'];
-  received_date?: Date;
+  received_date?: string;
   company_number: Company['company_number'];
   correction?: 'companies-house-correction' | 'errored-transaction';
 };
@@ -95,7 +95,10 @@ type CompanyAccountsMadeUpDateTransaction = BaseTransaction & {
 
 type CompanyConfirmationStatementMadeUpDateTransaction = BaseTransaction & {
   type: 'confirmation-statement-made-up-date';
-  data: Pick<RecursivePartial<Company>, 'confirmation_statement'>;
+  data: Pick<
+    RecursivePartial<Company>,
+    'confirmation_statement' | 'last_full_members_list_date'
+  >;
 };
 
 type CompanyAccountingReferenceDateTransaction = BaseTransaction & {

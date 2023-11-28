@@ -1,4 +1,3 @@
-import { formatISO, isValid, parse } from 'date-fns';
 import { Product183Record, Product183RecordVariableData } from './types.js';
 
 export const mapPostcodeStatus = (
@@ -134,19 +133,24 @@ export const mapPrivateFundIndicator = (
 };
 
 export const parseDate = (dateString: string): string | undefined => {
-  if (dateString.trim() === '' || dateString.trim() === '00000000') {
+  const trimmedDateString = dateString.trim();
+
+  if (trimmedDateString === '' || trimmedDateString === '00000000') {
     return undefined;
   }
 
-  const parsedDate = parse(dateString, 'yyyyMMdd', 0);
+  const year = trimmedDateString.slice(0, 4);
+  const month = trimmedDateString.slice(4, 6);
+  const day = trimmedDateString.slice(6, 8);
 
-  if (!isValid(parsedDate)) {
-    console.error('Invalid date', dateString);
+  const date = new Date(`${year}-${month}-${day}`);
 
+  if (isNaN(date.getTime())) {
+    console.error('Invalid date', trimmedDateString);
     return undefined;
   }
 
-  return formatISO(parsedDate, { representation: 'date' });
+  return `${year}-${month}-${day}`;
 };
 
 export const parseCompanyVariableData = (
@@ -167,16 +171,16 @@ export const parseCompanyVariableData = (
     'poBox',
   ];
 
-  return {
-    address: cells.reduce(
-      (result, cell, index) => ({
-        ...result,
-        [cell]:
-          parts[index] !== '' && parts[index] !== undefined
-            ? parts[index].replace(/,$/, '')
-            : '',
-      }),
-      {}
-    ) as Product183RecordVariableData['address'],
-  };
+  const result: Partial<Product183RecordVariableData['address']> = {};
+
+  for (let i = 0; i < cells.length; i++) {
+    const cell = cells[i];
+    const part = parts[i];
+    result[cell] =
+      part !== '' && part !== undefined
+        ? part.replace(/,$/, '').replace(/\r\n/, '')
+        : '';
+  }
+
+  return { address: result as Product183RecordVariableData['address'] };
 };

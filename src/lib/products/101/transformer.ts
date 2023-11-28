@@ -1,4 +1,3 @@
-import { parseIsoDate } from '../../util/dates.js';
 import {
   transformProduct183Accounts,
   transformProduct183CompanyStatus,
@@ -22,17 +21,20 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           accounts: transformProduct183Accounts(record),
           company_name: record.name,
           company_number: record.companyNumber,
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
           registered_office_address: transformProduct183RegisteredOfficeAddress(
             record.address
           ),
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Add Record':
@@ -52,14 +54,17 @@ export const transformProduct101 = (
           company_status_detail: transformProduct183CompanyStatusDetail(
             record.inspectMarker
           ),
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
           registered_office_address: transformProduct183RegisteredOfficeAddress(
             record.address
           ),
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Restoration':
@@ -68,7 +73,7 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           accounts: transformProduct183Accounts(record),
@@ -80,14 +85,17 @@ export const transformProduct101 = (
           company_status_detail: transformProduct183CompanyStatusDetail(
             record.inspectMarker
           ),
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
           registered_office_address: transformProduct183RegisteredOfficeAddress(
             record.address
           ),
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Status':
@@ -98,7 +106,10 @@ export const transformProduct101 = (
           document_type: record.gazettableDocumentType,
         },
         data: {
-          type: transformProduct183Type(record.companyStatus),
+          type: transformProduct183Type(
+            record.companyStatus,
+            record.companyNumber
+          ),
         },
       };
     case 'Accounts Made Up Date':
@@ -106,9 +117,7 @@ export const transformProduct101 = (
         type: 'accounts-made-up-date',
         ...transformCommonFields(record),
         gazette: {
-          date: record.gazetteDate
-            ? parseIsoDate(record.gazetteDate)
-            : undefined,
+          date: record.gazetteDate,
           document_type: record.gazettableDocumentType,
         },
         data: {
@@ -123,7 +132,7 @@ export const transformProduct101 = (
           document_type: record.gazettableDocumentType,
         },
         data: {
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
         },
@@ -142,9 +151,7 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: record.gazetteDate
-            ? parseIsoDate(record.gazetteDate)
-            : undefined,
+          date: record.gazetteDate,
         },
         data: {
           company_name: record.name,
@@ -156,9 +163,7 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: record.gazetteDate
-            ? parseIsoDate(record.gazetteDate)
-            : undefined,
+          date: record.gazetteDate,
         },
         data: {
           registered_office_address: transformProduct183RegisteredOfficeAddress(
@@ -192,7 +197,7 @@ export const transformProduct101 = (
         type: 'date-of-incorporation',
         ...transformCommonFields(record),
         data: {
-          date_of_creation: parseIsoDate(record.dateOfIncorporation),
+          date_of_creation: record.dateOfIncorporation,
         },
       };
     case 'Inspect Marker':
@@ -214,7 +219,7 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
       };
     case 'Converted/Closed':
@@ -231,7 +236,7 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
       };
     case 'Dissolution/Dissolution Final Gazette':
@@ -240,7 +245,7 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           company_status: 'dissolved',
@@ -274,11 +279,8 @@ export const transformProduct101 = (
         type: 'full-members-list',
         ...transformCommonFields(record),
         data: {
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
-          ),
-          last_full_members_list_date: parseIsoDate(
-            record.confirmationStatementDate
           ),
         },
       };
@@ -304,7 +306,7 @@ export const transformProduct101 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           accounts: transformProduct183Accounts(record),
@@ -323,7 +325,7 @@ export const transformProduct101 = (
         type: 'jurisdiction',
         ...transformCommonFields(record),
         gazette: {
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           jurisdiction: transformProduct183Jurisdiction(record['jurisdiction']),
@@ -337,7 +339,7 @@ export const transformProduct101 = (
           document_type: record.gazettableDocumentType,
         },
         data: {
-          confirmation_statement: transformProduct183ConfirmationStatement(
+          ...transformProduct183ConfirmationStatement(
             record['confirmationStatementDate']
           ),
         },
@@ -360,7 +362,7 @@ const transformCommonFields = (
   'transaction_id' | 'received_date' | 'company_number' | 'jurisdiction'
 > => ({
   transaction_id: record.transactionId,
-  received_date: parseIsoDate(record.receivedDate),
+  received_date: record.receivedDate,
   company_number: record.companyNumber,
   jurisdiction: transformProduct183Jurisdiction(record.jurisdiction),
 });

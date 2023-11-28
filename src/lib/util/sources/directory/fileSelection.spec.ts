@@ -1,4 +1,3 @@
-import { parse } from 'date-fns';
 import { describe, expect, it } from 'vitest';
 import { allFiles, filesAfter, latestFile } from './fileSelection.js';
 
@@ -35,9 +34,7 @@ describe('filesAfter', () => {
       '/path/to/2021/01/03/example.dat',
     ];
 
-    expect(
-      filesAfter(parse('2021/01/01', 'yyyy/MM/dd', new Date()), input)
-    ).toEqual(expected);
+    expect(filesAfter(new Date('2021-01-01'), input)).toEqual(expected);
   });
 
   it('should sort files', () => {
@@ -52,17 +49,13 @@ describe('filesAfter', () => {
       '/path/to/2021/01/03/example.dat',
     ];
 
-    expect(
-      filesAfter(parse('2021/01/01', 'yyyy/MM/dd', new Date()), input)
-    ).toEqual(expected);
+    expect(filesAfter(new Date('2021-01-01'), input)).toEqual(expected);
   });
 
   it('should throw an error if the file is not in a directory structure that represents dates', () => {
     const input = ['/path/to/example.dat'];
 
-    expect(() =>
-      filesAfter(parse('2021/01/01', 'yyyy/MM/dd', new Date()), input)
-    ).toThrowError(
+    expect(() => filesAfter(new Date('2021-01-01'), input)).toThrowError(
       'File "/path/to/example.dat" is not in a directory structure that represents dates'
     );
   });

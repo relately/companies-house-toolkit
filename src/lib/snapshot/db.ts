@@ -1,10 +1,7 @@
-import highland from 'highland';
 import EventEmitter from 'node:events';
-import { Readable } from 'node:stream';
 import { mergeDeepRight } from 'ramda';
 import { isLevelNotFoundError } from '../util/db.js';
-import { FormatterType } from '../util/formatters/types.js';
-import { formatCompanySnapshot } from './formatter.js';
+import { calculateValues } from './shared.js';
 import {
   CompanySnapshotAddOperation,
   CompanySnapshotDB,
@@ -15,39 +12,35 @@ import {
   SnapshotCompany,
 } from './types.js';
 
-type BatchBuffer = Map<string, CompanySnapshotDBBatchOperation>;
+export type BatchBuffer = Map<string, CompanySnapshotDBBatchOperation>;
 
 export const resolveBatch = async (
   db: CompanySnapshotDB,
-  operations: CompanySnapshotOperation[],
-  eventEmitter: EventEmitter
-): Promise<CompanySnapshotDBBatchOperation[]> => {
-  const buffer: BatchBuffer = new Map();
-
-  for (const operation of operations) {
-    switch (operation.type) {
-      case 'add':
-        resolveAdd(operation, buffer);
-        break;
-      case 'update':
-        await resolveUpdate(operation, buffer, db, eventEmitter);
-        break;
-      case 'delete':
-        resolveDelete(operation, buffer);
-        break;
-    }
+  operation: CompanySnapshotOperation,
+  eventEmitter: EventEmitter,
+  buffer: BatchBuffer,
+  batchSize: number
+) => {
+  switch (operation.type) {
+    case 'add':
+      resolveAdd(operation, buffer);
+      break;
+    case 'update':
+      await resolveUpdate(operation, buffer, db, eventEmitter);
+      break;
+    case 'delete':
+      resolveDelete(operation, buffer);
+      break;
   }
 
-  return Array.from(buffer.values());
-};
+  if (buffer.size >= batchSize) {
+    const batch = Array.from(buffer.values());
+    buffer.clear();
+    return batch;
+  }
 
-export const readValuesFromDb = (
-  db: CompanySnapshotDB,
-  formatterType: FormatterType
-) =>
-  highland<SnapshotCompany>(Readable.from(db.values())).through(
-    formatCompanySnapshot(formatterType)
-  );
+  return [];
+};
 
 const resolveAdd = (
   operation: CompanySnapshotAddOperation,
@@ -56,7 +49,7 @@ const resolveAdd = (
   void buffer.set(operation.key, {
     type: 'put',
     key: operation.key,
-    value: operation.value,
+    value: calculateValues(operation.value),
   });
 
 const resolveDelete = (
@@ -77,13 +70,16 @@ const resolveUpdate = async (
       ? existingOperation.value
       : await getValueFromDb(operation.key, db, eventEmitter);
 
+  const value = calculateValues(
+    (existingValue
+      ? mergeDeepRight(existingValue, operation.value)
+      : operation.value) as SnapshotCompany
+  );
+
   buffer.set(operation.key, {
     type: 'put',
     key: operation.key,
-    value: mergeDeepRight(
-      existingValue || {},
-      operation.value
-    ) as SnapshotCompany,
+    value,
   });
 };
 

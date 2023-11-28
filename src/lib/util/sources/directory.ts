@@ -1,5 +1,6 @@
 import { globSync } from 'glob';
-import highland from 'highland';
+import { Readable, Transform } from 'stream';
+import { compose } from '../streams.js';
 import { allFiles, filesAfter, latestFile } from './directory/fileSelection.js';
 import { estimateFileSize, getFileStream } from './file.js';
 import { DirectoryFileSelection, DirectorySourceType } from './types.js';
@@ -31,9 +32,39 @@ export const getDirectoryFileStream = (
   extension: string,
   fileSelection: DirectoryFileSelection
 ) =>
-  highland(getDirectoryFiles(source, extension, fileSelection)).flatMap(
-    getFileStream
+  compose(
+    Readable.from(getDirectoryFiles(source, extension, fileSelection)),
+    readFilesInSequence()
   );
+
+export const readFilesInSequence = () => {
+  let currentFileStream: null | Readable = null;
+
+  return new Transform({
+    objectMode: true,
+    transform(filename: string, _encoding, callback) {
+      if (currentFileStream) {
+        currentFileStream.destroy();
+      }
+
+      currentFileStream = getFileStream(filename);
+
+      currentFileStream.on('data', (chunk) => {
+        this.push(chunk);
+      });
+
+      currentFileStream.on('end', callback);
+      currentFileStream.on('error', callback);
+    },
+
+    final(callback) {
+      if (currentFileStream) {
+        currentFileStream.destroy();
+      }
+      callback();
+    },
+  });
+};
 
 export const estimateDirectorySize = (
   source: DirectorySourceType,

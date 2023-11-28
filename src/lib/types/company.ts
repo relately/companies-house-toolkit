@@ -8,8 +8,8 @@ export interface Company {
   company_status: CompanyStatus;
   company_status_detail?: CompanyStatusDetail;
   confirmation_statement?: ConfirmationStatement;
-  date_of_cessation?: Date;
-  date_of_creation: Date;
+  date_of_cessation?: string;
+  date_of_creation: string;
   etag?: string;
   foreign_company_details?: ForeignCompanyDetails;
   has_been_liquidated?: boolean;
@@ -18,7 +18,7 @@ export interface Company {
   has_super_secure_pscs?: boolean;
   is_community_interest_company?: boolean;
   jurisdiction: Jurisdiction;
-  last_full_members_list_date?: Date;
+  last_full_members_list_date?: string;
   links: Links;
   previous_company_names?: PreviousCompanyName[];
   registered_office_address?: RegisteredOfficeAddress;
@@ -37,11 +37,11 @@ export type CompanyAccounts = {
     month: number;
   };
   last_accounts?: {
-    made_up_to: Date;
+    made_up_to: string;
     type: CompanyAccountsType;
   };
-  next_due?: Date;
-  next_made_up_to: Date;
+  next_due?: string;
+  next_made_up_to: string;
   overdue: boolean;
 };
 
@@ -64,9 +64,9 @@ export type CompanyAccountsType =
   | 'unaudited-abridged';
 
 type AnnualReturn = {
-  last_made_up_to?: Date;
-  next_due?: Date;
-  next_made_up_to?: Date;
+  last_made_up_to?: string;
+  next_due?: string;
+  next_made_up_to?: string;
   overdue?: boolean;
 };
 
@@ -98,9 +98,9 @@ type CompanyStatusDetail =
   | 'converted-to-plc';
 
 type ConfirmationStatement = {
-  last_made_up_to?: Date;
-  next_due: Date;
-  next_made_up_to: Date;
+  last_made_up_to?: string;
+  next_due: string;
+  next_made_up_to: string;
   overdue?: boolean;
 };
 
@@ -166,8 +166,8 @@ type Links = {
 };
 
 export type PreviousCompanyName = {
-  ceased_on: Date;
-  effective_from: Date;
+  ceased_on: string;
+  effective_from: string;
   name: string;
 };
 

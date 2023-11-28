@@ -1,45 +1,44 @@
-import { addYears, isBefore, setDate, setMonth } from 'date-fns';
 import { CompanyAccountsType } from '../../types/company.js';
-import { parseIsoDate } from '../../util/dates.js';
 import { removeEmptyValues } from '../../util/objects.js';
 import { convertToTitleCase } from '../../util/strings.js';
-import { Through } from '../../util/types.js';
 import { Product183Record } from './parser/types.js';
 import { Product183Company } from './transformer/types.js';
 
-export const transformProduct183: Through<
-  Product183Record,
-  Product183Company
-> = (stream) =>
-  stream.map(
-    (record): Product183Company => ({
-      accounts: transformProduct183Accounts(record),
-      company_number: record.companyNumber,
-      company_name: record.name,
-      company_status: transformProduct183CompanyStatus(record.inspectMarker),
-      company_status_detail: transformProduct183CompanyStatusDetail(
-        record.inspectMarker
-      ),
-      confirmation_statement: transformProduct183ConfirmationStatement(
-        record.confirmationStatementDate
-      ),
-      date_of_creation: parseIsoDate(record.dateOfIncorporation),
-      jurisdiction: transformProduct183Jurisdiction(record.jurisdiction),
-      links: {
-        self: `/company/${record.companyNumber}`,
-      },
-      registered_office_address: transformProduct183RegisteredOfficeAddress(
-        record.address
-      ),
-      type: transformProduct183Type(record['companyStatus']),
-      subtype: transformProduct183Subtype(record['privateFundIndicator']),
-    })
-  );
+export const transformProduct183 = (
+  record: Product183Record
+): Product183Company => {
+  return {
+    accounts: transformProduct183Accounts(record),
+    company_number: record.companyNumber,
+    company_name: record.name,
+    company_status: transformProduct183CompanyStatus(record.inspectMarker),
+    company_status_detail: transformProduct183CompanyStatusDetail(
+      record.inspectMarker
+    ),
+    ...transformProduct183ConfirmationStatement(
+      record.confirmationStatementDate
+    ),
+    date_of_creation: record.dateOfIncorporation,
+    jurisdiction: transformProduct183Jurisdiction(record.jurisdiction),
+    links: {
+      self: `/company/${record.companyNumber}`,
+    },
+    registered_office_address: transformProduct183RegisteredOfficeAddress(
+      record.address
+    ),
+    type: transformProduct183Type(
+      record['companyStatus'],
+      record['companyNumber']
+    ),
+    subtype: transformProduct183Subtype(record['privateFundIndicator']),
+  };
+};
 
 export const transformProduct183Accounts = (record: {
   accountingReferenceDate?: Product183Record['accountingReferenceDate'];
   accountsMadeUpDate?: Product183Record['accountsMadeUpDate'];
   accountsType?: Product183Record['accountsType'];
+  dateOfIncorporation?: Product183Record['dateOfIncorporation'];
 }): Product183Company['accounts'] => {
   const accountingReferenceDay =
     record.accountingReferenceDate &&
@@ -51,9 +50,6 @@ export const transformProduct183Accounts = (record: {
     record.accountingReferenceDate.month.length > 0
       ? parseInt(record.accountingReferenceDate.month)
       : undefined;
-  const lastMadeUpTo = record.accountsMadeUpDate
-    ? parseIsoDate(record.accountsMadeUpDate)
-    : undefined;
 
   return removeEmptyValues({
     accounting_reference_date: {
@@ -61,16 +57,11 @@ export const transformProduct183Accounts = (record: {
       month: accountingReferenceMonth,
     },
     last_accounts: {
-      made_up_to: lastMadeUpTo,
+      made_up_to: record.accountsMadeUpDate,
       type: record.accountsType
         ? transformAccountsType(record.accountsType)
         : undefined,
     },
-    next_made_up_to: getAccountsNextMadeUpToDate(
-      accountingReferenceMonth,
-      accountingReferenceDay,
-      lastMadeUpTo
-    ),
   });
 };
 
@@ -114,35 +105,6 @@ const transformAccountsType = (
   }
 };
 
-const getAccountsNextMadeUpToDate = (
-  accountsReferenceMonth?: number,
-  accountsReferenceDay?: number,
-  lastMadeUpToDate?: Date
-): Date | undefined => {
-  if (lastMadeUpToDate) {
-    return addYears(lastMadeUpToDate, 1);
-  }
-
-  if (
-    accountsReferenceDay == undefined ||
-    accountsReferenceDay > 31 ||
-    accountsReferenceMonth === undefined ||
-    accountsReferenceMonth > 12
-  ) {
-    return undefined;
-  }
-
-  // Otherwise return the next reference date after today
-  const madeUpToDateThisYear = setDate(
-    setMonth(new Date(), accountsReferenceMonth - 1),
-    accountsReferenceDay
-  );
-
-  return isBefore(madeUpToDateThisYear, new Date())
-    ? addYears(madeUpToDateThisYear, 1)
-    : madeUpToDateThisYear;
-};
-
 export const transformProduct183CompanyStatus = (
   inspectMarker: Product183Record['inspectMarker']
 ): Product183Company['company_status'] | undefined => {
@@ -183,9 +145,20 @@ export const transformProduct183CompanyStatusDetail = (
 
 export const transformProduct183ConfirmationStatement = (
   confirmationStatementDate: Product183Record['confirmationStatementDate']
-): Product183Company['confirmation_statement'] => ({
-  last_made_up_to: parseIsoDate(confirmationStatementDate),
-});
+): Pick<
+  Product183Company,
+  'confirmation_statement' | 'last_full_members_list_date'
+> => {
+  if (confirmationStatementDate > '2016-06-29') {
+    return {
+      confirmation_statement: { last_made_up_to: confirmationStatementDate },
+    };
+  } else {
+    return {
+      last_full_members_list_date: confirmationStatementDate,
+    };
+  }
+};
 
 export const transformProduct183Jurisdiction = (
   jurisdiction: Product183Record['jurisdiction']
@@ -230,7 +203,8 @@ export const transformProduct183RegisteredOfficeAddress = (
 };
 
 export const transformProduct183Type = (
-  companyStatus: Product183Record['companyStatus']
+  companyStatus: Product183Record['companyStatus'],
+  companyNumber: Product183Record['companyNumber']
 ): Product183Company['type'] | undefined => {
   switch (companyStatus) {
     case 'Company Converted / Closed':
@@ -248,6 +222,10 @@ export const transformProduct183Type = (
     case 'Old Public Company':
       return 'old-public-company';
     case 'Other':
+      if (companyNumber.startsWith('OC')) {
+        return 'llp';
+      }
+
       return 'other';
     case 'PLC':
       return 'plc';

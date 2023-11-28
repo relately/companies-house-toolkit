@@ -13,6 +13,8 @@ import {
   Product183Record,
 } from './types.js';
 
+const companyLineRegex = /^\w{8} /;
+
 export const getLineType = (line: string): Product183LineType => {
   if (line.startsWith('AAAAAAAA')) {
     return 'header';
@@ -22,7 +24,7 @@ export const getLineType = (line: string): Product183LineType => {
     return 'trailer';
   }
 
-  if (/^\w{8} /.test(line)) {
+  if (companyLineRegex.test(line)) {
     return 'company';
   }
 
@@ -35,26 +37,6 @@ export const parseHeader = (line: string): Product183Header => {
     fileProductionDate: parseDate(line.substring(12, 20).trim()) || '',
   };
 };
-
-const companyFields: Array<keyof Product183Record> = [
-  'companyNumber',
-  'name',
-  'dateOfIncorporation',
-  'accountsMadeUpDate',
-  'confirmationStatementDate',
-  'companyStatus',
-  'accountingReferenceDate',
-  'accountsType',
-  'inspectMarker',
-  'privateFundIndicator',
-  'companyNumberConvertedTo',
-  'postcode',
-  'postcodeStatus',
-  'poBox',
-  'alphaKey',
-  'jurisdiction',
-  'address',
-];
 
 export const parseCompanyRecord = (line: string): Product183Record => ({
   companyNumber: line.substring(0, 8),
@@ -81,12 +63,3 @@ export const parseCompanyRecord = (line: string): Product183Record => ({
   jurisdiction: mapJurisdiction(line.substring(310, 311)),
   ...parseCompanyVariableData(line.substring(311)),
 });
-
-export const reorderCompanyFields = (record: Product183Record) =>
-  companyFields.reduce(
-    (result, field) => ({
-      ...result,
-      [field]: record[field],
-    }),
-    {} as Product183Record
-  );

@@ -3,17 +3,20 @@ import {
   getDirectoryFileStream,
 } from '../../util/sources/directory.js';
 import { estimateFileSize, getFileStream } from '../../util/sources/file.js';
-import { getStdinStream } from '../../util/sources/stdin.js';
 import { SourceType } from '../../util/sources/types.js';
+import { compose, split } from '../../util/streams.js';
 
 export const getProduct183SourceStream = (sourceType: SourceType) => {
   switch (sourceType.type) {
     case 'file':
-      return getFileStream(sourceType.path);
+      return compose(getFileStream(sourceType.path), split());
     case 'directory':
-      return getDirectoryFileStream(sourceType, '*.dat', 'all');
+      return compose(
+        getDirectoryFileStream(sourceType, '*.dat', 'all'),
+        split()
+      );
     case 'stdin':
-      return getStdinStream();
+      return compose(process.stdin, split());
   }
 };
 

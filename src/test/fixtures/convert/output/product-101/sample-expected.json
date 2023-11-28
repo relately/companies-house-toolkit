@@ -72,7 +72,7 @@
     "jurisdiction": "england-wales",
     "data": {
       "registered_office_address": {
-        "address_line_1": "P.O. Box 309 Ugland House",
+        "address_line_1": "P.O. BOX 309 Ugland House",
         "address_line_2": "George Town",
         "locality": "Grand Cayman  KY1-1104",
         "region": "Cayman Islands"
@@ -130,8 +130,7 @@
         "last_accounts": {
           "made_up_to": "2021-04-05",
           "type": "unaudited-abridged"
-        },
-        "next_made_up_to": "2022-04-05"
+        }
       }
     }
   }

@@ -1,19 +1,14 @@
-import { titleCase } from 'title-case';
+const knownAcronyms: Record<string, boolean> = {
+  KPMG: true,
+  'P.O.': true,
+  PO: true,
+  BOX: true,
+};
 
-const knownAcronyms = ['KPMG'];
-
-const isAcronym = (word: string) => knownAcronyms.includes(word);
-const isWord = (word: string) => word.match(/^[a-zA-Z,']+(\.)*$/);
-const isOrdinal = (word: string) =>
-  word.toLowerCase().match(/^\d+(st|nd|rd|th)$/) !== null;
-
+// Will convert any word, ordinal or number followed by a single letter to title case
 export const convertToTitleCase = (value: string): string =>
-  value
-    .replace(/,(?!\s)/g, ', ')
-    .split(' ')
-    .map((word) =>
-      (isWord(word) || isOrdinal(word)) && !isAcronym(word)
-        ? titleCase(word.toLowerCase())
-        : word
-    )
-    .join(' ');
+  value.replace(/\b([a-zA-Z']+|\d+(st|nd|rd|th)|\d+[a-zA-Z])\b/gi, (txt) =>
+    knownAcronyms[txt]
+      ? txt
+      : txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
+  );

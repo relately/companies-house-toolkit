@@ -1,4 +1,5 @@
 /* eslint-disable no-process-exit */
+import EventEmitter from 'events';
 import { Box } from 'ink';
 import React, { useEffect, useState } from 'react';
 import { convert, estimateSourceSize } from '../../lib/convert.js';
@@ -37,7 +38,8 @@ export const Convert: React.FC<ConvertProps> = ({
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    convert({ source: sourceType, product, formatterType })
+    const eventEmitter = new EventEmitter();
+    eventEmitter
       .on('error', (error: string) => {
         addError(error);
 
@@ -47,6 +49,8 @@ export const Convert: React.FC<ConvertProps> = ({
         setIsComplete(true);
       })
       .on('progress', setProgress);
+
+    void convert({ source: sourceType, product, formatterType }, eventEmitter);
   }, []);
 
   return (

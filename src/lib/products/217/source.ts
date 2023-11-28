@@ -3,8 +3,8 @@ import {
   getDirectoryFileStream,
 } from '../../util/sources/directory.js';
 import { estimateFileSize, getFileStream } from '../../util/sources/file.js';
-import { getStdinStream } from '../../util/sources/stdin.js';
 import { SourceType } from '../../util/sources/types.js';
+import { compose } from '../../util/streams.js';
 
 export const getProduct217SourceStream = (sourceType: SourceType) => {
   switch (sourceType.type) {
@@ -13,7 +13,7 @@ export const getProduct217SourceStream = (sourceType: SourceType) => {
     case 'directory':
       return getDirectoryFileStream(sourceType, '*.csv', 'latest');
     case 'stdin':
-      return getStdinStream();
+      return compose(process.stdin);
   }
 };
 
