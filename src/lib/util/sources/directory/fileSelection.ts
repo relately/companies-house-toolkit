@@ -1,5 +1,3 @@
-import { isAfter, parse } from 'date-fns';
-
 export const allFiles = (files: string[]) => files.sort();
 
 export const latestFile = (files: string[]) =>
@@ -16,9 +14,9 @@ export const filesAfter = (date: Date, files: string[]) => {
         );
       }
 
-      const fileDate = parse(dateMatch[1], 'yyyy/MM/dd', new Date());
+      const fileDate = new Date(dateMatch[1]);
 
-      return isAfter(fileDate, date);
+      return fileDate > date;
     })
     .sort();
 };

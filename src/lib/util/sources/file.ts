@@ -1,4 +1,3 @@
-import highland from 'highland';
 import { createReadStream, statSync } from 'node:fs';
 import { stat } from 'node:fs/promises';
 
@@ -7,7 +6,10 @@ export const getFileStream = (filePath: string) => {
     throw new Error(`File "${filePath}" does not exist`);
   }
 
-  return highland<string>(createReadStream(filePath));
+  return createReadStream(filePath, {
+    // approximate line length of product 183 files (390 characters in UTF-8) * 10000 (batch size)
+    highWaterMark: 390 * 10000,
+  });
 };
 
 export const estimateFileSize = async (filePath: string) =>

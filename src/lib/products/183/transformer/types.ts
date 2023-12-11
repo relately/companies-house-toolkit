@@ -9,6 +9,7 @@ export type Product183Company = RecursivePartial<
     | 'confirmation_statement'
     | 'date_of_creation'
     | 'jurisdiction'
+    | 'last_full_members_list_date'
     | 'type'
   >
 > &
@@ -26,7 +27,6 @@ export type Product183Company = RecursivePartial<
     | 'has_insolvency_history'
     | 'has_super_secure_pscs'
     | 'is_community_interest_company'
-    | 'last_full_members_list_date'
     | 'previous_company_names'
     | 'registered_office_is_in_dispute'
     | 'service_address'

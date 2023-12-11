@@ -1,7 +1,9 @@
 import { parse } from 'fast-csv';
-import { trimKeys } from '../../util/objects.js';
-import { Through } from '../../util/types.js';
-import { Product217Record } from './parser/types.js';
+import { compose } from '../../util/streams.js';
 
-export const parseProduct217: Through<string, Product217Record> = (stream) =>
-  stream.through(parse({ headers: true })).map(trimKeys<Product217Record>);
+export const parseProduct217 = () =>
+  compose(
+    parse({
+      headers: (headers) => headers.map((header) => header?.trim()),
+    })
+  );

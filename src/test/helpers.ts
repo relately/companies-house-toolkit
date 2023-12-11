@@ -1,6 +1,10 @@
-import { EventEmitter, Writable } from 'node:stream';
+import EventEmitter from 'node:events';
+import { Writable } from 'node:stream';
 
-type CaptureCallback = (writeStream: Writable) => EventEmitter;
+type CaptureCallback = (
+  writeStream: Writable,
+  eventEmitter: EventEmitter
+) => void;
 
 export const captureStreamOutput = (
   callback: CaptureCallback
@@ -15,9 +19,12 @@ export const captureStreamOutput = (
       },
     });
 
-    callback(writeStream).on('finish', () => {
+    const eventEmitter = new EventEmitter();
+    eventEmitter.on('finish', () => {
       resolve(output);
     });
+
+    callback(writeStream, eventEmitter);
   });
 };
 

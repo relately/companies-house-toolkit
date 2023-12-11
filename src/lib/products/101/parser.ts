@@ -1,13 +1,8 @@
-import { Through } from '../../util/types.js';
+import { compose, filter, map } from '../../util/streams.js';
 import { getLineType, parseTransaction } from './parser/parseLine.js';
-import { Product101Transaction } from './parser/types.js';
 
-export const parseProduct101: Through<string, Product101Transaction> = (
-  stream
-) =>
-  stream
-    .map((data) => data.toString().replace(/\r\n/g, ''))
-    .split()
-    .compact()
-    .filter((row) => getLineType(row) === 'transaction')
-    .map((row) => parseTransaction(row));
+export const parseProduct101 = () =>
+  compose(
+    filter((row: string) => getLineType(row) === 'transaction'),
+    map(parseTransaction)
+  );

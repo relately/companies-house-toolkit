@@ -1,43 +1,33 @@
-import {
-  addYears,
-  isAfter,
-  isBefore,
-  setDate,
-  setMonth,
-  subDays,
-  subYears,
-} from 'date-fns';
-
 import { CompanyAccountsType } from '../../types/company.js';
-import { parseUkDate } from '../../util/dates.js';
+import {
+  convertUkDateToIsoDate,
+  formatIsoDate,
+  parseUkDate,
+} from '../../util/dates.js';
 import { convertToTitleCase } from '../../util/strings.js';
-import { Through } from '../../util/types.js';
+import { getAccountsNextMadeUpToDate } from '../shared/company.js';
 import { Product217Record } from './parser/types.js';
 import { Product217Company } from './transformer/types.js';
 
-export const transformProduct217: Through<
-  Product217Record,
-  Product217Company
-> = (stream) =>
-  stream.map(
-    (record): Product217Company => ({
-      accounts: transformAccounts(record),
-      company_name: record.CompanyName,
-      company_number: record.CompanyNumber,
-      company_status: transformCompanyStatus(record.CompanyStatus),
-      confirmation_statement: transformConfirmationStatement(record),
-      date_of_creation: parseUkDate(record['IncorporationDate']),
-      date_of_cessation: parseUkDate(record['DissolutionDate']),
-      has_charges: parseInt(record['Mortgages.NumMortCharges']) > 0,
-      links: {
-        self: `/company/${record.CompanyNumber}`,
-      },
-      registered_office_address: transformRegisteredOfficeAddress(record),
-      sic_codes: transformSicCodes(record),
-      previous_company_names: transformPreviousCompanyNames(record),
-      type: transformCompanyType(record['CompanyCategory']),
-    })
-  );
+export const transformProduct217 = (
+  record: Product217Record
+): Product217Company => ({
+  accounts: transformAccounts(record),
+  company_name: record.CompanyName,
+  company_number: record.CompanyNumber,
+  company_status: transformCompanyStatus(record.CompanyStatus),
+  confirmation_statement: transformConfirmationStatement(record),
+  date_of_creation: convertUkDateToIsoDate(record['IncorporationDate']),
+  date_of_cessation: convertUkDateToIsoDate(record['DissolutionDate']),
+  has_charges: parseInt(record['Mortgages.NumMortCharges']) > 0,
+  links: {
+    self: `/company/${record.CompanyNumber}`,
+  },
+  registered_office_address: transformRegisteredOfficeAddress(record),
+  sic_codes: transformSicCodes(record),
+  previous_company_names: transformPreviousCompanyNames(record),
+  type: transformCompanyType(record['CompanyCategory']),
+});
 
 const transformAccounts = (
   record: Product217Record
@@ -56,11 +46,14 @@ const transformAccounts = (
       accountingReferenceMonth,
       accountingReferenceDay,
       lastMadeUpTo,
-      nextDue
+      nextDue,
+      record['IncorporationDate']
+        ? parseUkDate(record['IncorporationDate'])
+        : undefined
     ),
-    next_due: nextDue,
+    next_due: nextDue ? formatIsoDate(nextDue) : undefined,
     last_accounts: {
-      made_up_to: lastMadeUpTo,
+      made_up_to: lastMadeUpTo ? formatIsoDate(lastMadeUpTo) : undefined,
       type: transformAccountsType(record['Accounts.AccountCategory']),
     },
     accounting_reference_date: {
@@ -73,8 +66,8 @@ const transformAccounts = (
 const transformConfirmationStatement = (
   record: Product217Record
 ): Product217Company['confirmation_statement'] => ({
-  next_due: parseUkDate(record['ConfStmtNextDueDate']),
-  last_made_up_to: parseUkDate(record['ConfStmtLastMadeUpDate']),
+  next_due: convertUkDateToIsoDate(record['ConfStmtNextDueDate']),
+  last_made_up_to: convertUkDateToIsoDate(record['ConfStmtLastMadeUpDate']),
   next_made_up_to: getConfirmationStatementNextMadeUpDate(
     parseUkDate(record['ConfStmtLastMadeUpDate']),
     parseUkDate(record['IncorporationDate'])
@@ -116,15 +109,16 @@ const transformPreviousCompanyNames = (
       record[`PreviousName_${i}.CompanyName` as keyof Product217Record];
 
     if (previousName !== '') {
-      const lastCondate = parseUkDate(
+      const lastCondate = convertUkDateToIsoDate(
         record[`PreviousName_${i + 1}.CONDATE` as keyof Product217Record]
       );
 
       previousNames.push({
-        ceased_on: parseUkDate(
+        ceased_on: convertUkDateToIsoDate(
           record[`PreviousName_${i}.CONDATE` as keyof Product217Record]
         ),
-        effective_from: lastCondate || parseUkDate(record['IncorporationDate']),
+        effective_from:
+          lastCondate || convertUkDateToIsoDate(record['IncorporationDate']),
         name: previousName,
       });
     }
@@ -173,56 +167,23 @@ const transformAccountsType = (
   }
 };
 
-const getAccountsNextMadeUpToDate = (
-  accountsReferenceMonth?: number,
-  accountsReferenceDay?: number,
-  lastMadeUpToDate?: Date,
-  nextDue?: Date
-): Date | undefined => {
-  if (lastMadeUpToDate) {
-    return addYears(lastMadeUpToDate, 1);
-  }
-
-  if (
-    accountsReferenceDay == undefined ||
-    accountsReferenceMonth === undefined
-  ) {
-    return undefined;
-  }
-
-  // If next due date is set then return the last reference date before it
-  if (nextDue) {
-    const madeUpBeforeNextDue = setDate(
-      setMonth(nextDue, accountsReferenceMonth - 1),
-      accountsReferenceDay
-    );
-
-    return isAfter(madeUpBeforeNextDue, nextDue)
-      ? subYears(madeUpBeforeNextDue, 1)
-      : madeUpBeforeNextDue;
-  }
-
-  // Otherwise return the next reference date after today
-  const madeUpToDateThisYear = setDate(
-    setMonth(new Date(), accountsReferenceMonth - 1),
-    accountsReferenceDay
-  );
-
-  return isBefore(madeUpToDateThisYear, new Date())
-    ? addYears(madeUpToDateThisYear, 1)
-    : madeUpToDateThisYear;
-};
-
 const getConfirmationStatementNextMadeUpDate = (
   lastMadeUpDate?: Date,
   incorporationDate?: Date
-): Date | undefined => {
+): string | undefined => {
   if (lastMadeUpDate) {
-    return addYears(lastMadeUpDate, 1);
+    const nextDate = new Date(lastMadeUpDate);
+    nextDate.setFullYear(nextDate.getFullYear() + 1);
+
+    return formatIsoDate(nextDate);
   }
 
   if (incorporationDate) {
-    return subDays(addYears(incorporationDate, 1), 1);
+    const nextDate = new Date(incorporationDate);
+    nextDate.setFullYear(nextDate.getFullYear() + 1);
+    nextDate.setDate(nextDate.getDate() - 1);
+
+    return formatIsoDate(nextDate);
   }
 };
 

@@ -54,6 +54,7 @@ type SnapshotOptions = {
   snapshotPath: string;
   updatesPath: string;
   alternativeUpdatesPath?: string;
+  companies?: string;
   json?: boolean;
   j?: boolean;
 };
@@ -84,6 +85,12 @@ export const createSnapshotCommand = () =>
       createOption(
         '-a, --alternative-updates-path <alternative-updates>',
         'Path to the alternative updates directory'
+      )
+    )
+    .addOption(
+      createOption(
+        '-c, --companies <companies>',
+        'Filter the snapshot to only contain the specified companies. Comma separated list of company numbers.'
       )
     )
     .addOption(
@@ -143,6 +150,9 @@ export const createSnapshotCommand = () =>
           updatesSource={updatesSource}
           alternativeUpdatesSource={alternativeUpdatesSource}
           formatterType={formatterType}
+          companies={options.companies
+            ?.split(',')
+            .map((company) => company.trim())}
         />,
         { stdout: process.stderr }
       );

@@ -1,15 +1,8 @@
-import { Through } from '../../util/types.js';
-import {
-  getLineType,
-  parseCompanyRecord,
-  reorderCompanyFields,
-} from './parser/parseLine.js';
-import { Product183Record } from './parser/types.js';
+import { compose, filter, map } from '../../util/streams.js';
+import { getLineType, parseCompanyRecord } from './parser/parseLine.js';
 
-export const parseProduct183: Through<string, Product183Record> = (stream) =>
-  stream
-    .split()
-    .compact()
-    .filter((row) => getLineType(row) === 'company')
-    .map(parseCompanyRecord)
-    .map(reorderCompanyFields);
+export const parseProduct183 = () =>
+  compose(
+    filter((row: string) => getLineType(row) === 'company'),
+    map(parseCompanyRecord)
+  );

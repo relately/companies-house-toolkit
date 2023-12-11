@@ -380,7 +380,7 @@ export const parseTransaction = (line: string): Product100Transaction => {
         ...pick([...commonFields, 'privateFundIndicator'], data),
       };
     default:
-      console.error('Unknown transaction type', data);
+      console.error('Unknown transaction type', data.transactionType);
       throw Error('Unknown transaction type');
   }
 };

@@ -1,17 +1,31 @@
-import highland from 'highland';
 import indentString from 'indent-string';
-import { formatDates, removeEmptyValues } from '../objects.js';
-import { Through } from '../types.js';
+import { Transform } from 'node:stream';
+import { removeEmptyValues } from '../objects.js';
 
-export const formatJson =
-  <T extends object>(): Through<T, string> =>
-  (stream) =>
-    highland(['[\n']).concat(
-      stream
-        .map(removeEmptyValues)
-        .map(formatDates)
-        .map((object) => JSON.stringify(object, undefined, 2))
-        .map((json) => indentString(json, 2))
-        .intersperse(',\n')
-        .append('\n]\n\n')
-    );
+export const formatJson = <T extends object>(): Transform => {
+  let first = true;
+
+  return new Transform({
+    objectMode: true,
+
+    transform(object: T, _encoding, callback) {
+      let json = JSON.stringify(removeEmptyValues(object), undefined, 2);
+      json = indentString(json, 2);
+
+      if (first) {
+        this.push('[\n');
+        first = false;
+      } else {
+        this.push(',\n');
+      }
+
+      this.push(json);
+      callback();
+    },
+
+    flush(callback) {
+      this.push('\n]\n\n');
+      callback();
+    },
+  });
+};

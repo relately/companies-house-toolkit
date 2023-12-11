@@ -154,9 +154,7 @@
     "company_number": "00001140",
     "company_name": "BRITISH STEEL TRADING LIMITED",
     "date_of_creation": "1864-04-04",
-    "confirmation_statement": {
-      "last_made_up_to": "2006-05-25"
-    },
+    "last_full_members_list_date": "2006-05-25",
     "type": "ltd",
     "accounts": {
       "accounting_reference_date": {
@@ -167,7 +165,7 @@
         "type": "dormant",
         "made_up_to": "2006-12-30"
       },
-      "next_made_up_to": "2007-12-30"
+      "next_made_up_to": "2007-12-31"
     },
     "jurisdiction": "england-wales",
     "registered_office_address": {
@@ -216,9 +214,7 @@
     "company_number": "00002537",
     "company_name": "BRABY-FULLER LIMITED",
     "date_of_creation": "1865-10-24",
-    "confirmation_statement": {
-      "last_made_up_to": "2004-10-31"
-    },
+    "last_full_members_list_date": "2004-10-31",
     "type": "ltd",
     "accounts": {
       "accounting_reference_date": {
@@ -295,7 +291,7 @@
     },
     "jurisdiction": "england-wales",
     "registered_office_address": {
-      "premises": "Suite 101, Cheltenham House",
+      "premises": "Suite 101,Cheltenham House",
       "address_line_1": "14-16 Temple Street",
       "locality": "Birmingham",
       "postal_code": "B2 5BG"

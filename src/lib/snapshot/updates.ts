@@ -1,58 +1,113 @@
-import highland from 'highland';
 import { EventEmitter } from 'node:events';
-import { Duplex } from 'node:stream';
+import { Duplex, Writable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { parseProduct100 } from '../products/100/parser.js';
+import { Product100Transaction } from '../products/100/parser/types.js';
 import { transformProduct100 } from '../products/100/transformer.js';
 import { parseProduct101 } from '../products/101/parser.js';
+import { Product101Transaction } from '../products/101/parser/types.js';
 import { transformProduct101 } from '../products/101/transformer.js';
 import { CompanyTransaction } from '../products/101/transformer/types.js';
-import { formatDates } from '../util/objects.js';
+import { parseIsoDate } from '../util/dates.js';
 import { getDirectoryFiles } from '../util/sources/directory.js';
-import { getFileStream } from '../util/sources/file.js';
+import { estimateFileSize, getFileStream } from '../util/sources/file.js';
 import { DirectorySourceType } from '../util/sources/types.js';
-import { resolveBatch } from './db.js';
-import {
-  CompanySnapshotDB,
-  CompanySnapshotOperation,
-  SnapshotCompany,
-} from './types.js';
+import { filter, map, split, tap } from '../util/streams.js';
+import { BatchBuffer, resolveBatch } from './db.js';
+import { CompanySnapshotDB, CompanySnapshotOperation } from './types.js';
 
 type Options = {
   db: CompanySnapshotDB;
   source: DirectorySourceType;
   alternativeSource?: DirectorySourceType;
   snapshotDate: Date;
+  companies?: string[];
   eventEmitter: EventEmitter;
   batchSize?: number;
 };
 
-export const writeUpdatesToDb = ({
+export const writeUpdatesToDb = async ({
   db,
   source,
   alternativeSource,
   snapshotDate,
+  companies,
   eventEmitter,
-  batchSize = 1000,
-}: Options) =>
-  highland(mergeDirectoryFiles(source, snapshotDate, alternativeSource))
-    .flatMap((file) => {
-      const stream = getFileStream(file);
+  batchSize = 50000,
+}: Options) => {
+  const shouldProcess = (line: Product101Transaction | Product100Transaction) =>
+    !companies || companies.includes(line.companyNumber);
 
-      if (file.startsWith(source.path)) {
-        return stream.through(parseProduct101).map(transformProduct101);
-      } else if (alternativeSource && file.startsWith(alternativeSource.path)) {
-        return stream.through(parseProduct100).map(transformProduct100);
-      }
-    })
-    .through(transformTransactionToBatchOperation(snapshotDate))
-    .batch(batchSize)
-    .flatMap((batch: CompanySnapshotOperation[]) =>
-      highland(resolveBatch(db, batch, eventEmitter))
+  let bytesProcessed = 0;
+  const buffer: BatchBuffer = new Map();
+
+  const files = mergeDirectoryFiles(source, snapshotDate, alternativeSource);
+
+  for (const file of files) {
+    const isProduct101 = file.startsWith(source.path);
+
+    await pipeline(
+      getFileStream(file),
+      split(),
+      tap((line: string) => {
+        bytesProcessed += Buffer.byteLength(line, 'utf8');
+      }),
+      isProduct101 ? parseProduct101() : parseProduct100(),
+      tap((line: Product101Transaction | Product100Transaction) => {
+        if (!shouldProcess(line)) {
+          eventEmitter.emit('progress', bytesProcessed);
+          bytesProcessed = 0;
+        }
+      }),
+      filter(shouldProcess),
+      isProduct101 ? map(transformProduct101) : map(transformProduct100),
+      transformTransactionToBatchOperation(snapshotDate),
+      new Writable({
+        objectMode: true,
+        async write(operation: CompanySnapshotOperation, _encoding, callback) {
+          try {
+            const batch = await resolveBatch(
+              db,
+              operation,
+              eventEmitter,
+              buffer,
+              batchSize
+            );
+
+            if (batch.length > 0) {
+              await db.batch(batch);
+
+              eventEmitter.emit('progress', bytesProcessed);
+              bytesProcessed = 0;
+            }
+
+            callback();
+          } catch (err) {
+            callback(err as Error);
+          }
+        },
+      })
+    );
+  }
+
+  // Flush the remaining buffer if it's not empty
+  if (buffer.size > 0) {
+    await db.batch(Array.from(buffer.values()));
+
+    eventEmitter.emit('progress', bytesProcessed);
+  }
+};
+
+export const estimateUpdatesSize = (
+  source: DirectorySourceType,
+  snapshotDate: Date,
+  alternativeSource?: DirectorySourceType
+) =>
+  Promise.all(
+    mergeDirectoryFiles(source, snapshotDate, alternativeSource).map(
+      estimateFileSize
     )
-    .flatMap((batch) => highland(db.batch(batch)))
-    .tap(() => eventEmitter.emit('progress', batchSize))
-    .last()
-    .toPromise(Promise);
+  ).then((sizes) => sizes.reduce((acc, size) => acc + size, 0));
 
 const mergeDirectoryFiles = (
   source: DirectorySourceType,
@@ -88,10 +143,11 @@ const transformTransactionToBatchOperation = (snapshotDate: Date) =>
     transactions: AsyncGenerator<CompanyTransaction>
   ) {
     for await (const transaction of transactions) {
-      if (
-        transaction.received_date &&
-        transaction.received_date >= snapshotDate
-      ) {
+      const receivedDate = transaction.received_date
+        ? parseIsoDate(transaction.received_date)
+        : undefined;
+
+      if (receivedDate && receivedDate >= snapshotDate) {
         const operation = transactionToBatchOperation(transaction);
 
         if (operation) {
@@ -111,7 +167,7 @@ const transactionToBatchOperation = (
       return {
         type: 'add',
         key: transaction.company_number,
-        value: formatDates(transaction.data) as SnapshotCompany,
+        value: transaction.data,
       };
     case 'accounting-reference-date':
     case 'accounts':
@@ -133,11 +189,16 @@ const transactionToBatchOperation = (
     case 'subsidiary-company-exemption-from-audit-or-filing-accounts':
     case 'type':
     case 'voluntary-arrangement':
-      return {
-        type: 'update',
-        key: transaction.company_number,
-        value: formatDates(transaction.data),
-      };
+      return Object.values(transaction.data).length > 0
+        ? {
+            type: 'update',
+            key: transaction.company_number,
+            value: {
+              company_number: transaction.company_number,
+              ...transaction.data,
+            },
+          }
+        : undefined;
     case 'delete':
       return {
         type: 'delete',
