@@ -1,4 +1,3 @@
-import { parseProduct183 } from '../products/183/parser.js';
 import { transformProduct183 } from '../products/183/transformer.js';
 import { Product183Company } from '../products/183/transformer/types.js';
 import { getAccountsNextMadeUpToDate } from '../products/shared/company.js';
@@ -11,7 +10,6 @@ import { compose, map } from '../util/streams.js';
 
 export const convertProduct183 = (formatterType: FormatterType) =>
   compose(
-    parseProduct183(),
     map(transformProduct183),
     map(calculateValues),
     formatProduct183(formatterType)

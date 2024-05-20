@@ -5,7 +5,7 @@ export interface Company {
   can_file: boolean;
   company_name: string;
   company_number: string;
-  company_status: CompanyStatus;
+  company_status?: CompanyStatus;
   company_status_detail?: CompanyStatusDetail;
   confirmation_statement?: ConfirmationStatement;
   date_of_cessation?: string;

@@ -1,6 +1,7 @@
 import EventEmitter from 'node:events';
 import { mergeDeepRight } from 'ramda';
 import { isLevelNotFoundError } from '../util/db.js';
+import { RecursivePartial } from '../util/types.js';
 import { calculateValues } from './shared.js';
 import {
   CompanySnapshotAddOperation,
@@ -72,7 +73,7 @@ const resolveUpdate = async (
 
   const value = calculateValues(
     (existingValue
-      ? mergeDeepRight(existingValue, operation.value)
+      ? mergeRecords(existingValue, operation.value)
       : operation.value) as SnapshotCompany
   );
 
@@ -102,4 +103,17 @@ const getValueFromDb = async (
 
     throw error;
   }
+};
+
+const mergeRecords = (
+  existingValue: SnapshotCompany,
+  newValue: RecursivePartial<SnapshotCompany>
+): SnapshotCompany => {
+  const result = mergeDeepRight(existingValue, newValue);
+
+  if (newValue.registered_office_address) {
+    result['registered_office_address'] = newValue.registered_office_address;
+  }
+
+  return result as SnapshotCompany;
 };

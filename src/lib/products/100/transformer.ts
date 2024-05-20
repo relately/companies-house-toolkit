@@ -1,4 +1,3 @@
-import { parseIsoDate } from '../../util/dates.js';
 import { convertToTitleCase } from '../../util/strings.js';
 import {
   transformProduct183Accounts,
@@ -29,7 +28,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           accounts: transformProduct183Accounts(record),
@@ -79,7 +78,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           accounts: transformProduct183Accounts(record),
@@ -122,9 +121,7 @@ export const transformProduct100 = (
         type: 'accounts-made-up-date',
         ...transformCommonFields(record),
         gazette: {
-          date: record.gazetteDate
-            ? parseIsoDate(record.gazetteDate)
-            : undefined,
+          date: record.gazetteDate,
           document_type: record.gazettableDocumentType,
         },
         data: {
@@ -158,9 +155,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: record.gazetteDate
-            ? parseIsoDate(record.gazetteDate)
-            : undefined,
+          date: record.gazetteDate,
         },
         data: {
           company_name: record.name,
@@ -172,9 +167,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: record.gazetteDate
-            ? parseIsoDate(record.gazetteDate)
-            : undefined,
+          date: record.gazetteDate,
         },
         data: {
           registered_office_address:
@@ -229,7 +222,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
       };
     case 'Converted/Closed':
@@ -246,7 +239,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
       };
     case 'Dissolution/Dissolution Final Gazette':
@@ -255,7 +248,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           company_status: 'dissolved',
@@ -316,7 +309,7 @@ export const transformProduct100 = (
         ...transformCommonFields(record),
         gazette: {
           document_type: record.gazettableDocumentType,
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           accounts: transformProduct183Accounts(record),
@@ -335,7 +328,7 @@ export const transformProduct100 = (
         type: 'jurisdiction',
         ...transformCommonFields(record),
         gazette: {
-          date: parseIsoDate(record.gazetteDate),
+          date: record.gazetteDate,
         },
         data: {
           jurisdiction: transformProduct183Jurisdiction(record['jurisdiction']),
@@ -372,7 +365,7 @@ const transformCommonFields = (
   'transaction_id' | 'received_date' | 'company_number' | 'jurisdiction'
 > => ({
   transaction_id: record.transactionId,
-  received_date: parseIsoDate(record.receivedDate),
+  received_date: record.receivedDate,
   company_number: record.companyNumber,
   jurisdiction: transformProduct183Jurisdiction(record.jurisdiction),
 });

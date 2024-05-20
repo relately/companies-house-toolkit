@@ -16,12 +16,14 @@ export type ConvertProps = {
   sourceType: SourceType;
   product: Product;
   formatterType: FormatterType;
+  companies?: Set<string>;
 };
 
 export const Convert: React.FC<ConvertProps> = ({
   sourceType,
   product,
   formatterType,
+  companies,
 }: ConvertProps) => {
   const { messages, addError } = useMessages();
   const { progress, setProgress, total } = useProgress(() => {
@@ -50,7 +52,10 @@ export const Convert: React.FC<ConvertProps> = ({
       })
       .on('progress', setProgress);
 
-    void convert({ source: sourceType, product, formatterType }, eventEmitter);
+    void convert(
+      { source: sourceType, product, companies, formatterType },
+      eventEmitter
+    );
   }, []);
 
   return (

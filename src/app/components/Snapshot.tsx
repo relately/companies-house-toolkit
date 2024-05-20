@@ -4,7 +4,7 @@ import EventEmitter from 'node:events';
 import React, { useEffect, useRef } from 'react';
 import { estimateSourceSize } from '../../lib/convert.js';
 import { snapshot } from '../../lib/snapshot.js';
-import { getSnapshotDate } from '../../lib/snapshot/snapshot.js';
+import { getSnapshotDate } from '../../lib/snapshot/product183.js';
 import { estimateUpdatesSize } from '../../lib/snapshot/updates.js';
 import { FormatterType } from '../../lib/util/formatters/types.js';
 import {
@@ -18,17 +18,19 @@ import { Progress } from './shared/Progress.js';
 import { Summary } from './shared/Summary.js';
 
 export type SnapshotProps = {
-  snapshotSource: FileSourceType | DirectorySourceType;
-  updatesSource: DirectorySourceType;
-  alternativeUpdatesSource?: DirectorySourceType;
+  product183Source: FileSourceType | DirectorySourceType;
+  product101Source: DirectorySourceType;
+  product100Source: DirectorySourceType;
+  product217Source: FileSourceType | DirectorySourceType;
   formatterType: FormatterType;
-  companies?: string[];
+  companies?: Set<string>;
 };
 
 export const Snapshot: React.FC<SnapshotProps> = ({
-  snapshotSource,
-  updatesSource,
-  alternativeUpdatesSource,
+  product100Source,
+  product101Source,
+  product183Source,
+  product217Source,
   companies,
   formatterType,
 }: SnapshotProps) => {
@@ -37,16 +39,17 @@ export const Snapshot: React.FC<SnapshotProps> = ({
   const [isComplete, setIsComplete] = React.useState(false);
   const { progress, setProgress, total } = useProgress(async () => {
     try {
-      const sourceSize = await estimateSourceSize('183', snapshotSource);
-      const snapshotDate = await getSnapshotDate(snapshotSource);
+      const product217Size = await estimateSourceSize('217', product217Source);
+      const product183Size = await estimateSourceSize('183', product183Source);
+      const snapshotDate = await getSnapshotDate(product183Source);
 
       const updatesSize = await estimateUpdatesSize(
-        updatesSource,
+        product101Source,
         snapshotDate,
-        alternativeUpdatesSource
+        product100Source
       );
 
-      return (sourceSize || 0) + updatesSize;
+      return (product217Size || 0) + (product183Size || 0) + updatesSize;
     } catch (error) {
       if (error instanceof Error && 'message' in error) {
         addError(error.message);
@@ -81,9 +84,10 @@ export const Snapshot: React.FC<SnapshotProps> = ({
 
     snapshot(
       {
-        snapshotSource,
-        updatesSource,
-        alternativeUpdatesSource,
+        product183Source,
+        product101Source,
+        product100Source,
+        product217Source,
         companies,
         formatterType,
       },

@@ -43,6 +43,7 @@ const parseFormatterType = (options: ConvertOptions): FormatterType =>
 
 type ConvertOptions = {
   product: string;
+  companies?: string;
   json?: boolean;
   j?: boolean;
 };
@@ -54,6 +55,12 @@ export const createConvertCommand = () =>
       createOption('-p, --product <product>', 'The data product to convert')
         .choices(['101', '183', '217'])
         .makeOptionMandatory(true)
+    )
+    .addOption(
+      createOption(
+        '-c, --companies <companies>',
+        'Filter the snapshot to only contain the specified companies. Comma separated list of company numbers.'
+      )
     )
     .addOption(
       createOption('-j, --json', 'Output JSON instead of CSV').default(false)
@@ -80,6 +87,11 @@ export const createConvertCommand = () =>
           sourceType={sourceType}
           product={product}
           formatterType={formatterType}
+          companies={
+            new Set(
+              options.companies?.split(',').map((company) => company.trim())
+            )
+          }
         />,
         { stdout: process.stderr }
       );

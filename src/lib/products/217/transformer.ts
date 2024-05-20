@@ -15,9 +15,14 @@ export const transformProduct217 = (
   accounts: transformAccounts(record),
   company_name: record.CompanyName,
   company_number: record.CompanyNumber,
-  company_status: transformCompanyStatus(record.CompanyStatus),
+  company_status: transformCompanyStatus(
+    record.CompanyNumber,
+    record.CompanyStatus
+  ),
   confirmation_statement: transformConfirmationStatement(record),
-  date_of_creation: convertUkDateToIsoDate(record['IncorporationDate']),
+  date_of_creation: !record.CompanyNumber.startsWith('IP')
+    ? convertUkDateToIsoDate(record['IncorporationDate'])
+    : undefined,
   date_of_cessation: convertUkDateToIsoDate(record['DissolutionDate']),
   has_charges: parseInt(record['Mortgages.NumMortCharges']) > 0,
   links: {
@@ -79,7 +84,7 @@ const transformRegisteredOfficeAddress = (
 ): Product217Company['registered_office_address'] => ({
   address_line_1: convertToTitleCase(record['RegAddress.AddressLine1']),
   address_line_2: convertToTitleCase(record['RegAddress.AddressLine2']),
-  care_of: convertToTitleCase(record['RegAddress.CareOf']),
+  care_of: record['RegAddress.CareOf'],
   locality: convertToTitleCase(record['RegAddress.PostTown']),
   po_box: convertToTitleCase(record['RegAddress.POBox']),
   country: convertToTitleCase(record['RegAddress.Country']),
@@ -97,7 +102,11 @@ const transformSicCodes = (
     record['SICCode.SicText_4'],
   ]
     .filter((code) => code !== '' && code !== 'None Supplied')
-    .map((code) => parseInt(code).toString());
+    .map((code) => {
+      const match = code.match(/\d+/);
+
+      return match ? match[0] : 'None Supplied';
+    });
 
 const transformPreviousCompanyNames = (
   record: Product217Record
@@ -109,9 +118,12 @@ const transformPreviousCompanyNames = (
       record[`PreviousName_${i}.CompanyName` as keyof Product217Record];
 
     if (previousName !== '') {
-      const lastCondate = convertUkDateToIsoDate(
-        record[`PreviousName_${i + 1}.CONDATE` as keyof Product217Record]
-      );
+      const lastCondate =
+        i < 10
+          ? convertUkDateToIsoDate(
+              record[`PreviousName_${i + 1}.CONDATE` as keyof Product217Record]
+            )
+          : undefined;
 
       previousNames.push({
         ceased_on: convertUkDateToIsoDate(
@@ -160,7 +172,7 @@ const transformAccountsType = (
     case 'TOTAL EXEMPTION SMALL':
       return 'total-exemption-small';
     case 'UNAUDITED ABRIDGED':
-      return 'audited-abridged';
+      return 'unaudited-abridged';
     case 'NO ACCOUNTS FILED':
     default:
       return undefined;
@@ -172,6 +184,10 @@ const getConfirmationStatementNextMadeUpDate = (
   incorporationDate?: Date
 ): string | undefined => {
   if (lastMadeUpDate) {
+    if (formatIsoDate(lastMadeUpDate) < '2016-06-29') {
+      return;
+    }
+
     const nextDate = new Date(lastMadeUpDate);
     nextDate.setFullYear(nextDate.getFullYear() + 1);
 
@@ -188,10 +204,16 @@ const getConfirmationStatementNextMadeUpDate = (
 };
 
 const transformCompanyStatus = (
+  companyNumber: Product217Record['CompanyNumber'],
   status: Product217Record['CompanyStatus']
 ): Product217Company['company_status'] => {
+  if (companyNumber.startsWith('IP')) {
+    return undefined;
+  }
+
   switch (status) {
     case 'Active':
+      return companyNumber.startsWith('OE') ? 'registered' : 'active';
     case 'Active - Proposal to Strike off':
       return 'active';
     case 'ADMINISTRATION ORDER':

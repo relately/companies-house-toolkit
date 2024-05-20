@@ -31,11 +31,13 @@ describe.concurrent(
     it('should should execute snapshot command', async () => {
       const { stdout } = await runCli([
         'snapshot',
-        `--snapshot-path=${fixturePath(
+        `--product-183-path=${fixturePath(
           'snapshot/input/product-183/sample.dat'
         )}`,
-        `--updates-path=${fixturePath('snapshot/input/product-101')}`,
-        '--product-pair=183,101',
+        `--product-101-path=${fixturePath('snapshot/input/product-101')}`,
+        `--product-100-path=${fixturePath('snapshot/input/product-101')}`,
+        `--product-217-path=${fixturePath('snapshot/input/product-217')}`,
+        '--type=company',
         `--json`,
       ]);
 

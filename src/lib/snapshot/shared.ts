@@ -1,27 +1,24 @@
-import { getAccountsNextMadeUpToDate } from '../products/shared/company.js';
-import { parseIsoDate } from '../util/dates.js';
+import { Product183Company } from '../products/183/transformer/types.js';
+import { Company } from '../types/company.js';
 import { removeEmptyValues } from '../util/objects.js';
+import { RecursivePartial } from '../util/types.js';
 import { SnapshotCompany } from './types.js';
 
 export const calculateValues = (
-  companyRecord: SnapshotCompany
+  companyRecord: Product183Company | RecursivePartial<Company>
 ): SnapshotCompany =>
   removeEmptyValues({
     ...companyRecord,
     accounts: {
       ...companyRecord.accounts,
-      next_made_up_to: getAccountsNextMadeUpToDate(
-        companyRecord.accounts?.accounting_reference_date?.month,
-        companyRecord.accounts?.accounting_reference_date?.day,
-        companyRecord.accounts?.last_accounts?.made_up_to
-          ? parseIsoDate(companyRecord.accounts.last_accounts.made_up_to)
-          : undefined,
-        companyRecord.accounts?.next_due
-          ? parseIsoDate(companyRecord.accounts.next_due)
-          : undefined,
-        companyRecord.date_of_creation
-          ? parseIsoDate(companyRecord.date_of_creation)
-          : undefined
-      ),
+      // Always unset these as they cannot be reliably derived
+      next_due: undefined,
+      next_made_up_to: undefined,
+    },
+    confirmation_statement: {
+      ...companyRecord.confirmation_statement,
+      // Always unset these as they cannot be reliably derived
+      next_due: undefined,
+      next_made_up_to: undefined,
     },
   }) as SnapshotCompany;

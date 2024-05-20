@@ -40,7 +40,9 @@ export type SnapshotCompany = RecursivePartial<
     | 'jurisdiction'
     | 'type'
     | 'links'
-  >;
+  > & {
+    last_updated: string;
+  };
 
 export type CompanySnapshotDB = Level<string, SnapshotCompany>;
 

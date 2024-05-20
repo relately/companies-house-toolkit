@@ -1,4 +1,3 @@
-import { parseProduct217 } from '../products/217/parser.js';
 import { transformProduct217 } from '../products/217/transformer.js';
 import { formatCsv } from '../util/formatters/csv.js';
 import { formatJson } from '../util/formatters/json.js';
@@ -6,11 +5,7 @@ import { FormatterType } from '../util/formatters/types.js';
 import { compose, map } from '../util/streams.js';
 
 export const convertProduct217 = (formatterType: FormatterType) =>
-  compose(
-    parseProduct217(),
-    map(transformProduct217),
-    formatProduct217(formatterType)
-  );
+  compose(map(transformProduct217), formatProduct217(formatterType));
 
 const formatProduct217 = (type: FormatterType) => {
   switch (type) {

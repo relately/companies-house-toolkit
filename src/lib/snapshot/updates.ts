@@ -14,6 +14,7 @@ import { estimateFileSize, getFileStream } from '../util/sources/file.js';
 import { DirectorySourceType } from '../util/sources/types.js';
 import { filter, map, split, tap } from '../util/streams.js';
 import { BatchBuffer, resolveBatch } from './db.js';
+import { calculateValues } from './shared.js';
 import { CompanySnapshotDB, CompanySnapshotOperation } from './types.js';
 
 type Options = {
@@ -21,7 +22,7 @@ type Options = {
   source: DirectorySourceType;
   alternativeSource?: DirectorySourceType;
   snapshotDate: Date;
-  companies?: string[];
+  companies?: Set<string>;
   eventEmitter: EventEmitter;
   batchSize?: number;
 };
@@ -36,7 +37,7 @@ export const writeUpdatesToDb = async ({
   batchSize = 50000,
 }: Options) => {
   const shouldProcess = (line: Product101Transaction | Product100Transaction) =>
-    !companies || companies.includes(line.companyNumber);
+    !companies || companies.has(line.companyNumber);
 
   let bytesProcessed = 0;
   const buffer: BatchBuffer = new Map();
@@ -53,15 +54,18 @@ export const writeUpdatesToDb = async ({
         bytesProcessed += Buffer.byteLength(line, 'utf8');
       }),
       isProduct101 ? parseProduct101() : parseProduct100(),
-      tap((line: Product101Transaction | Product100Transaction) => {
+      filter((line: Product101Transaction | Product100Transaction) => {
         if (!shouldProcess(line)) {
           eventEmitter.emit('progress', bytesProcessed);
           bytesProcessed = 0;
+
+          return false;
         }
+
+        return true;
       }),
-      filter(shouldProcess),
       isProduct101 ? map(transformProduct101) : map(transformProduct100),
-      transformTransactionToBatchOperation(snapshotDate),
+      transformTransactionToBatchOperation(db),
       new Writable({
         objectMode: true,
         async write(operation: CompanySnapshotOperation, _encoding, callback) {
@@ -138,16 +142,24 @@ const mergeDirectoryFiles = (
   });
 };
 
-const transformTransactionToBatchOperation = (snapshotDate: Date) =>
+const transformTransactionToBatchOperation = (db: CompanySnapshotDB) =>
   Duplex.from(async function* (
     transactions: AsyncGenerator<CompanyTransaction>
   ) {
     for await (const transaction of transactions) {
+      const existing = await db
+        .get(transaction.company_number)
+        .catch(() => null);
+
+      const lastUpdatedDate = existing
+        ? parseIsoDate(existing.last_updated)
+        : undefined;
+
       const receivedDate = transaction.received_date
         ? parseIsoDate(transaction.received_date)
         : undefined;
 
-      if (receivedDate && receivedDate >= snapshotDate) {
+      if (lastUpdatedDate && receivedDate && receivedDate >= lastUpdatedDate) {
         const operation = transactionToBatchOperation(transaction);
 
         if (operation) {
@@ -167,7 +179,10 @@ const transactionToBatchOperation = (
       return {
         type: 'add',
         key: transaction.company_number,
-        value: transaction.data,
+        value: {
+          ...calculateValues(transaction.data),
+          last_updated: transaction.received_date || '',
+        },
       };
     case 'accounting-reference-date':
     case 'accounts':
@@ -194,8 +209,9 @@ const transactionToBatchOperation = (
             type: 'update',
             key: transaction.company_number,
             value: {
+              ...calculateValues(transaction.data),
               company_number: transaction.company_number,
-              ...transaction.data,
+              last_updated: transaction.received_date,
             },
           }
         : undefined;

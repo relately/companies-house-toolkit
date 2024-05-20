@@ -151,11 +151,14 @@ export const transformProduct183ConfirmationStatement = (
 > => {
   if (confirmationStatementDate > '2016-06-29') {
     return {
-      confirmation_statement: { last_made_up_to: confirmationStatementDate },
+      confirmation_statement: {
+        last_made_up_to: confirmationStatementDate,
+      },
     };
   } else {
     return {
-      last_full_members_list_date: confirmationStatementDate,
+      // We can't assume that all confirmation statements before this date contain the full members list
+      // last_full_members_list_date: confirmationStatementDate,
     };
   }
 };
@@ -190,15 +193,15 @@ export const transformProduct183RegisteredOfficeAddress = (
   address: Product183Record['address']
 ): Product183Company['registered_office_address'] => {
   return {
-    care_of: convertToTitleCase(address.careOf),
-    premises: convertToTitleCase(address.houseNameOrNumber),
-    po_box: convertToTitleCase(address.poBox),
-    address_line_1: convertToTitleCase(address.street),
-    address_line_2: convertToTitleCase(address.area),
-    locality: convertToTitleCase(address.postTown),
-    region: convertToTitleCase(address.region),
-    country: convertToTitleCase(address.country),
-    postal_code: address.postcode,
+    care_of: nonEmptyOrNull(address.careOf),
+    premises: nonEmptyOrNull(convertToTitleCase(address.houseNameOrNumber)),
+    po_box: nonEmptyOrNull(convertToTitleCase(address.poBox)),
+    address_line_1: nonEmptyOrNull(convertToTitleCase(address.street)),
+    address_line_2: nonEmptyOrNull(convertToTitleCase(address.area)),
+    locality: nonEmptyOrNull(convertToTitleCase(address.postTown)),
+    region: nonEmptyOrNull(convertToTitleCase(address.region)),
+    country: nonEmptyOrNull(convertToTitleCase(address.country)),
+    postal_code: nonEmptyOrNull(address.postcode),
   };
 };
 
@@ -222,7 +225,7 @@ export const transformProduct183Type = (
     case 'Old Public Company':
       return 'old-public-company';
     case 'Other':
-      if (companyNumber.startsWith('OC')) {
+      if (companyNumber.startsWith('OC') || companyNumber.startsWith('SO')) {
         return 'llp';
       }
 
@@ -264,3 +267,6 @@ export const transformProduct183Subtype = (
     return 'private-fund-limited-partnership';
   }
 };
+
+const nonEmptyOrNull = (value: string): string | undefined =>
+  value.length > 0 ? value : undefined;

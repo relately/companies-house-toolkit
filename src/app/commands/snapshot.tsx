@@ -11,24 +11,6 @@ import {
 } from '../../lib/util/sources/types.js';
 import { Snapshot } from '../components/Snapshot.js';
 
-const parseSnapshotProductType = (productPair: string): '183' | undefined => {
-  switch (productPair) {
-    case '183,101':
-      return '183';
-    default:
-      return undefined;
-  }
-};
-
-const parseUpdatesProductType = (productPair: string): '101' | undefined => {
-  switch (productPair) {
-    case '183,101':
-      return '101';
-    default:
-      return undefined;
-  }
-};
-
 const parseSourceType = (
   input: string
 ): FileSourceType | DirectorySourceType | undefined => {
@@ -50,10 +32,11 @@ const parseFormatterType = (options: SnapshotOptions): FormatterType =>
   options.json || options.j ? 'json' : 'csv';
 
 type SnapshotOptions = {
-  productPair: string;
-  snapshotPath: string;
-  updatesPath: string;
-  alternativeUpdatesPath?: string;
+  type: 'company';
+  product100Path: string;
+  product101Path: string;
+  product183Path: string;
+  product217Path: string;
   companies?: string;
   json?: boolean;
   j?: boolean;
@@ -62,30 +45,33 @@ type SnapshotOptions = {
 export const createSnapshotCommand = () =>
   createCommand('snapshot')
     .addOption(
-      createOption(
-        '-p, --product-pair <product-pair>',
-        'The pair of products to combine into a snapshot. Comma separated pair of product numbers consisting of the snapshot product number followed by the snapshot number, e.g. 183,101.'
-      )
-        .choices(['183,101'])
+      createOption('-t, --type <type>', 'The type of snapshot to generate')
+        .choices(['company'])
         .makeOptionMandatory(true)
     )
     .addOption(
       createOption(
-        '-s, --snapshot-path <snapshot>',
-        'Path to the snapshot file or directory. Will select the latest snapshot if passed a directory.'
+        '--product-100-path <path>',
+        'Path to the alternative updates directory'
       ).makeOptionMandatory(true)
     )
     .addOption(
       createOption(
-        '-u, --updates-path <updates>',
+        '--product-101-path <path>',
         'Path to the updates directory'
       ).makeOptionMandatory(true)
     )
     .addOption(
       createOption(
-        '-a, --alternative-updates-path <alternative-updates>',
-        'Path to the alternative updates directory'
-      )
+        '--product-183-path <path>',
+        'Path to the snapshot file or directory. Will select the latest snapshot if passed a directory.'
+      ).makeOptionMandatory(true)
+    )
+    .addOption(
+      createOption(
+        '--product-217-path <path>',
+        'Path to the snapshot directory'
+      ).makeOptionMandatory(true)
     )
     .addOption(
       createOption(
@@ -97,63 +83,56 @@ export const createSnapshotCommand = () =>
       createOption('-j, --json', 'Output JSON instead of CSV').default(false)
     )
     .action((options: SnapshotOptions) => {
-      const snapshotParserType = parseSnapshotProductType(options.productPair);
-      const updatesParserType = parseUpdatesProductType(options.productPair);
-
-      if (!snapshotParserType || !updatesParserType) {
-        process.stderr.write(`Unknown product pair "${options.productPair}"`);
-        process.exit(1);
-      }
-
-      const snapshotSource = parseSourceType(options.snapshotPath);
-
-      if (!snapshotSource) {
-        process.stderr.write(
-          `File or directory "${options.snapshotPath}" does not exist`
-        );
-        process.exit(1);
-      }
-
-      const updatesSource = parseSourceType(options.updatesPath);
-
-      if (!updatesSource) {
-        process.stderr.write(
-          `File or directory "${options.updatesPath}" does not exist`
-        );
-        process.exit(1);
-      }
-
-      if (updatesSource.type !== 'directory') {
-        process.stderr.write(`Updates path must be a directory, not a file`);
-        process.exit(1);
-      }
-
-      let alternativeUpdatesSource: DirectorySourceType | undefined = undefined;
-      if (options.alternativeUpdatesPath) {
-        const sourceType = parseSourceType(options.alternativeUpdatesPath);
-
-        if (sourceType && sourceType.type !== 'directory') {
-          process.stderr.write(
-            `Alternative updates path must be a directory, not a file`
-          );
-          process.exit(1);
-        }
-
-        alternativeUpdatesSource = sourceType;
-      }
+      const product100Source = validateDirectoryExists(
+        options.product100Path,
+        '100'
+      );
+      const product101Source = validateDirectoryExists(
+        options.product101Path,
+        '101'
+      );
+      const product183Source = validateExists(options.product183Path, '183');
+      const product217Source = validateExists(options.product217Path, '217');
 
       const formatterType = parseFormatterType(options);
 
       render(
         <Snapshot
-          snapshotSource={snapshotSource}
-          updatesSource={updatesSource}
-          alternativeUpdatesSource={alternativeUpdatesSource}
+          product183Source={product183Source}
+          product101Source={product101Source}
+          product100Source={product100Source}
+          product217Source={product217Source}
           formatterType={formatterType}
-          companies={options.companies
-            ?.split(',')
-            .map((company) => company.trim())}
+          companies={
+            new Set(
+              options.companies?.split(',').map((company) => company.trim())
+            )
+          }
         />,
         { stdout: process.stderr }
       );
     });
+
+const validateExists = (path: string, product: string) => {
+  const source = parseSourceType(path);
+
+  if (!source) {
+    process.stderr.write(`Product ${product} path "${path}" does not exist`);
+    process.exit(1);
+  }
+
+  return source;
+};
+
+const validateDirectoryExists = (path: string, product: string) => {
+  const source = validateExists(path, product);
+
+  if (source.type !== 'directory') {
+    process.stderr.write(
+      `Product ${product} path must be a directory, not a file`
+    );
+    process.exit(1);
+  }
+
+  return source;
+};
