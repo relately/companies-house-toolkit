@@ -22,7 +22,7 @@ type Options = {
   source: DirectorySourceType;
   alternativeSource?: DirectorySourceType;
   snapshotDate: Date;
-  companies?: Set<string>;
+  companies: Set<string>;
   eventEmitter: EventEmitter;
   batchSize?: number;
 };
@@ -37,7 +37,7 @@ export const writeUpdatesToDb = async ({
   batchSize = 50000,
 }: Options) => {
   const shouldProcess = (line: Product101Transaction | Product100Transaction) =>
-    !companies || companies.has(line.companyNumber);
+    companies.size === 0 || companies.has(line.companyNumber);
 
   let bytesProcessed = 0;
   const buffer: BatchBuffer = new Map();

@@ -38,7 +38,7 @@ type WriteSnapshotOptions = {
   db: CompanySnapshotDB;
   source: FileSourceType | DirectorySourceType;
   snapshotDate: string;
-  companies?: Set<string>;
+  companies: Set<string>;
   eventEmitter: EventEmitter;
   batchSize?: number;
 };
@@ -52,7 +52,7 @@ export const writeProduct217ToDb = async ({
   batchSize = 5000,
 }: WriteSnapshotOptions) => {
   const shouldProcess = (line: Product217Record) =>
-    !companies || companies.has(line.CompanyNumber);
+    companies.size === 0 || companies.has(line.CompanyNumber);
 
   let bytesProcessed = 0;
 

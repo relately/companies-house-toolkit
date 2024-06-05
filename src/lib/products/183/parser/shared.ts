@@ -132,27 +132,6 @@ export const mapPrivateFundIndicator = (
   return mapping[indicator] || '';
 };
 
-export const parseDate = (dateString: string): string | undefined => {
-  const trimmedDateString = dateString.trim();
-
-  if (trimmedDateString === '' || trimmedDateString === '00000000') {
-    return undefined;
-  }
-
-  const year = trimmedDateString.slice(0, 4);
-  const month = trimmedDateString.slice(4, 6);
-  const day = trimmedDateString.slice(6, 8);
-
-  const date = new Date(`${year}-${month}-${day}`);
-
-  if (isNaN(date.getTime())) {
-    console.error('Invalid date', trimmedDateString);
-    return undefined;
-  }
-
-  return `${year}-${month}-${day}`;
-};
-
 export const parseCompanyVariableData = (
   data: string
 ): Product183RecordVariableData => {

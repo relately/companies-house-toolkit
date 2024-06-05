@@ -1,3 +1,5 @@
+import { Address } from './shared.js';
+
 export interface Company {
   accounts?: CompanyAccounts;
   annual_return?: AnnualReturn;
@@ -21,9 +23,9 @@ export interface Company {
   last_full_members_list_date?: string;
   links: Links;
   previous_company_names?: PreviousCompanyName[];
-  registered_office_address?: RegisteredOfficeAddress;
+  registered_office_address?: Address;
   registered_office_is_in_dispute?: boolean;
-  service_address?: ServiceAddress;
+  service_address?: Address;
   sic_codes?: string[];
   super_secure_managing_officer_count?: number;
   type: CompanyType;
@@ -169,29 +171,6 @@ export type PreviousCompanyName = {
   ceased_on: string;
   effective_from: string;
   name: string;
-};
-
-type RegisteredOfficeAddress = {
-  care_of?: string;
-  premises?: string;
-  po_box?: string;
-  address_line_1?: string;
-  address_line_2?: string;
-  locality?: string;
-  region?: string;
-  postal_code?: string;
-  country?: string;
-};
-
-type ServiceAddress = {
-  address_line_1?: string;
-  address_line_2?: string;
-  care_of?: string;
-  country?: string;
-  locality?: string;
-  po_box?: string;
-  postal_code?: string;
-  region?: string;
 };
 
 type CompanyType =

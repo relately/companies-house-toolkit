@@ -1,3 +1,4 @@
+import { parseDatFormatDate } from '../../../util/dates.js';
 import {
   mapAccountsType,
   mapCompanyStatus,
@@ -5,7 +6,6 @@ import {
   mapJurisdiction,
   mapPostcodeStatus,
   parseCompanyVariableData,
-  parseDate,
 } from './shared.js';
 import {
   Product183Header,
@@ -34,15 +34,15 @@ export const getLineType = (line: string): Product183LineType => {
 export const parseHeader = (line: string): Product183Header => {
   return {
     runNumber: parseInt(line.substring(8, 12)),
-    fileProductionDate: parseDate(line.substring(12, 20).trim()) || '',
+    fileProductionDate: parseDatFormatDate(line.substring(12, 20).trim()) || '',
   };
 };
 
 export const parseCompanyRecord = (line: string): Product183Record => ({
   companyNumber: line.substring(0, 8),
-  dateOfIncorporation: parseDate(line.substring(12, 20)) || '',
-  accountsMadeUpDate: parseDate(line.substring(20, 28)) || '',
-  confirmationStatementDate: parseDate(line.substring(28, 36)) || '',
+  dateOfIncorporation: parseDatFormatDate(line.substring(12, 20)) || '',
+  accountsMadeUpDate: parseDatFormatDate(line.substring(20, 28)) || '',
+  confirmationStatementDate: parseDatFormatDate(line.substring(28, 36)) || '',
   companyStatus: mapCompanyStatus(
     line.substring(0, 8),
     line.substring(36, 38).trim()

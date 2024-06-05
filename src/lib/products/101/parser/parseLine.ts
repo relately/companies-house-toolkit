@@ -1,5 +1,6 @@
 import { pick } from 'ramda';
 
+import { parseDatFormatDate } from '../../../util/dates.js';
 import {
   mapAccountsType,
   mapCompanyStatus,
@@ -8,7 +9,6 @@ import {
   mapPostcodeStatus,
   mapPrivateFundIndicator,
   parseCompanyVariableData,
-  parseDate,
 } from '../../183/parser/shared.js';
 import {
   CorrectionMarker,
@@ -426,12 +426,14 @@ export const parseLine = (line: string): Product101Record => ({
   originalGazettableDocumentType: line.substring(16, 17).trim(),
   voluntaryDissolutionIndicator:
     mapVoluntaryDissolutionIndicator(line.substring(17, 18).trim()) || '',
-  dateOfIncorporation: parseDate(line.substring(18, 26).trim()) || '',
-  accountsMadeUpDate: parseDate(line.substring(26, 34).trim()) || '',
-  confirmationStatementDate: parseDate(line.substring(34, 42).trim()) || '',
-  gazetteDate: parseDate(line.substring(42, 50).trim()) || '',
-  originalDateOfPublication: parseDate(line.substring(50, 58).trim()) || '',
-  receivedDate: parseDate(line.substring(58, 66).trim()) || '',
+  dateOfIncorporation: parseDatFormatDate(line.substring(18, 26).trim()) || '',
+  accountsMadeUpDate: parseDatFormatDate(line.substring(26, 34).trim()) || '',
+  confirmationStatementDate:
+    parseDatFormatDate(line.substring(34, 42).trim()) || '',
+  gazetteDate: parseDatFormatDate(line.substring(42, 50).trim()) || '',
+  originalDateOfPublication:
+    parseDatFormatDate(line.substring(50, 58).trim()) || '',
+  receivedDate: parseDatFormatDate(line.substring(58, 66).trim()) || '',
   companyStatus: mapCompanyStatus(
     line.substring(0, 8),
     line.substring(66, 68).trim()

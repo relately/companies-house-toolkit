@@ -19,7 +19,7 @@ type SnapshotOptions = {
   product101Source: DirectorySourceType;
   product100Source: DirectorySourceType;
   product217Source: FileSourceType | DirectorySourceType;
-  companies?: Set<string>;
+  companies: Set<string>;
   formatterType: FormatterType;
   writeStream?: Writable;
 };
