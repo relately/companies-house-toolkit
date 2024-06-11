@@ -16,7 +16,7 @@ export type ConvertProps = {
   sourceType: SourceType;
   product: Product;
   formatterType: FormatterType;
-  companies?: Set<string>;
+  companies: Set<string>;
 };
 
 export const Convert: React.FC<ConvertProps> = ({

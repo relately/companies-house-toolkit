@@ -23,7 +23,7 @@ export type SnapshotProps = {
   product100Source: DirectorySourceType;
   product217Source: FileSourceType | DirectorySourceType;
   formatterType: FormatterType;
-  companies?: Set<string>;
+  companies: Set<string>;
 };
 
 export const Snapshot: React.FC<SnapshotProps> = ({

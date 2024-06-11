@@ -1,1 +1,1 @@
-export type Product = '101' | '183' | '217';
+export type Product = '101' | '183' | '216' | '217';

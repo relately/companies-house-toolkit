@@ -12,6 +12,7 @@ const parseProductType = (product: string): Product | undefined => {
   switch (product) {
     case '101':
     case '183':
+    case '216':
     case '217':
       return product;
     default:
@@ -53,7 +54,7 @@ export const createConvertCommand = () =>
     .addArgument(createArgument('<input>', 'The input file or directory'))
     .addOption(
       createOption('-p, --product <product>', 'The data product to convert')
-        .choices(['101', '183', '217'])
+        .choices(['101', '183', '216', '217'])
         .makeOptionMandatory(true)
     )
     .addOption(

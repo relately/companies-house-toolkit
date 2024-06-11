@@ -7,6 +7,8 @@ import { Product101Transaction } from './products/101/parser/types.js';
 import { estimateProduct101SourceSize } from './products/101/source.js';
 import { Product183Record } from './products/183/parser/types.js';
 import { estimateProduct183SourceSize } from './products/183/source.js';
+import { Product216Record } from './products/216/parser/types.js';
+import { estimateProduct216SourceSize } from './products/216/source.js';
 import { Product217Record } from './products/217/parser/types.js';
 import { estimateProduct217SourceSize } from './products/217/source.js';
 import { Product } from './types/product.js';
@@ -17,7 +19,7 @@ import { filter, tap } from './util/streams.js';
 type ConvertOptions = {
   source: SourceType;
   product: Product;
-  companies?: Set<string>;
+  companies: Set<string>;
   formatterType: FormatterType;
   writeStream?: Writable;
 };
@@ -38,8 +40,9 @@ export const convert = async (
       | Product101Transaction
       | Product100Transaction
       | Product183Record
+      | Product216Record
   ) => {
-    if (!companies) {
+    if (companies.size === 0) {
       return true;
     }
 
@@ -70,6 +73,7 @@ export const convert = async (
             | Product101Transaction
             | Product100Transaction
             | Product183Record
+            | Product216Record
         ) => {
           if (!shouldProcess(parsedLine)) {
             eventEmitter.emit('progress', itemBytes);
@@ -97,6 +101,8 @@ export const estimateSourceSize = (product: Product, source: SourceType) => {
       return estimateProduct101SourceSize(source);
     case '183':
       return estimateProduct183SourceSize(source);
+    case '216':
+      return estimateProduct216SourceSize(source);
     case '217':
       return estimateProduct217SourceSize(source);
   }
