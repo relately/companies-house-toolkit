@@ -130,7 +130,7 @@ const handleUpdates = async (
       isProduct101 ? map(transformProduct101) : map(transformProduct100),
       await getDbMapper('101', db, source),
       batch(batchSize),
-      writeBatch(db, () => {
+      writeBatch(db, '101', () => {
         eventEmitter.emit('progress', bytesProcessed);
       })
     );
