@@ -64,7 +64,7 @@ export const load = async (
       getTransformer(product),
       await getDbMapper(product, db, source),
       batch(batchSize),
-      writeBatch(db, () => {
+      writeBatch(db, product, () => {
         eventEmitter.emit('progress', bytesProcessed);
       })
     );
@@ -75,12 +75,19 @@ export const load = async (
   eventEmitter.emit('finish');
 };
 
-const writeBatch = (db: Knex, onBatch: () => void) =>
+const writeBatch = (db: Knex, product: Product, onBatch: () => void) =>
   new Writable({
     objectMode: true,
     async write(data: Record<string, unknown>[], _encoding, callback) {
       try {
-        await db('companies').insert(data).onConflict('company_number').merge();
+        if (['101', '183', '217'].includes(product)) {
+          await db('companies')
+            .insert(data)
+            .onConflict('company_number')
+            .merge();
+        } else {
+          await db('officers').insert(data).onConflict('person_number').merge();
+        }
 
         onBatch();
         callback();
