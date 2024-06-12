@@ -10,7 +10,6 @@ import { writeBatch } from '../util/db.js';
 import { getDirectoryFiles } from '../util/sources/directory.js';
 import { DirectorySourceType, FileSourceType } from '../util/sources/types.js';
 import { batch, filter, map, tap } from '../util/streams.js';
-import { calculateValues } from './shared.js';
 import { CompanySnapshotDB, SnapshotCompany } from './types.js';
 
 export const getProduct217SnapshotDate = (
@@ -91,7 +90,7 @@ const companyRecordToBatchOperation = (
   type: 'put',
   key: companyRecord.company_number,
   value: {
-    ...calculateValues(companyRecord),
+    ...companyRecord,
     last_updated: snapshotDate,
   } as SnapshotCompany,
 });

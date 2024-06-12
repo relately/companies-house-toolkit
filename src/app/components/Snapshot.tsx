@@ -2,9 +2,9 @@
 import { Box } from 'ink';
 import EventEmitter from 'node:events';
 import React, { useEffect, useRef } from 'react';
-import { estimateSourceSize } from '../../lib/convert.js';
+import { estimateSourceSize } from '../../lib/products/index.js';
 import { snapshot } from '../../lib/snapshot.js';
-import { getSnapshotDate } from '../../lib/snapshot/product183.js';
+import { getProduct183SnapshotDate } from '../../lib/snapshot/product183.js';
 import { estimateUpdatesSize } from '../../lib/snapshot/updates.js';
 import { FormatterType } from '../../lib/util/formatters/types.js';
 import {
@@ -41,7 +41,7 @@ export const Snapshot: React.FC<SnapshotProps> = ({
     try {
       const product217Size = await estimateSourceSize('217', product217Source);
       const product183Size = await estimateSourceSize('183', product183Source);
-      const snapshotDate = await getSnapshotDate(product183Source);
+      const snapshotDate = await getProduct183SnapshotDate(product183Source);
 
       const updatesSize = await estimateUpdatesSize(
         product101Source,

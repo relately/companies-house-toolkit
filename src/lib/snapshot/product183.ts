@@ -12,10 +12,9 @@ import { Product183Company } from '../products/183/transformer/types.js';
 import { writeBatch } from '../util/db.js';
 import { DirectorySourceType, FileSourceType } from '../util/sources/types.js';
 import { batch, filter, map, tap } from '../util/streams.js';
-import { calculateValues } from './shared.js';
 import { CompanySnapshotDB, SnapshotCompany } from './types.js';
 
-export const getSnapshotDate = async (
+export const getProduct183SnapshotDate = async (
   source: FileSourceType | DirectorySourceType
 ) => {
   const lines = getProduct183SourceStream(source);
@@ -83,7 +82,7 @@ const companyRecordToBatchOperation = (
   type: 'put',
   key: companyRecord.company_number,
   value: {
-    ...calculateValues(companyRecord),
+    ...companyRecord,
     last_updated: snapshotDate,
   },
 });

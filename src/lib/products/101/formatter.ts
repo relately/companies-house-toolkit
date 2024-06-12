@@ -1,13 +1,8 @@
-import { transformProduct101 } from '../products/101/transformer.js';
-import { formatCsv } from '../util/formatters/csv.js';
-import { formatJson } from '../util/formatters/json.js';
-import { FormatterType } from '../util/formatters/types.js';
-import { compose, map } from '../util/streams.js';
+import { formatCsv } from '../../util/formatters/csv.js';
+import { formatJson } from '../../util/formatters/json.js';
+import { FormatterType } from '../../util/formatters/types.js';
 
-export const convertProduct101 = (formatterType: FormatterType) =>
-  compose(map(transformProduct101), formatProduct101(formatterType));
-
-const formatProduct101 = (type: FormatterType) => {
+export const formatProduct101 = (type: FormatterType) => {
   switch (type) {
     case 'json':
       return formatJson();

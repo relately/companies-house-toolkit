@@ -2,7 +2,6 @@ import EventEmitter from 'node:events';
 import { mergeDeepRight } from 'ramda';
 import { isLevelNotFoundError } from '../util/db.js';
 import { RecursivePartial } from '../util/types.js';
-import { calculateValues } from './shared.js';
 import {
   CompanySnapshotAddOperation,
   CompanySnapshotDB,
@@ -50,7 +49,7 @@ const resolveAdd = (
   void buffer.set(operation.key, {
     type: 'put',
     key: operation.key,
-    value: calculateValues(operation.value),
+    value: operation.value,
   });
 
 const resolveDelete = (
@@ -71,12 +70,11 @@ const resolveUpdate = async (
       ? existingOperation.value
       : await getValueFromDb(operation.key, db, eventEmitter);
 
-  const value = calculateValues(
-    (existingValue
+  const value = (
+    existingValue
       ? mergeRecords(existingValue, operation.value)
-      : operation.value) as SnapshotCompany
-  );
-
+      : operation.value
+  ) as SnapshotCompany;
   buffer.set(operation.key, {
     type: 'put',
     key: operation.key,

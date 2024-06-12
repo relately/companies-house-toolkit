@@ -5,6 +5,11 @@ export type Product216LineType =
   | 'trailer'
   | 'unknown';
 
+export type Product216Header = {
+  runNumber: number;
+  fileProductionDate: string;
+};
+
 export type Product216Record = Product216PersonRecord | Product216CompanyRecord;
 
 export type Product216PersonRecord = {

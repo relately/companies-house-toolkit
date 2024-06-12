@@ -1,4 +1,26 @@
+import { Company } from '../../types/company.js';
 import { formatIsoDate } from '../../util/dates.js';
+import { removeEmptyValues } from '../../util/objects.js';
+import { RecursivePartial } from '../../util/types.js';
+
+export const calculateValues = (
+  companyRecord: RecursivePartial<Company>
+): RecursivePartial<Company> =>
+  removeEmptyValues({
+    ...companyRecord,
+    accounts: {
+      ...companyRecord.accounts,
+      // Always unset these as they cannot be reliably derived
+      next_due: undefined,
+      next_made_up_to: undefined,
+    },
+    confirmation_statement: {
+      ...companyRecord.confirmation_statement,
+      // Always unset these as they cannot be reliably derived
+      next_due: undefined,
+      next_made_up_to: undefined,
+    },
+  });
 
 export const getAccountsNextMadeUpToDate = (
   accountsReferenceMonth?: number,

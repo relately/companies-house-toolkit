@@ -3,7 +3,10 @@ import EventEmitter from 'node:events';
 import { Writable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { formatCompanySnapshot } from './snapshot/formatter.js';
-import { getSnapshotDate, writeProduct183ToDb } from './snapshot/product183.js';
+import {
+  getProduct183SnapshotDate,
+  writeProduct183ToDb,
+} from './snapshot/product183.js';
 import {
   getProduct217SnapshotDate,
   writeProduct217ToDb,
@@ -64,7 +67,7 @@ const processSnapshot = async (
       eventEmitter,
     });
 
-    const snapshotDate = await getSnapshotDate(product183Source);
+    const snapshotDate = await getProduct183SnapshotDate(product183Source);
 
     // Write product 183 snapshot data for companies not in product 217
     eventEmitter.emit('status', 'writing product 183');

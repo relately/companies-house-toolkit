@@ -1,16 +1,17 @@
 import EventEmitter from 'node:events';
 import { Writable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
-import { getConverter, getParser, getSourceStream } from './convert/index.js';
 import { Product100Transaction } from './products/100/parser/types.js';
 import { Product101Transaction } from './products/101/parser/types.js';
-import { estimateProduct101SourceSize } from './products/101/source.js';
 import { Product183Record } from './products/183/parser/types.js';
-import { estimateProduct183SourceSize } from './products/183/source.js';
 import { Product216Record } from './products/216/parser/types.js';
-import { estimateProduct216SourceSize } from './products/216/source.js';
 import { Product217Record } from './products/217/parser/types.js';
-import { estimateProduct217SourceSize } from './products/217/source.js';
+import {
+  getFormatter,
+  getParser,
+  getSourceStream,
+  getTransformer,
+} from './products/index.js';
 import { Product } from './types/product.js';
 import { FormatterType } from './util/formatters/types.js';
 import { SourceType } from './util/sources/types.js';
@@ -84,7 +85,8 @@ export const convert = async (
           return true;
         }
       ),
-      getConverter(product, formatterType),
+      getTransformer(product),
+      getFormatter(product, formatterType),
       tap(() => eventEmitter.emit('progress', itemBytes)),
       writeStream
     );
@@ -93,17 +95,4 @@ export const convert = async (
   }
 
   eventEmitter.emit('finish');
-};
-
-export const estimateSourceSize = (product: Product, source: SourceType) => {
-  switch (product) {
-    case '101':
-      return estimateProduct101SourceSize(source);
-    case '183':
-      return estimateProduct183SourceSize(source);
-    case '216':
-      return estimateProduct216SourceSize(source);
-    case '217':
-      return estimateProduct217SourceSize(source);
-  }
 };

@@ -2,30 +2,38 @@
 import EventEmitter from 'events';
 import { Box } from 'ink';
 import React, { useEffect, useState } from 'react';
-import { convert } from '../../lib/convert.js';
+import { load } from '../../lib/load.js';
 import { estimateSourceSize } from '../../lib/products/index.js';
 import { Product } from '../../lib/types/product.js';
-import { FormatterType } from '../../lib/util/formatters/types.js';
-import { SourceType } from '../../lib/util/sources/types.js';
+import {
+  DirectorySourceType,
+  FileSourceType,
+} from '../../lib/util/sources/types.js';
 import { useMessages } from '../hooks/useMessages.js';
 import { useProgress } from '../hooks/useProgress.js';
 import { Messages } from './shared/Messages.js';
 import { Progress } from './shared/Progress.js';
 import { Summary } from './shared/Summary.js';
 
-export type ConvertProps = {
-  sourceType: SourceType;
+export type LoadProps = {
+  sourceType: DirectorySourceType | FileSourceType;
+  additionalSourceType?: DirectorySourceType;
   product: Product;
-  formatterType: FormatterType;
-  companies: Set<string>;
+  connection: {
+    host: string;
+    user: string;
+    password: string;
+    database: string;
+    port: number;
+  };
 };
 
-export const Convert: React.FC<ConvertProps> = ({
+export const Load: React.FC<LoadProps> = ({
   sourceType,
+  additionalSourceType,
   product,
-  formatterType,
-  companies,
-}: ConvertProps) => {
+  connection,
+}: LoadProps) => {
   const { messages, addError } = useMessages();
   const { progress, setProgress, total } = useProgress(() => {
     try {
@@ -44,6 +52,7 @@ export const Convert: React.FC<ConvertProps> = ({
     const eventEmitter = new EventEmitter();
     eventEmitter
       .on('error', (error: string) => {
+        console.log(error);
         addError(error);
 
         process.exit(1);
@@ -53,8 +62,13 @@ export const Convert: React.FC<ConvertProps> = ({
       })
       .on('progress', setProgress);
 
-    void convert(
-      { source: sourceType, product, companies, formatterType },
+    void load(
+      {
+        source: sourceType,
+        additionalSource: additionalSourceType,
+        product,
+        connection,
+      },
       eventEmitter
     );
   }, []);
@@ -62,10 +76,8 @@ export const Convert: React.FC<ConvertProps> = ({
   return (
     <Box flexDirection="column" margin={1} rowGap={1}>
       <Summary
-        description={`Converting ${
-          sourceType.type === 'stdin' ? 'stdin' : sourceType.path
-        } to ${formatterType}`}
-        status="converting"
+        description={`Loading ${sourceType.path}`}
+        status="loading"
         isComplete={isComplete}
         progress={<Progress total={total} progress={progress} />}
       />

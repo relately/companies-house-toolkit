@@ -14,7 +14,6 @@ import { estimateFileSize, getFileStream } from '../util/sources/file.js';
 import { DirectorySourceType } from '../util/sources/types.js';
 import { filter, map, split, tap } from '../util/streams.js';
 import { BatchBuffer, resolveBatch } from './db.js';
-import { calculateValues } from './shared.js';
 import { CompanySnapshotDB, CompanySnapshotOperation } from './types.js';
 
 type Options = {
@@ -113,7 +112,7 @@ export const estimateUpdatesSize = (
     )
   ).then((sizes) => sizes.reduce((acc, size) => acc + size, 0));
 
-const mergeDirectoryFiles = (
+export const mergeDirectoryFiles = (
   source: DirectorySourceType,
   snapshotDate: Date,
   alternativeSource?: DirectorySourceType
@@ -180,7 +179,7 @@ const transactionToBatchOperation = (
         type: 'add',
         key: transaction.company_number,
         value: {
-          ...calculateValues(transaction.data),
+          ...transaction.data,
           last_updated: transaction.received_date || '',
         },
       };
@@ -209,7 +208,7 @@ const transactionToBatchOperation = (
             type: 'update',
             key: transaction.company_number,
             value: {
-              ...calculateValues(transaction.data),
+              ...transaction.data,
               company_number: transaction.company_number,
               last_updated: transaction.received_date,
             },
