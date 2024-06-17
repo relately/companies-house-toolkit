@@ -68,6 +68,8 @@ export const load = async (
         eventEmitter.emit('progress', bytesProcessed);
       })
     );
+
+    await db.destroy();
   } catch (error) {
     eventEmitter.emit('error', error);
   }
@@ -145,4 +147,6 @@ const handleUpdates = async (
 
     eventEmitter.emit('progress', bytesProcessed);
   }
+
+  await db.destroy();
 };
