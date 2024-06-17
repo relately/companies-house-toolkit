@@ -38,14 +38,14 @@ export const load = async (
   eventEmitter: EventEmitter
 ) => {
   const db: Knex = knex({ client: 'pg', connection });
-  const batchSize = 1;
+  const batchSize = 1000;
 
   let bytesProcessed = 0;
 
   if (product === '101' && additionalSource) {
     await handleUpdates(
       db,
-      batchSize,
+      1,
       eventEmitter,
       source as DirectorySourceType,
       additionalSource
